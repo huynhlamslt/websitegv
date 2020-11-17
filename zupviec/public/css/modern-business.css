@@ -1,0 +1,169 @@
+/*!
+ * Start Bootstrap - Modern Business (https://startbootstrap.com/template-overviews/modern-business)
+ * Copyright 2013-2019 Start Bootstrap
+ * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-logomodern-business-nav/blob/master/LICENSE)
+ */
+body {
+  padding-top: 56px;
+  background-image: 
+  }
+
+.carousel-item {
+  height: 65vh;
+  min-height: 300px;
+  background: no-repeat center center scroll;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.portfolio-item {
+  margin-bottom: 30px;
+}
+
+.divider-text {
+    position: relative;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+.divider-text span {
+    padding: 7px;
+    font-size: 12px;
+    position: relative;   
+    z-index: 2;
+}
+.divider-text:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+    top: 55%;
+    left: 0;
+    z-index: 1;
+}
+
+.btn-facebook {
+    background-color: #405D9D;
+    color: #fff;
+}
+.btn-twitter {
+    background-color: #42AEEC;
+    color: #fff;
+}
+
+/*css bang gia dv*/
+
+.pricing .card {
+  border: none;
+  border-radius: 1rem;
+  transition: all 0.2s;
+  box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.1);
+}
+
+
+.pricing hr {
+  margin: 1.5rem 0;
+}
+
+.pricing .card-title {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  letter-spacing: .1rem;
+  font-weight: bold;
+  font-size: 30px;
+  border-style: groove;
+  border-radius: 20px;
+}
+.pricing .namepk1{
+  
+  background-color: #D12B46;
+  color: #FCF6F6;
+}
+
+.pricing .namepk2{
+  
+  background-color: #1CD655;
+  color: #FCF6F6;
+}
+.pricing .namepk3{
+  
+  background-color: #490606;
+  color: #FCF6F6;
+}
+.pricing .card-price {
+  font-size: 3rem;
+  margin: 0;
+}
+
+.pricing .card-price .period {
+  font-size: 20px;
+}
+
+.pricing ul li {
+  margin-bottom: 1rem;
+  border-radius: 5px;
+  border-style: groove;
+}
+
+.pricing .text-muted {
+  opacity: 0.7;
+}
+
+.pricing .btn {
+  font-size: 80%;
+  border-radius: 5rem;
+  letter-spacing: .1rem;
+  font-weight: bold;
+  padding: 1rem;
+  opacity: 0.7;
+  transition: all 0.2s;
+}
+
+/* Hover Effects on Card */
+
+@media (min-width: 992px) {
+  .pricing .card:hover {
+    margin-top: -.25rem;
+    margin-bottom: .25rem;
+    box-shadow: 0 0.5rem 1rem 0 rgba(0, 0, 0, 0.3);
+  }
+  .pricing .card:hover .btn {
+    opacity: 1;
+  }
+}
+
+
+
+
+
+
+.footer{
+  background: #152F4F;
+  color:white;
+  
+  .links{
+    ul {list-style-type: none;}
+    li a{
+      color: white;
+      transition: color .2s;
+      &:hover{
+        text-decoration:none;
+        color:#4180CB;
+        }
+    }
+  }  
+  .about-company{
+    i{font-size: 25px;}
+    a{
+      color:white;
+      transition: color .2s;
+      &:hover{color:#4180CB}
+    }
+  } 
+  .location{
+    i{font-size: 18px;}
+  }
+  .copyright p{border-top:1px solid rgba(255,255,255,.1);} 
+}
