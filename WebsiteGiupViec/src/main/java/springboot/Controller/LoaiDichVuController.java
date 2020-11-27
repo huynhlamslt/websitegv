@@ -48,6 +48,18 @@ public class LoaiDichVuController {
         return ResponseEntity.ok().body(loaiDichVu);
     }
 
+    //Lấy loại dịch vụ bằng iddv của bảng phí
+    @GetMapping("/loaidv/bpdv/{id}")
+    public ResponseEntity<LoaiDichVu> getLoaiDichVubyIdDv(@PathVariable(value="id") Integer iddv){
+        LoaiDichVu loaiDichVu = loaiDichVuDAO.findByIdDv(iddv);
+
+        if(loaiDichVu==null){
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok().body(loaiDichVu);
+    }
+
     //Update loại dịch vụ
     @PutMapping("/loaidv/{id}")
     public ResponseEntity<LoaiDichVu> updateLoaiDV(@PathVariable(value = "id") Integer idloaidv, @Validated @RequestBody LoaiDichVu loaidvDetail){

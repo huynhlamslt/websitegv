@@ -20,7 +20,7 @@ public class HopDongDKGV {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int idhddk;
     private int idnv;
-    private int idngv;
+    private int idnguoigv;
     private String suckhoe;
     private Date ngayky;
     private Date ngayhethan;
@@ -31,11 +31,11 @@ public class HopDongDKGV {
 
     }
 
-    public HopDongDKGV(int idhddk, int idnv, int idngv, String suckhoe, Date ngayky, Date ngayhethan, int phantramluong,
+    public HopDongDKGV(int idhddk, int idnv, int idnguoigv, String suckhoe, Date ngayky, Date ngayhethan, int phantramluong,
             String kinhnghiem) {
         this.idhddk = idhddk;
         this.idnv = idnv;
-        this.idngv = idngv;
+        this.idnguoigv = idnguoigv;
         this.suckhoe = suckhoe;
         this.ngayky = ngayky;
         this.ngayhethan = ngayhethan;
@@ -59,12 +59,12 @@ public class HopDongDKGV {
         this.idnv = idnv;
     }
 
-    public int getIdngv() {
-        return idngv;
+    public int getidnguoigv() {
+        return idnguoigv;
     }
 
-    public void setIdngv(int idngv) {
-        this.idngv = idngv;
+    public void setidnguoigv(int idnguoigv) {
+        this.idnguoigv = idnguoigv;
     }
 
     public String getSuckhoe() {

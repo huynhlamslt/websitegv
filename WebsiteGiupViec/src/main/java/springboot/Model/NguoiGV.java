@@ -26,13 +26,17 @@ public class NguoiGV {
     private String cmnd;
     private String quequan;
     private String hinhanh;
+    private int del;
+    private int hopdong;
+    private int ungtuyen;
+    private int idloaidv;
 
     public NguoiGV(){
 
     }
 
     public NguoiGV(int idnguoigv, String hoten, String gioitinh, Date ngaysinh, String sdt, String cmnd, String quequan,
-            String hinhanh) {
+            String hinhanh, int del, int hopdong, int ungtuyen, int idloaidv) {
         this.idnguoigv = idnguoigv;
         this.hoten = hoten;
         this.gioitinh = gioitinh;
@@ -41,6 +45,10 @@ public class NguoiGV {
         this.cmnd = cmnd;
         this.quequan = quequan;
         this.hinhanh = hinhanh;
+        this.del = del;
+        this.hopdong = hopdong;
+        this.ungtuyen = ungtuyen;
+        this.idloaidv = idloaidv;
     }
 
     public int getIdnguoigv() {
@@ -107,5 +115,36 @@ public class NguoiGV {
         this.hinhanh = hinhanh;
     }
 
-    
+    public int getDel() {
+        return del;
+    }
+
+    public void setDel(int del) {
+        this.del = del;
+    }
+
+    public int getHopdong() {
+        return hopdong;
+    }
+
+    public void setHopdong(int hopdong) {
+        this.hopdong = hopdong;
+    }
+
+    public int getUngtuyen() {
+        return ungtuyen;
+    }
+
+    public void setUngtuyen(int ungtuyen) {
+        this.ungtuyen = ungtuyen;
+    }
+
+    public int getIdloaidv() {
+        return idloaidv;
+    }
+
+    public void setIdloaidv(int idloaidv) {
+        this.idloaidv = idloaidv;
+    }
+     
 }

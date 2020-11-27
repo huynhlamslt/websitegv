@@ -29,6 +29,11 @@ public class LoaiDichVuDAO {
         return loaiDichVuRepository.findById(idloaidv).orElse(null);
     }
 
+    //Get loaidv by iddv
+    public LoaiDichVu findByIdDv(Integer iddv){
+        return loaiDichVuRepository.findByIdDv(iddv);
+    }
+
     //Delete 
     public void delete(LoaiDichVu loaidv){
         loaiDichVuRepository.delete(loaidv);

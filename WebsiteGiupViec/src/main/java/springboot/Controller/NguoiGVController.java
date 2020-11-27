@@ -33,7 +33,13 @@ public class NguoiGVController {
     // Lấy ds người giúp việc
     @GetMapping("/nguoigv")
     public List<NguoiGV> getAllNguoiGV(){
-        return nguoiGVDAO.findAll();
+        return nguoiGVDAO.findAlltrue();
+    }
+
+    // Lấy ds tuyển dụng người giúp việc
+    @GetMapping("/nguoigv/tuyendung")
+    public List<NguoiGV> getAllTuyenDung(){
+        return nguoiGVDAO.findAlltuyendung();
     }
 
     // Lấy 1 người giúp việc qua Id
@@ -64,6 +70,10 @@ public class NguoiGVController {
         nguoiGV.setCmnd(ngvDetail.getCmnd());
         nguoiGV.setQuequan(ngvDetail.getQuequan());
         nguoiGV.setHinhanh(ngvDetail.getHinhanh());
+        nguoiGV.setDel(ngvDetail.getDel());
+        nguoiGV.setHopdong(ngvDetail.getHopdong());
+        nguoiGV.setUngtuyen(ngvDetail.getUngtuyen());
+        nguoiGV.setIdloaidv(ngvDetail.getIdloaidv());
 
         NguoiGV updateNguoiGV = nguoiGVDAO.save(nguoiGV);
         return ResponseEntity.ok().body(updateNguoiGV);
@@ -81,6 +91,18 @@ public class NguoiGVController {
         nguoiGVDAO.delete(nguoiGV);
         return ResponseEntity.ok().build();
     }
+
+     // Xóa 1 người giúp việc qua Id
+     @PutMapping("/nguoigv/xoa/{id}")
+     public ResponseEntity<NguoiGV> deleteNguoiGvById(@PathVariable(value="id") Integer idngv){
+         NguoiGV nguoiGV = nguoiGVDAO.findOne(idngv);
+ 
+         if(nguoiGV == null){
+             return ResponseEntity.notFound().build();
+         }
+         nguoiGVDAO.deleteNguoigv(idngv);
+         return ResponseEntity.ok().build();
+     }
 }
 
 

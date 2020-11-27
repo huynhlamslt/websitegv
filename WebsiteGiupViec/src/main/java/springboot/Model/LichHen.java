@@ -1,7 +1,6 @@
 package springboot.Model;
 
 import java.sql.Date;
-import java.sql.Time;
 
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -16,27 +15,33 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name = "lichhen")
 @EntityListeners(AuditingEntityListener.class)
 public class LichHen {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int idlichhen;
     private int idnv;
     private int idkh;
     private Date ngay;
-    private Time gio;
-    private String diachi;
+
+    // @JsonFormat(pattern = "HH:mm")
+    // @JsonDeserialize(using = SqlTimeDeserializer.class)
+    // @Column(name = "gio")
+    private String gio;
+    private String diachihen;
+    private int hopdong;
 
     public LichHen(){
 
     }
 
-    public LichHen(int idlichhen, int idnv, int idkh, Date ngay, Time gio, String diachi) {
+    public LichHen(int idlichhen, int idnv, int idkh, Date ngay, String gio, String diachihen, int hopdong) {
         this.idlichhen = idlichhen;
         this.idnv = idnv;
         this.idkh = idkh;
         this.ngay = ngay;
         this.gio = gio;
-        this.diachi = diachi;
+        this.diachihen = diachihen;
+        this.hopdong = hopdong;
     }
 
     public int getIdlichhen() {
@@ -71,19 +76,28 @@ public class LichHen {
         this.ngay = ngay;
     }
 
-    public Time getGio() {
+    public String getGio() {
         return gio;
     }
 
-    public void setGio(Time gio) {
+    public void setGio(String gio) {
         this.gio = gio;
     }
 
-    public String getDiachi() {
-        return diachi;
+    public String getDiachihen() {
+        return diachihen;
     }
 
-    public void setDiachi(String diachi) {
-        this.diachi = diachi;
+    public void setDiachihen(String diachihen) {
+        this.diachihen = diachihen;
     }
+
+    public int getHopdong() {
+        return hopdong;
+    }
+
+    public void setHopdong(int hopdong) {
+        this.hopdong = hopdong;
+    }
+
 }

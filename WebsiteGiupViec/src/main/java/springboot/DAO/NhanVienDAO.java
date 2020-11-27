@@ -28,6 +28,16 @@ public class NhanVienDAO {
 	public NhanVien findOne(Integer manv) {
 		return nhanVienRepository.findById(manv).orElse(null);
 	}
+
+	//Get nhân viên chưa có tài khoản
+	public List<NhanVien> findTKNhanVien(){
+		return nhanVienRepository.findTKNVien();
+	}
+
+	//Get nhan vien chua co lich hen
+	public List<NhanVien> findByTimeNhanVien(String gio, String ngay){
+		return nhanVienRepository.findbyTime(gio, ngay);
+	}
 	
 	//Delete
 	public void delete(NhanVien nv) {

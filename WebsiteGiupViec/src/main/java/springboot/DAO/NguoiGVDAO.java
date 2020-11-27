@@ -24,6 +24,16 @@ public class NguoiGVDAO {
         return nguoiGVRepository.findAll();
     }
 
+    //Get all true
+    public List<NguoiGV> findAlltrue(){
+        return nguoiGVRepository.findAlltrue();
+    }
+
+    //Get all tuyen dung
+    public List<NguoiGV> findAlltuyendung(){
+        return nguoiGVRepository.findAlltuyendung();
+    }
+
     //Get by Id
     public NguoiGV findOne(Integer idngv){
         return nguoiGVRepository.findById(idngv).orElse(null);
@@ -32,5 +42,10 @@ public class NguoiGVDAO {
     //Delete 
     public void delete(NguoiGV ngv){
         nguoiGVRepository.delete(ngv);
+    }
+
+    //Delete by Id
+    public void deleteNguoigv(Integer idngv){
+        nguoiGVRepository.deleteNguoigv(idngv);
     }
 }

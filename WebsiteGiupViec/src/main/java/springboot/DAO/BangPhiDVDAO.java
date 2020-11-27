@@ -29,6 +29,11 @@ public class BangPhiDVDAO {
         return bangPhiDVRepository.findById(iddv).orElse(null);
     }
 
+     //Get by Idloaidv
+     public List<BangPhiDV> findByIdLoaidv(Integer idloaidv){
+        return bangPhiDVRepository.findByIdLoaiDV(idloaidv);
+    }
+
     //Delete
     public void delete(BangPhiDV bpdv){
         bangPhiDVRepository.delete(bpdv);

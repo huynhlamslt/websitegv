@@ -46,6 +46,18 @@ public class NhanVienController {
 		}
 		return ResponseEntity.ok().body(nVien);
 	}
+
+	//Get nhan vien chua co tai khoan
+	@GetMapping("/nhanvien/tk")
+	public List<NhanVien> getAllNhanvienTk(){
+		return nhanVienDAO.findTKNhanVien();
+	}
+
+	//Get nhan vien chua co lich hen
+	@GetMapping("/nhanvien/{gio}/{ngay}")
+	public List<NhanVien> getAllNhanvienLH(@PathVariable(value="gio") String gio, @PathVariable(value="ngay") String ngay){
+		return nhanVienDAO.findByTimeNhanVien(gio, ngay);
+	}
 	
 	//Update nhan vien
 	@PutMapping("/nhanvien/{id}")

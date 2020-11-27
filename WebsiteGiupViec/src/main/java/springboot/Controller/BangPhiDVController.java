@@ -36,8 +36,20 @@ public class BangPhiDVController {
         return bangPhiDVDAO.findAll();
     }
 
+     //Lấy bảng phí theo Id loại dv
+     @GetMapping("/bangphidv/loaidv/{id}")
+     public ResponseEntity<List<BangPhiDV>> getBangPhiByIdLoaiDV(@PathVariable(value = "id") Integer idloaidv){
+        List<BangPhiDV> bangPhiDV = bangPhiDVDAO.findByIdLoaidv(idloaidv);
+
+        if(bangPhiDV==null){
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok().body(bangPhiDV);
+    }
+
     //Lấy bảng phí theo id
-    @GetMapping("/bangphi/{id}")
+    @GetMapping("/bangphidv/{id}")
     public ResponseEntity<BangPhiDV> getBangPhiDVbtID(@PathVariable(value = "id") Integer iddv){
         BangPhiDV bangPhiDV = bangPhiDVDAO.findOne(iddv);
 

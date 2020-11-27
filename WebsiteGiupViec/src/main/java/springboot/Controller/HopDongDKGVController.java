@@ -57,7 +57,7 @@ public class HopDongDKGVController {
             return ResponseEntity.notFound().build();
         }
 
-        hopDongDKGV.setIdngv(hddkDetail.getIdngv());
+        hopDongDKGV.setidnguoigv(hddkDetail.getidnguoigv());
         hopDongDKGV.setIdnv(hddkDetail.getIdnv());
         hopDongDKGV.setSuckhoe(hddkDetail.getSuckhoe());
         hopDongDKGV.setKinhnghiem(hddkDetail.getKinhnghiem());

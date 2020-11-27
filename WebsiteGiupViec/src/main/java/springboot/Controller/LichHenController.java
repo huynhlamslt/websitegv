@@ -61,7 +61,8 @@ public class LichHenController {
         lichHen.setIdnv(lhDetail.getIdnv());
         lichHen.setNgay(lhDetail.getNgay());
         lichHen.setGio(lhDetail.getGio());
-        lichHen.setDiachi(lhDetail.getDiachi());
+        lichHen.setDiachihen(lhDetail.getDiachihen());
+        lichHen.setHopdong(lhDetail.getHopdong());
 
         LichHen updateLichHen = lichHenDAO.save(lichHen);
         return ResponseEntity.ok().body(updateLichHen);
