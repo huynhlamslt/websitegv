@@ -1,37 +1,33 @@
 import React, { Component } from 'react';
-import { AvForm, AvField, ValidatingFormGroup } from 'availity-reactstrap-validation';
+//import { AvForm, AvField, ValidatingFormGroup } from 'availity-reactstrap-validation';
 
 import { confirmAlert } from 'react-confirm-alert';
 
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
 import {
- BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
   withRouter
 } from "react-router-dom";
 
-import { 
-    Button, 
-    Container, 
-    Form, FormGroup, 
-    Input, 
-    Label, 
-    FormFeedback, FormText, 
-    InputGroup, InputGroupAddon } from 'reactstrap';
+// import { 
+//     Button, 
+//     Container, 
+//     Form, FormGroup, 
+//     Input, 
+//     Label, 
+//     FormFeedback, FormText, 
+//     InputGroup, InputGroupAddon } from 'reactstrap';
 
 class RegisterServiceContain extends Component {
 
     emptyItem = {
         hoten: '',
         sdt: '',
-        diachilamviec: '',
+        diachi: '',
         ngaylam: '',
         congviec:'',
         trangthai: 'Chưa duyệt',
-        dichvu:''
+        iddv:''
     };
 
     emptyKh = {
@@ -47,16 +43,21 @@ class RegisterServiceContain extends Component {
             item: this.emptyItem,
             dichVus: [],
             khachhang: this.emptyKh,
+            loaiDVs:[],
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     async componentDidMount(){
-        const dv = await (await fetch(`/gvnhanh/loaidichvu/${this.props.match.params.id}`)).json();
+        const dv = await (await fetch(`/gvnhanh/bangphidv/${this.props.match.params.id}`)).json();
+        const loaidv = await (await fetch(`/gvnhanh/loaidv/bpdv/${this.props.match.params.id}`)).json();
         this.setState({
-            dichVus:dv      
+            dichVus:dv,
+            loaiDVs: loaidv,      
         })
+
+        console.log("this", this.state)
     }
 
     handleChange(event) {
@@ -86,11 +87,11 @@ class RegisterServiceContain extends Component {
                     item:{
                         hoten: this.state.item["hoten"],
                         sdt: this.state.item["sdt"],
-                        diachilamviec: this.state.item["diachilamviec"],
+                        diachi: this.state.item["diachi"],
                         ngaylam: '',
                         congviec: this.state.item["congviec"],
                         trangthai: 'Chưa duyệt',
-                        dichvu: this.state.item["dichvu"],
+                        iddv: this.state.item["iddv"],
                     }
                 })
             }
@@ -101,28 +102,28 @@ class RegisterServiceContain extends Component {
         event.preventDefault();
         const {item} = this.state;
         const {khachhang} = this.state;
-
-        const sv = await (await fetch(`/gvnhanh/khachhang/service/${item["sdt"]}`)).json();
-        if(sv===true){
-           confirmAlert({
-              title: 'Cảnh báo!',
-              message: 'Khách hàng không được đặt dịch vụ do đã vi phạm quy định. Liên hệ với công ty để biết thêm chi tiết!',
-              buttons: [
-                {
-                  label: 'OK',
-                  onClick: () => this.props.history.push("/contact")
+       
+        // const sv = await (await fetch(`/gvnhanh/khachhang/service/${item["sdt"]}`)).json();
+        // if(sv===true){
+        //    confirmAlert({
+        //       title: 'Cảnh báo!',
+        //       message: 'Khách hàng không được đặt dịch vụ do đã vi phạm quy định. Liên hệ với công ty để biết thêm chi tiết!',
+        //       buttons: [
+        //         {
+        //           label: 'OK',
+        //           onClick: () => this.props.history.push("/contact")
                
-                }
-              ],
-               childrenElement: () => null,
-                closeOnClickOutside: true,
-                closeOnEscape: true,
-                willUnmount: () => null,
-                onClickOutside: () => null,
-                onKeypressEscape: () => null
-            });
-        }
-        else{
+        //         }
+        //       ],
+        //        childrenElement: () => null,
+        //         closeOnClickOutside: true,
+        //         closeOnEscape: true,
+        //         willUnmount: () => null,
+        //         onClickOutside: () => null,
+        //         onKeypressEscape: () => null
+        //     });
+        // }
+        // else{
 
             // this.setState({
             //     khachhang:{
@@ -132,21 +133,22 @@ class RegisterServiceContain extends Component {
             //         trangthai: false,
             //     }
             // })
-            this.state.khachhang.hoten = item["hoten"];
-            this.state.khachhang.sdt = item["sdt"];
-            this.state.khachhang.diachi = item["diachilamviec"];
-            this.state.khachhang.trangthai = false;
-            console.log("kh", khachhang);
 
-            await fetch('/gvnhanh/khachhang', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(khachhang),
+            // this.state.khachhang.hoten = item["hoten"];
+            // this.state.khachhang.sdt = item["sdt"];
+            // this.state.khachhang.diachi = item["diachilamviec"];
+            // this.state.khachhang.trangthai = false;
+            // console.log("kh", khachhang);
 
-            });
+            // await fetch('/gvnhanh/khachhang', {
+            // method: 'POST',
+            // headers: {
+            //     'Accept': 'application/json',
+            //     'Content-Type': 'application/json'
+            // },
+            // body: JSON.stringify(khachhang),
+
+            // });
 
             await fetch('/gvnhanh/yeucau', {
             method: 'POST',
@@ -174,7 +176,7 @@ class RegisterServiceContain extends Component {
                 onClickOutside: () => null,
                 onKeypressEscape: () => null
             });
-        }
+        //}
 
     }
     render() {
@@ -182,7 +184,8 @@ class RegisterServiceContain extends Component {
 
         const {item} = this.state;
         const {dichVus} = this.state;
-        this.state.item.dichvu = this.state.dichVus.tenloai;
+        this.state.item.iddv = this.state.dichVus.iddv;
+        const {loaiDVs} = this.state;
         return (
             <div>
                 <div className="container">
@@ -200,12 +203,12 @@ class RegisterServiceContain extends Component {
                         <li className="breadcrumb-item">
                             <a href="index.html">Trang chủ</a>
                         </li>
-                        <li className="breadcrumb-item active"> {dichVus.tenloai}</li>
+                        <li className="breadcrumb-item active"> {dichVus.tendv}</li>
                     </ol>
                     <div className="row">
                         <div className="col-md-5">
                             
-                            <img className="img-fluid rounded mb-3 mb-md-0" src={dichVus.anh} alt="" />
+                            <img className="img-fluid rounded mb-3 mb-md-0" src={loaiDVs.anh} alt="ảnh" />
                           
                         </div>
                         <div className="col-md-7">
@@ -250,7 +253,7 @@ class RegisterServiceContain extends Component {
                                     <div className="input-group-prepend">
                                         <span className="input-group-text"> <i className="fa fa-user" /> </span>
                                     </div>
-                                    <input name="diachilamviec" id="diachilamviec" value={item.diachilamviec ||''} className="form-control" 
+                                    <input name="diachi" id="diachi" value={item.diachi ||''} className="form-control" 
                                     placeholder="Nhập địa chỉ" type="text" onChange={this.handleChange} required/>
                                 </div>
                                 {/* ket thuc form-diachi */} {/* form-thoigian */}

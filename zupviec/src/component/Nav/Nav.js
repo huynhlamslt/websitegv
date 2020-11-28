@@ -17,6 +17,7 @@ class Nav extends Component {
         const response = await fetch('/gvnhanh/loaidv');
         const body = await response.json();
         this.setState({ loaiDVs: body, isLoading: false });
+        console.log("loaidv", this.state.loaiDVs)
     }
 
   render() {

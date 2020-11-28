@@ -30,12 +30,12 @@ class RegisterStaff extends Component {
         ngaysinh: '',
         sdt: '',
         cmnd: '',
-        kinhnghiem: '',
         quequan:'',
-        dvdangky:'',
         hinhanh: '',
-        trangthai: '',
         del: '',
+        hopdong: '',
+        ungtuyen: '',
+        idloaidv: ''
     };
 
     constructor(props) {
@@ -49,7 +49,7 @@ class RegisterStaff extends Component {
     }
 
     async componentDidMount(){
-        const dv = await (await fetch('/gvnhanh/loaidichvu')).json();
+        const dv = await (await fetch('/gvnhanh/loaidv')).json();
         this.setState({
             dichVus:dv      
         })
@@ -76,12 +76,13 @@ class RegisterStaff extends Component {
         event.preventDefault();
         const {item} = this.state;
         const {dichVus} = this.state;
-        this.state.item.trangthai='false';
-        this.state.item.del='false';
+        this.state.item.del='0';
+        this.state.item.hopdong='0';
+        this.state.item.ungtuyen='1';
 
-        if(this.state.item.dvdangky===''){
+        if(this.state.item.idloaidv===''){
             //alert("loi")
-            this.state.item.dvdangky= this.state.dichVus[0].tenloai;
+            this.state.item.idloaidv= this.state.dichVus[0].idloaidv;
         }
         console.log("item", item);
 
@@ -180,10 +181,10 @@ class RegisterStaff extends Component {
                             <div className="input-group-prepend">
                                 <span className="input-group-text"> <i className="fa fa-building" /> </span>
                             </div>
-                            <Input type="select" className="form-control" name="dvdangky" id="dvdangky" value={item.dvdangky ||''} 
+                            <Input type="select" className="form-control" name="idloaidv" id="idloaidv" value={item.idloaidv ||''} 
                             onChange={this.handleChange} required>
-                                {this.state.dichVus.map((item, index) => (
-                                    <option value={item.tenloai}>{item.tenloai}</option>
+                                {this.state.dichVus.map((dv, index) => (
+                                    <option value={dv.idloaidv}>{dv.tenloai}</option>
                                 ))}*
                             </Input>
                         </div>

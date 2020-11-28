@@ -1,15 +1,27 @@
 import React, { Component } from 'react';
 
 import {
- BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  withRouter
+  Link
 } from "react-router-dom";
 
 class Home extends Component {
+
+    state = {
+        isLoading: true,
+        iddv: '',
+      };
+
+    async componentDidMount() {
+        const response = await fetch('/gvnhanh/bangphidv');
+        const body = await response.json();
+        this.setState({ iddv: body[0].iddv, isLoading: false });
+        console.log("body", this.state)
+    }
+
     render() {
+
+    const {iddv} = this.state;
+
         return (
             <div className="container">
               <h1 className="my-4">
@@ -184,7 +196,7 @@ class Home extends Component {
                   <img className="img-fluid rounded" src="image/allService.jpg" alt="" />
                 </div>
                 <div className="col-md-6">
-                  <Link to="/dichvu/1" className="btn btn-lg btn-secondary btn-block ">Đặt ngay</Link>
+                  <Link to={"/dichvu/"+iddv} className="btn btn-lg btn-secondary btn-block ">Đặt ngay</Link>
                 </div>
               </div>
               {/* Call to Action Section */}

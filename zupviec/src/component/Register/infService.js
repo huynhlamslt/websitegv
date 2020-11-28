@@ -31,27 +31,30 @@ class infService extends Component {
         this.state = {
             dichVus: [],
             chiTiets: [],
+            link:'',
         };
     }
 
     async componentWillReceiveProps (newProps) {
       console.log("newProps", newProps)
-      const dv = await (await fetch(`/gvnhanh/loaidichvu/${newProps.match.params.id}`)).json();
+      const dv = await (await fetch(`/gvnhanh/loaidv/${newProps.match.params.id}`)).json();
         const ct = await (await fetch(`/gvnhanh/bangphidv/loaidv/${newProps.match.params.id}`)).json();
         this.setState({
             dichVus:dv,
-            chiTiets:ct,      
+            chiTiets:ct,  
+            link: ct[0].iddv,    
         })
     }
 
     async componentDidMount(){
-        const dv = await (await fetch(`/gvnhanh/loaidichvu/${this.props.match.params.id}`)).json();
+        const dv = await (await fetch(`/gvnhanh/loaidv/${this.props.match.params.id}`)).json();
         const ct = await (await fetch(`/gvnhanh/bangphidv/loaidv/${this.props.match.params.id}`)).json();
        console.log("dv",this.props.match.params.id);
 
         this.setState({
             dichVus:dv,
-            chiTiets:ct,      
+            chiTiets:ct, 
+            link: ct[0].iddv,   
         })
 
         if (window.FB) {
@@ -67,23 +70,27 @@ class infService extends Component {
         // document.body.appendChild(script);
     }
 
+    currencyFormat(num){
+       return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')
+    }
 
     render() {
 
        const {dichVus} = this.state;
        const {chiTiets} = this.state;
+       const {link} = this.state;
 
        const chiTietList = chiTiets.map((ct, idx) =>{
           return <div key={idx} className="col-sm-4 pricing text-center">
             <div className="card mb-5 mb-lg-0">
               <div className="card-body">
                 <h1 className="card-title text-center namepk1">{ct.tendv}</h1>
-                <h6 className="card-price text-center">{ct.gia}<span className="period">/{ct.donvitinh}</span></h6>
+                <h6 className="card-price text-center">{this.currencyFormat(ct.gia)}<span className="period">VNĐ/{ct.donvitinh}</span></h6>
                 <hr />
                 <ul className="fa-ul">
                   <li>
                     <span className="fa-li"><i className="fas fa-check" />
-                     {ct.chitiet}
+                     {ct.mota}
                     </span>                  
                   </li>
                   <li>
@@ -92,7 +99,7 @@ class infService extends Component {
                     </span>
                   </li>
                 </ul>
-                <Link to={`/dichvu/${this.props.match.params.id}`} className="btn btn-block btn-primary text-uppercase">Đặt lịch ngay</Link>
+                <Link to={`/dichvu/${ct.iddv}`} className="btn btn-block btn-primary text-uppercase">Đặt lịch ngay</Link>
               </div>
             </div>
           </div>
@@ -133,7 +140,7 @@ class infService extends Component {
             <p style={{fontWeight: 600}} className="text-justify">
               {dichVus.gioithieu}
             </p>
-            <Link to={`/dichvu/${this.props.match.params.id}`} className="btn btn-primary" href="#">Đặt lịch ngay
+            <Link to={`/dichvu/${link}`} className="btn btn-primary" href="#">Đặt lịch ngay
               <span className="glyphicon glyphicon-chevron-right" />
             </Link>
           </div>
@@ -162,7 +169,7 @@ class infService extends Component {
                 </span>
                 <br />
                 <p style={{fontWeight: 300}} className="text-justify">
-                  {dichVus.mota}
+                  {dichVus.gioithieu}
                 </p>
               </div> 
             </div>
