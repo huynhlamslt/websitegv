@@ -21,17 +21,19 @@ public class KhachHang {
     private String sdt;
     private String email;
     private String diachi;
+    private int trangthai;
 
     public KhachHang(){
 
     }
 
-    public KhachHang(int idkh, String hoten, String sdt, String email, String diachi) {
+    public KhachHang(int idkh, String hoten, String sdt, String email, String diachi, int trangthai) {
         this.idkh = idkh;
         this.hoten = hoten;
         this.sdt = sdt;
         this.email = email;
         this.diachi = diachi;
+        this.trangthai = trangthai;
     }
 
     public int getIdkh() {
@@ -72,6 +74,14 @@ public class KhachHang {
 
     public void setDiachi(String diachi) {
         this.diachi = diachi;
+    }
+
+    public int getTrangthai() {
+        return trangthai;
+    }
+
+    public void setTrangthai(int trangthai) {
+        this.trangthai = trangthai;
     }
 
 }

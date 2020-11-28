@@ -29,6 +29,16 @@ public class KhachHangDAO {
         return khachHangRepository.findById(idkh).orElse(null);
     }
 
+    //Update trang thai true
+    public void updateTrue(Integer idkh){
+        khachHangRepository.setTTTrue(idkh);
+    }
+
+     //Update trang thai false
+     public void updateFalse(Integer idkh){
+        khachHangRepository.setTTFalse(idkh);
+    }
+
     //Delete 
     public void delete(KhachHang kh){
         khachHangRepository.delete(kh);

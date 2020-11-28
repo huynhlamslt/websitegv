@@ -68,6 +68,19 @@ public class LichHenController {
         return ResponseEntity.ok().body(updateLichHen);
     }
 
+     //Cập nhật trạng thái kí hợp đồng
+     @PutMapping("/lichhen/capnhat/{id}")
+     public ResponseEntity<LichHen> updateHD(@PathVariable(value = "id") Integer idlh){
+         LichHen lichHen = lichHenDAO.findOne(idlh);
+ 
+         if(lichHen == null){
+             return ResponseEntity.notFound().build();
+         }
+ 
+         lichHenDAO.updateHD(idlh);
+         return ResponseEntity.ok().build();
+     }
+
     //Xóa lịch hẹn
     @DeleteMapping("/lichhen/{id}")
     public ResponseEntity<LichHen> deleteLichHen(@PathVariable(value = "id") Integer idlh){

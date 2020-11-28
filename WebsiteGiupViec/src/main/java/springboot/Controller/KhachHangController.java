@@ -60,9 +60,36 @@ public class KhachHangController {
         khachHang.setSdt(khDetail.getSdt());
         khachHang.setEmail(khDetail.getEmail());
         khachHang.setDiachi(khDetail.getDiachi());
+        khachHang.setTrangthai(khDetail.getTrangthai());
 
         KhachHang updateKhachhang = khachHangDAO.save(khachHang);
         return ResponseEntity.ok().body(updateKhachhang);
+    }
+
+    //Cập nhật trạng thái true
+    @PutMapping("/khachhang/true/{id}")
+    public ResponseEntity<KhachHang> updateTrue(@PathVariable(value = "id") Integer idkh){
+        KhachHang khachHang = khachHangDAO.findOne(idkh);
+
+        if(khachHang==null){
+            return ResponseEntity.notFound().build();
+        }
+
+        khachHangDAO.updateTrue(idkh);;
+        return ResponseEntity.ok().build();
+    }
+
+    //Cập nhật trạng thái false
+    @PutMapping("/khachhang/false/{id}")
+    public ResponseEntity<KhachHang> updateFalse(@PathVariable(value = "id") Integer idkh){
+        KhachHang khachHang = khachHangDAO.findOne(idkh);
+
+        if(khachHang==null){
+            return ResponseEntity.notFound().build();
+        }
+
+        khachHangDAO.updateFalse(idkh);;
+        return ResponseEntity.ok().build();
     }
 
     //Xóa khách hàng

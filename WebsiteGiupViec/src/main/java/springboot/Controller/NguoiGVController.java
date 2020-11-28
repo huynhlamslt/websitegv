@@ -54,6 +54,17 @@ public class NguoiGVController {
         return ResponseEntity.ok().body(nguoiGV);
     }
 
+    @GetMapping("/nguoigv/timngv/{id}/{start}/{end}")
+    public List<NguoiGV> getNguoiGvByHDThue(@PathVariable(value="id") Integer idloaidv, @PathVariable(value = "start") String start, @PathVariable(value = "end") String end){
+        return nguoiGVDAO.findHdThue(idloaidv, start, end);
+
+        // if(nguoiGV == null){
+        //     return ResponseEntity.notFound().build();
+        // }
+
+        // return ResponseEntity.ok().body(nguoiGV);
+    }
+
     //Update người giúp việc
     @PutMapping("/nguoigv/{id}")
     public ResponseEntity<NguoiGV> updateNguoiGV(@PathVariable(value="id") Integer idngv, @Validated @RequestBody NguoiGV ngvDetail){

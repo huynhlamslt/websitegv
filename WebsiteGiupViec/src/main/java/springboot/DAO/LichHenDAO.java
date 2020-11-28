@@ -29,6 +29,11 @@ public class LichHenDAO {
         return lichHenRepository.findById(idlh).orElse(null);
     }
 
+    //Update hop dong
+    public void updateHD(Integer idlichhen){
+        lichHenRepository.updateHopdong(idlichhen);
+    }
+
     //Delete
     public void delete(LichHen lh){
         lichHenRepository.delete(lh);

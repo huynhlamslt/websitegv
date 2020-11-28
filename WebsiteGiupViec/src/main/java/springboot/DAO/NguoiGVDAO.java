@@ -39,6 +39,11 @@ public class NguoiGVDAO {
         return nguoiGVRepository.findById(idngv).orElse(null);
     }
 
+    //Get by hdthue
+    public List<NguoiGV> findHdThue(Integer idloaidv, String start, String end){
+        return nguoiGVRepository.findbyHopDong(idloaidv, start, end);
+    }
+
     //Delete 
     public void delete(NguoiGV ngv){
         nguoiGVRepository.delete(ngv);

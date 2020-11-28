@@ -1,9 +1,23 @@
 package springboot.Repository;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import springboot.Model.KhachHang;
 
 public interface KhachHangRepository extends JpaRepository<KhachHang, Integer>{
-    
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE khachhang SET trangthai=1 WHERE idkh=:idkh", nativeQuery = true)
+    void setTTTrue(@Param("idkh") int idkh);
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE khachhang SET trangthai=0 WHERE idkh=:idkh", nativeQuery = true)
+    void setTTFalse(@Param("idkh") int idkh);
+
 }

@@ -30,6 +30,8 @@ create table khachhang(
     diachi nvarchar(500),
     constraint ck_sdt check (LENGTH(sdt) = 10)
 ) engine = innodb;
+alter table khachhang modify column email varchar(255) null;
+alter table khachhang add column trangthai int;
 
 create table nhanvien(
 	idnv int auto_increment primary key,
