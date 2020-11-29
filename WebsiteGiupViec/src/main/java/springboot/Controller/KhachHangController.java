@@ -47,6 +47,12 @@ public class KhachHangController {
         return ResponseEntity.ok().body(khachHang);
     }
 
+     //Lấy ds khách hàng qua sdt
+     @GetMapping("/khachhang/sdt/{sdt}")
+     public List<KhachHang> getAllKhachHang(@PathVariable(value="sdt") String sdt){
+         return khachHangDAO.findKHDV(sdt);
+     }
+
     //Update khách hàng
     @PutMapping("/khachhang/{id}")
     public ResponseEntity<KhachHang> updateKhachHang(@PathVariable(value = "id") Integer idkh, @Validated @RequestBody KhachHang khDetail){

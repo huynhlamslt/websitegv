@@ -12,7 +12,7 @@ import org.springframework.data.repository.query.Param;
 import springboot.Model.NguoiGV;
 
 public interface NguoiGVRepository extends JpaRepository<NguoiGV, Integer>{
-    @Query(value ="SELECT * FROM nguoigiupviec WHERE nguoigiupviec.del=0 and nguoigiupviec.ungtuyen=0;", nativeQuery = true)
+    @Query(value ="SELECT * FROM nguoigiupviec WHERE nguoigiupviec.del=0 and nguoigiupviec.ungtuyen=0 order by hopdong ASC;", nativeQuery = true)
     List<NguoiGV> findAlltrue();
 
     @Query(value ="SELECT * FROM nguoigiupviec WHERE nguoigiupviec.ungtuyen=1", nativeQuery = true)

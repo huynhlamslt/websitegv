@@ -29,6 +29,11 @@ public class KhachHangDAO {
         return khachHangRepository.findById(idkh).orElse(null);
     }
 
+     //Get by sdt
+     public List<KhachHang> findKHDV(String sdt){
+        return khachHangRepository.findKHDV(sdt);
+    }
+
     //Update trang thai true
     public void updateTrue(Integer idkh){
         khachHangRepository.setTTTrue(idkh);

@@ -1,5 +1,7 @@
 package springboot.Repository;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,5 +21,8 @@ public interface KhachHangRepository extends JpaRepository<KhachHang, Integer>{
     @Modifying
     @Query(value = "UPDATE khachhang SET trangthai=0 WHERE idkh=:idkh", nativeQuery = true)
     void setTTFalse(@Param("idkh") int idkh);
+
+    @Query(value ="SELECT * FROM khachhang WHERE sdt=:sdt AND trangthai=0;", nativeQuery = true)
+    List<KhachHang> findKHDV(@Param("sdt") String sdt);
 
 }
