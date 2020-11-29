@@ -44,6 +44,7 @@ class infService extends Component {
             chiTiets:ct,  
             link: ct[0].iddv,    
         })
+      window.scrollTo(0, 0);
     }
 
     async componentDidMount(){
@@ -61,6 +62,8 @@ class infService extends Component {
           var el = this.refs.fbplugins;
           window.FB.XFBML.parse(el);
         }
+
+        window.scrollTo(0, 0);
 
         //  const script = document.createElement("script");
 

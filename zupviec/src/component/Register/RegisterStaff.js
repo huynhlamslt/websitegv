@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import { AvForm, AvField, ValidatingFormGroup } from 'availity-reactstrap-validation';
 
 import { confirmAlert } from 'react-confirm-alert';
@@ -38,6 +38,7 @@ class RegisterStaff extends Component {
         idloaidv: ''
     };
 
+
     constructor(props) {
         super(props);
         this.state = {
@@ -49,12 +50,14 @@ class RegisterStaff extends Component {
     }
 
     async componentDidMount(){
+        window.scrollTo(0, 0); 
         const dv = await (await fetch('/gvnhanh/loaidv')).json();
         this.setState({
             dichVus:dv      
-        })
+        });
         // const {dichVus} = this.state;
         // console.log("dv", this.state.dichVus[0].tenloai);
+
     }
 
     handleChange(event) {
@@ -122,7 +125,9 @@ class RegisterStaff extends Component {
         const {dichVus} = this.state;
 
         return (
+
             <div className="container">
+
                 <div className="card bg-light">
                     <article className="card-body mx-auto" style={{maxWidth: '400px'}}>
                     <h4 className="card-title mt-3 text-center">Đăng ký trở thành NHÂN VIÊN 

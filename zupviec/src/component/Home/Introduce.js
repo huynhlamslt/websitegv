@@ -4,6 +4,10 @@ import { AvForm, AvField, ValidatingFormGroup } from 'availity-reactstrap-valida
 
 class Introduce extends Component {
 
+     async componentDidMount() {
+        window.scrollTo(0, 0);
+    }
+
     render() {
 
         return (

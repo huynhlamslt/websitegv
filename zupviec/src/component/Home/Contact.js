@@ -4,7 +4,13 @@ import { AvForm, AvField, ValidatingFormGroup } from 'availity-reactstrap-valida
 
 class Contact extends Component {
 
-  
+    constructor(props) {
+      super(props)
+    }
+
+    async componentDidMount() {
+        window.scrollTo(0, 0); 
+    }
 
     render() {
 

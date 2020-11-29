@@ -6,7 +6,8 @@ import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 
 import {
-  withRouter
+    Link,
+    withRouter
 } from "react-router-dom";
 
 // import { 
@@ -57,7 +58,8 @@ class RegisterServiceContain extends Component {
             loaiDVs: loaidv,      
         })
 
-        console.log("this", this.state)
+        console.log("this", this.state);
+        window.scrollTo(0, 0);
     }
 
     handleChange(event) {
@@ -103,27 +105,28 @@ class RegisterServiceContain extends Component {
         const {item} = this.state;
         const {khachhang} = this.state;
        
-        // const sv = await (await fetch(`/gvnhanh/khachhang/service/${item["sdt"]}`)).json();
-        // if(sv===true){
-        //    confirmAlert({
-        //       title: 'Cảnh báo!',
-        //       message: 'Khách hàng không được đặt dịch vụ do đã vi phạm quy định. Liên hệ với công ty để biết thêm chi tiết!',
-        //       buttons: [
-        //         {
-        //           label: 'OK',
-        //           onClick: () => this.props.history.push("/contact")
+        const sv = await (await fetch(`/gvnhanh/khachhang/sdt/${item["sdt"]}`)).json();
+        console.log("sv", sv.length)
+        if(sv.length!==0){
+           confirmAlert({
+              title: 'Cảnh báo!',
+              message: 'Khách hàng không được đặt dịch vụ do đã vi phạm quy định. Liên hệ với công ty để biết thêm chi tiết!',
+              buttons: [
+                {
+                  label: 'OK',
+                  onClick: () => this.props.history.push("/contact")
                
-        //         }
-        //       ],
-        //        childrenElement: () => null,
-        //         closeOnClickOutside: true,
-        //         closeOnEscape: true,
-        //         willUnmount: () => null,
-        //         onClickOutside: () => null,
-        //         onKeypressEscape: () => null
-        //     });
-        // }
-        // else{
+                }
+              ],
+               childrenElement: () => null,
+                closeOnClickOutside: true,
+                closeOnEscape: true,
+                willUnmount: () => null,
+                onClickOutside: () => null,
+                onKeypressEscape: () => null
+            });
+        }
+        else{
 
             // this.setState({
             //     khachhang:{
@@ -176,7 +179,7 @@ class RegisterServiceContain extends Component {
                 onClickOutside: () => null,
                 onKeypressEscape: () => null
             });
-        //}
+        }
 
     }
     render() {
@@ -201,7 +204,7 @@ class RegisterServiceContain extends Component {
                 </h1>
                     <ol className="breadcrumb">
                         <li className="breadcrumb-item">
-                            <a href="index.html">Trang chủ</a>
+                            <Link to=""><a>Trang chủ</a></Link>
                         </li>
                         <li className="breadcrumb-item active"> {dichVus.tendv}</li>
                     </ol>

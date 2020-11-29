@@ -15,7 +15,8 @@ class Home extends Component {
         const response = await fetch('/gvnhanh/bangphidv');
         const body = await response.json();
         this.setState({ iddv: body[0].iddv, isLoading: false });
-        console.log("body", this.state)
+        console.log("body", this.state);
+        window.scrollTo(0, 0);
     }
 
     render() {
@@ -91,7 +92,7 @@ class Home extends Component {
                   Các loại
                 </span>
                 <span style={{color: '#fb8533'}}>
-                  dịch vụ
+                  &nbsp;dịch vụ
                 </span>
               </h2>
               <div className="row">
