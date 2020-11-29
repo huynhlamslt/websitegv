@@ -79,11 +79,11 @@ class listloaidv extends Component{
         }
 
         const loaidvList = loaidvs.map(loaidv =>{
-        	return <tr className="d-flex h-100" key={loaidv.idloaidv}>
-						<td className="col-1 text-center">{loaidv.idloaidv}</td>
-						<td className="col-4 text-center">{loaidv.tenloai}</td>
-						<td className="col-5 text-center">{loaidv.gioithieu}</td>
-                        <td className="col-2 text-center">
+        	return <tr className="h-100" key={loaidv.idloaidv}>
+						<td className="col-1 text-center align-middle">{loaidv.idloaidv}</td>
+						<td className="col-3 align-middle">{loaidv.tenloai}</td>
+						<td className="col-7 ">{loaidv.gioithieu}</td>
+                        <td className="col-1 text-center align-middle">
                         	<div class="btn-group" role="group" aria-label="Basic example">
 	                        	<Link to={"/loaidv/"+loaidv.idloaidv}>
 								  <button type="button" class="btn btn-outline-primary" title="Cập nhật">
@@ -113,7 +113,7 @@ class listloaidv extends Component{
 		            </div>{/* /.row */}
 
 		            <div className="mb-4 pb-4">
-						<Link to = "/loaidv/themloaidv">
+						<Link to = "/loaidv/new">
 							<button className="btn btn-success float-right">Thêm dịch vụ</button>
 						</Link>
 					</div>
@@ -126,11 +126,11 @@ class listloaidv extends Component{
 					<div className="container-fluid">
 						<table className="table table-bordered table-hover table-inverse table-striped">
 							<thead className="thead-dark">
-								<tr className="d-flex h-100">
+								<tr className="">
 									<th className="col-1 text-center">Mã loại</th>
-									<th className="col-4 text-center">Tên loại</th>
-									<th className="col-5 text-center">Giới thiệu</th>
-									<th className="col-2 text-center"></th>
+									<th className="col-3 text-center">Tên loại</th>
+									<th className="col-7 text-center">Giới thiệu</th>
+									<th className="col-1 text-center"></th>
 								</tr>
 							</thead>
 							<tbody>

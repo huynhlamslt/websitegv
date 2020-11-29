@@ -6,35 +6,44 @@ import {
   withRouter
 } from "react-router-dom";
 
-class listtuyendung extends Component{
+class listhdlaodong extends Component{
 
 	constructor(props) {
         super(props);
         this.state = {
-          ngvs: [], 
+          hdlds: [], 
           isLoading: true,
-          item: [],
+          nhanViens: [],
+          ngvs: [],
         };
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.setState({isLoading: true});
 
-        fetch('gvnhanh/nguoigv/tuyendung')
+        fetch('gvnhanh/hopdongdk')
           .then(response => response.json())
-          .then(data => this.setState({ngvs: data, isLoading: false}));
+          .then(data => this.setState({hdlds: data, isLoading: false}));
+
+        const nv = await (await fetch('gvnhanh/nhanvien')).json();
+        const ngv = await (await fetch('gvnhanh/nguoigv')).json();
+
+        this.setState({
+        	nhanViens: nv,
+        	ngvs: ngv
+        })
     }
 
      async remove(id) {
-        await fetch(`/gvnhanh/nguoigv/${id}`, {
+        await fetch(`/gvnhanh/hopdongdk/${id}`, {
           method: 'DELETE',
           headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
           }
         }).then(() => {
-           let updateNguoiGV = [...this.state.ngvs].filter(i => i.idnguoigv !== id);
-           this.setState({ngvs: updateNguoiGV});
+           let updateHdlaodong = [...this.state.hdlds].filter(i => i.idhddk !== id);
+           this.setState({hdlds: updateHdlaodong});
         });
     }
 
@@ -70,7 +79,7 @@ class listtuyendung extends Component{
 
 	render(){
 
-		const {ngvs, isLoading} = this.state;
+		const {hdlds, isLoading, nhanViens, ngvs} = this.state;
 
 		if (isLoading) {
             return <p className="text-primary align-middle text-center">
@@ -79,25 +88,36 @@ class listtuyendung extends Component{
                   </p>;
         }
 
-        const ngvList = ngvs.map((ngv, index) => {
-	          return <tr key={ngv.idnguoigv}>
-	            <th scope="row" className="text-center">{index+1}</th>
-	            <td className="text-center">{ngv.hoten}</td>
-	            <td className="text-center">{this.formatter.format(Date.parse(ngv.ngaysinh))}</td>
-	            <td className="text-center">{ngv.sdt}</td>
-	            <td className="text-center">{ngv.quequan}</td>
+        const hdldList = hdlds.map((hddk, index) => {
+	          return <tr key={hddk.idhddk}>
+	          	<td scope="row" className="text-center">{hddk.idhddk}</td>
+	            <td className="text-center">
+		            {ngvs.map((ngv,index)=>{
+		            	if(ngv.idnguoigv===hddk.idnguoigv)
+		            		return ngv.hoten
+		            })}
+	            </td>
+	            <td className="text-center">
+	            	 {nhanViens.map((nv,index)=>{
+		            	if(nv.idnv===hddk.idnv)
+		            		return nv.hoten
+		            })}
+	            </td>
+	            <td className="text-center">{this.formatter.format(Date.parse(hddk.ngayky))}</td>
+	            <td className="text-center">{this.formatter.format(Date.parse(hddk.ngayhethan))}</td>
+	            <td className="text-center">{hddk.phantramluong}</td>
 	            <td className="text-center">
 
 	            	<div className="btn-group" role="group" aria-label="Basic example">
-	                	<Link to={"/nguoigv/"+ngv.idnguoigv+`_new`}>
+	                	<Link to={"/hdlaodong/"+hddk.idhddk}>
 						  <button type="button" className="btn btn-outline-primary" title="Cập nhật">
 						  	<i className="fas fa-pencil-alt" />
 						  </button>
 						</Link>
 
-						<button type="button" className="btn btn-outline-danger" onClick={this.handleClick.bind(this,ngv.idnguoigv)} title="Xóa">
+						{/*<button type="button" className="btn btn-outline-danger" onClick={this.handleClick.bind(this,ngv.idnguoigv)} title="Xóa">
 							<i className="fas fa-trash" />
-						</button>
+						</button>*/}
 					</div> 
 	            </td>
 	          </tr>
@@ -110,12 +130,16 @@ class listtuyendung extends Component{
 		          <div className="container-fluid">
 		            <div className="row mb-2">
 		              <div className="col-sm-6">
-		                <h1 className="m-0">Danh sách tuyển dụng</h1>
+		                <h1 className="m-0">Danh sách hợp đồng lao động</h1>
 		              </div>{/* /.col */}
 		              
 		            </div>{/* /.row */}
 
-		           
+		            <div className="mb-4 pb-4">
+						<Link to = "/hdlaodong/themhdlaodong">
+							<button className="btn btn-success float-right">Thêm hợp đồng</button>
+						</Link>
+					</div>
 
 		          </div>{/* /.container-fluid */}
 		        </div>
@@ -126,16 +150,17 @@ class listtuyendung extends Component{
 						<table className="table table-bordered table-hover table-inverse table-striped">
 							<thead className="thead-dark">
 								<tr className="">
-									<th className="text-center" scope="col">STT</th>
-									<th className="text-center">Họ tên</th>
-									<th className="text-center">Ngày sinh</th>
-									<th className="text-center">SĐT</th>
-									<th className="text-center">Quê quán</th>
-									<th className="text-center">Quê quán</th>
+									<th className="text-center" scope="col">Mã số</th>
+									<th className="text-center">Họ tên NGV</th>
+									<th className="text-center">Họ tên NV</th>
+									<th className="text-center">Ngày ký</th>
+									<th className="text-center">Ngày hết hạn</th>
+									<th className="text-center">% lương</th>
+									<th className="text-center"></th>
 								</tr>
 							</thead>
 							<tbody>
-								{ngvList}
+								{hdldList}
 							</tbody>
 						</table>
 					</div>
@@ -145,4 +170,4 @@ class listtuyendung extends Component{
 		);
 	}
 }
-export default listtuyendung;
+export default listhdlaodong;

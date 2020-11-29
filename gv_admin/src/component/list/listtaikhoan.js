@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import {
   Link,
   withRouter
@@ -6,8 +8,106 @@ import {
 
 class listtaikhoan extends Component{
 
-	
+	constructor(props){
+		super(props);
+		this.state = {
+			tks:[],
+			isLoading: true,
+			item:[],
+			nvs:[]
+		};
+		this.remove = this.remove.bind(this);
+		
+	}
+
+	 async componentDidMount() {
+        const response = await fetch('/gvnhanh/taikhoan');
+        const body = await response.json();
+        const nv = await (await fetch('gvnhanh/nhanvien')).json();
+        this.setState({ 
+        	tks: body, 
+        	isLoading: false ,
+        	nvs: nv
+        });
+    }
+
+	async remove(id){
+		await fetch(`/gvnhanh/taikhoan/${id}`,{
+			method: 'DELETE',
+			headers:{
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			}
+		}).then(() =>{
+			let updateTaikhoan = [...this.state.tks].filter(i => i.idtk !== id);
+			this.setState({tks: updateTaikhoan});
+		});
+	}
+
+	handleClick(id){
+      confirmAlert({
+          title: 'Cảnh báo',
+          message: 'Bạn chắc chắn muốn xóa',
+          buttons: [
+            {
+              label: 'Đồng ý',
+              onClick: ()=> this.remove(id)
+            },
+            {
+              label: 'Không',
+           
+            },
+          ],
+           childrenElement: () => null,
+            closeOnClickOutside: true,
+            closeOnEscape: true,
+            willUnmount: () => null,
+            onClickOutside: () => null,
+            onKeypressEscape: () => null
+        });
+    }
+
 	render(){
+
+		const {tks, isLoading} = this.state;
+		const {item} = this.state;
+		const {nvs} = this.state;
+
+        if (isLoading) {
+            return <p className="text-primary align-middle text-center">
+                    <i className="fas fa-spinner fa-pulse fa-4x fa-fw" />
+                    Loading...
+                  </p>;
+        }
+
+        const tkList = tks.map(tk =>{
+        	return <tr key={tk.idtk}>
+						<td className="text-center">{tk.idtk}</td>
+						<td className="text-center">{tk.sdt}</td>
+						<td className="text-center">
+						{nvs.map((nv, index)=>{
+							if(nv.idnv===tk.idnv)
+								return nv.hoten
+						})}
+						</td>                  
+                        <td className="text-center">{tk.quyen}</td>
+                        <td className="text-center">{tk.trangthai}</td>
+                        <td className="text-center">
+                        	<div class="btn-group" role="group" aria-label="Basic example">
+	                        	<Link to={"/taikhoan/"+tk.idtk}>
+								  <button type="button" class="btn btn-outline-primary" title="Cập nhật">
+								  	<i className="fas fa-pencil-alt" />
+								  </button>
+								</Link>
+
+							  <button type="button" class="btn btn-outline-danger" onClick={this.handleClick.bind(this,tk.idtk)} title="Xóa">
+							  	<i className="fas fa-trash" />
+							  </button>
+							</div>                       	
+                        </td>
+					</tr>
+        });
+
 		return(
 			<div className="content-wrapper">
 
@@ -21,7 +121,7 @@ class listtaikhoan extends Component{
 		            </div>{/* /.row */}
 
 		            <div className="mb-4 pb-4">
-						<Link to = "/taikhoan/themtaikhoan">
+						<Link to = "/taikhoan/new">
 							<button className="btn btn-success float-right">Thêm tài khoản</button>
 						</Link>
 					</div>
@@ -40,16 +140,11 @@ class listtaikhoan extends Component{
 									<th className="text-center">Nhân viên</th>
 									<th className="text-center">Quyền</th>
                                     <th className="text-center">Trạng thái</th>
+                                    <th className="text-center"></th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr className="">
-									<td className="text-center">1</td>
-									<td className="text-center">1</td>
-									<td className="text-center">1</td>
-                                    <td className="text-center">1</td>
-                                    <td className="text-center">1</td>
-								</tr>
+								{tkList}
 							</tbody>
 						</table>
 					</div>

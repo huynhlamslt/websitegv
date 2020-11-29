@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import {
   Link,
   withRouter
@@ -6,9 +8,123 @@ import {
 
 class listnguoigv extends Component{
 
+	  constructor(props) {
+        super(props);
+        this.state = {
+          ngvs: [], 
+          isLoading: true,
+          item: [],
+        };
+        //this.remove = this.remove.bind(this);
+        //this.handleChange = this.handleChange.bind(this);
+    }
+
+    componentDidMount() {
+        this.setState({isLoading: true});
+
+        fetch('gvnhanh/nguoigv')
+          .then(response => response.json())
+          .then(data => this.setState({ngvs: data, isLoading: false}));
+    }
+
+    async remove(id) {
+        await fetch(`/gvnhanh/nguoigv/xoa/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        }).then(() => {
+           let updateNguoiGV = [...this.state.ngvs].filter(i => i.idnguoigv !== id);
+           this.setState({ngvs: updateNguoiGV});
+        });
+    }
+
+    async handleClick(id){
+      confirmAlert({
+          title: 'Cảnh báo',
+          message: 'Bạn chắc chắn muốn xóa',
+          buttons: [
+            {
+              label: 'Đồng ý',
+              onClick: ()=>this.remove(id)
+            //   onClick: async ()=> {
+            //   await fetch(`/gvnhanh/nguoigv/xoa/${id}`, {
+            //                 method:'PUT',
+            //                 headers: {
+            //                   'Accept': 'application/json',
+            //                   'Content-Type': 'application/json'
+            //                 }
+            //               }).then(() => {
+            //            fetch('gvnhanh/nguoigv')
+            //           .then(response => response.json())
+            //           .then(data => this.setState({ngvs: data, isLoading: false}));
+            //     });
+            // }
+            },
+            {
+              label: 'Không',
+           
+            },
+          ],
+           childrenElement: () => null,
+            closeOnClickOutside: true,
+            closeOnEscape: true,
+            willUnmount: () => null,
+            onClickOutside: () => null,
+            onKeypressEscape: () => null
+        });
+
+    }
+
+    formatter = new Intl.DateTimeFormat("en-GB", {
+          year: "numeric",
+          month: "numeric",
+          day: "2-digit"
+        });
 	
 	render(){
+
+		const {ngvs, isLoading} = this.state;
+
+		if (isLoading) {
+            return <p className="text-primary align-middle text-center">
+                    <i className="fas fa-spinner fa-pulse fa-4x fa-fw" />
+                    Loading...
+                  </p>;
+        }
+
+    const ngvList = ngvs.map(ngv => {
+	          return <tr key={ngv.idnguoigv}>
+	            <th scope="row" className="text-center">{ngv.idnguoigv}</th>
+	            <td className="text-center">{ngv.hoten}</td>
+	            <td className="text-center">{ngv.gioitinh}</td>
+	            <td className="text-center">{this.formatter.format(Date.parse(ngv.ngaysinh))}</td>
+	            <td className="text-center">{ngv.sdt}</td>
+	            <td className="text-center">{ngv.cmnd}</td>
+	            <td className="text-center">{ngv.quequan}</td>
+	            <td className="text-center">
+
+	            	<div className="btn-group" role="group" aria-label="Basic example">
+	                	<Link to={"/nguoigv/"+ngv.idnguoigv}>
+						  <button type="button" className="btn btn-outline-primary" title="Cập nhật">
+						  	<i className="fas fa-pencil-alt" />
+						  </button>
+						</Link>
+
+						{ngv.hopdong!==1 ? <Link to={"/hdlaodong/" + `${ngv.idnguoigv}_new`}><button type="button" className="btn btn-outline-warning" tag={Link} to={"/hopdongdk/" + `${ngv.idnguoigv}_new`} 
+		                title="Hợp đồng"><i className="fas fa-print" /></button></Link>: null}
+
+						<button type="button" className="btn btn-outline-danger" onClick={this.handleClick.bind(this,ngv.idnguoigv)} title="Xóa">
+							<i className="fas fa-trash" />
+						</button>
+					</div> 
+	            </td>
+	          </tr>
+	        });
+
 		return(
+
 			<div className="content-wrapper">
 
 				<div className="content-header">
@@ -21,7 +137,7 @@ class listnguoigv extends Component{
 		            </div>{/* /.row */}
 
 		            <div className="mb-4 pb-4">
-						<Link to = "/nguoigv/themnguoigv">
+						<Link to = "/nguoigv/new">
 							<button className="btn btn-success float-right">Thêm mới</button>
 						</Link>
 					</div>
@@ -35,25 +151,18 @@ class listnguoigv extends Component{
 						<table className="table table-bordered table-hover table-inverse table-striped">
 							<thead className="thead-dark">
 								<tr className="">
-									<th className="col-1 text-center" scope="col">Mã NGV</th>
-									<th className="col-2 text-center">Họ tên</th>
+									<th className="text-center" scope="col">Mã NGV</th>
+									<th className="text-center">Họ tên</th>
 									<th className=" text-center">Giới tính</th>
 									<th className="text-center">Ngày sinh</th>
 									<th className="text-center">SĐT</th>
 									<th className=" text-center">CMND</th>
-									<th className="col-3 text-center">Quê quán</th>
+									<th className="text-center">Quê quán</th>
+									<th className="text-center"></th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr className="">
-									<th className=" text-center">1</th>
-									<th className=" text-center">2</th>
-									<th className=" text-center">3</th>
-									<th className=" text-center">4</th>
-									<th className=" text-center">5</th>
-									<th className=" text-center">6</th>
-									<th className=" text-center">7</th>
-								</tr>
+								{ngvList}
 							</tbody>
 						</table>
 					</div>

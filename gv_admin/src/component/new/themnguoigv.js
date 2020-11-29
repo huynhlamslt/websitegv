@@ -5,7 +5,7 @@ import {
 } from "react-router-dom";
 import CurrencyFormat from 'react-currency-format';
 
-class themnhanvien extends Component{
+class themnguoigv extends Component{
 
 	emptyItem = {
 		hoten: '',
@@ -13,42 +13,44 @@ class themnhanvien extends Component{
 		ngaysinh: '',
 		sdt: '',
 		cmnd: '',
-		luong: ''
+		kinhnghiem: '',
+		quequan:'',
+		dvdangky:'',
+		hinhanh: '',
+		del: '', 
+		hopdong: '',
 	};
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			item: this.emptyItem
+			item: this.emptyItem,
+			dichVus:[],
+			dvdangky:'',
+			upload: '',
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
-		this.handleChangePhone = this.handleChangePhone.bind(this);
+		// this.handleChangePhone = this.handleChangePhone.bind(this);
+		// this.getBase64 = this.getBase64.bind(this);
+		// this.changeImage = this.changeImage.bind(this);
 	}
 
 	async componentDidMount() {
-		if (this.props.match.params.id !== 'new') {
-			const nv = await (await fetch(`/gvnhanh/nhanvien/${this.props.match.params.id}`)).json();
-			this.setState({item: nv});
+		const [update, them] = this.props.match.params.id.split('_');
+		if (update !== 'new') {
+			const ngv = await (await fetch(`/gvnhanh/nguoigv/${update}`)).json();
+			this.setState({item: ngv});
 		}
-		console.log("nv", this.state.item)
 	}
 
-	handleChange(event) {
+	async handleChange(event) {
 		const target = event.target;
 		const value = target.value;
 		const name= target.name;
 		let item = {...this.state.item};
 		item[name] = value;
 		this.setState({item});
-
-		console.log("nv",item);
-
-		// this.setState({[event.target.id]: event.target.value});
-		
-		 // this.setState({
-	  //     input: event.target.value
-	  //   });
 	}
 
 	async handleSubmit(event) {
@@ -56,10 +58,12 @@ class themnhanvien extends Component{
 
 		const {item} = this.state;
 		if(this.state.item.gioitinh===''){
-			this.state.item.gioitinh='Nam';
-			
+			this.state.item.gioitinh='Nam';	
 		}
-		await fetch('/gvnhanh/nhanvien', {
+		this.state.item.del=0;
+		this.state.item.hopdong=0;
+		this.state.item.ungtuyen=0;
+		await fetch('/gvnhanh/nguoigv', {
 			method: (item.id) ? 'PUT' : 'POST',
 			headers: {
 				'Accept': 'application/json',
@@ -67,19 +71,14 @@ class themnhanvien extends Component{
 			},
 			body: JSON.stringify(item),
 		});
-		this.props.history.push('/nhanvien');
-		
+		this.props.history.push('/nguoigv');
 	}
 
-	handleChangePhone(e){
-	    if(e.target.value.match("^[a-zA-Z ]*$")!=null) {
-	      this.setState({item: e.target.value});
-	    }
-	  }
 	render(){
 
 		const {item} = this.state;
-		const title = <h1 className="h3 mb-2 text-gray-800 pb-3">{item.idnv ? 'Cập nhật nhân viên' : 'Thêm nhân viên'}</h1>;
+		const title = <h1 className="h3 mb-2 text-gray-800 pb-3">{item.idnguoigv ? 'Cập nhật người giúp việc' : 'Thêm người giúp việc'}</h1>;
+		const [update, them] = this.props.match.params.id.split('_');
 
 		return(
 			<div className="content-wrapper">
@@ -108,7 +107,7 @@ class themnhanvien extends Component{
 				                <div className="card-body">
 				                  <div className="form-group">
 				                    <label for="exampleInputEmail1">Họ tên nhân viên</label>
-				                    <input type="text" className="form-control" name="hoten" id="hoten" value={item.hoten || ''} 
+				                    <input type="text" className="form-control col-md-10" name="hoten" id="hoten" value={item.hoten || ''} 
 				                    onChange={this.handleChange} placeholder="" required/>
 				                  </div>
 
@@ -149,23 +148,20 @@ class themnhanvien extends Component{
 						                </div>
 				                    </div>
 				                  </div>
-				                 
-				                  <div className="form-group">
-				                    <label for="exampleInputPassword1">Lương</label>
-				                    <div class="input-group mb-3 col-md-4">
-									  <input type="number" className="form-control" name="luong" id="luong" min="0" value={item.luong || ''}
-											onChange={this.handleChange}/>
-									  <div class="input-group-append">
-									    <span class="input-group-text" id="basic-addon2">VNĐ</span>
-									  </div>
-									</div>
+
+				                   <div className="form-group">
+				                    <label for="exampleInputEmail1">Quê quán</label>
+				                    <input type="text" className="form-control col-md-10" name="quequan" id="quaquan" value={item.quequan || ''} 
+				                    onChange={this.handleChange} placeholder="" required/>
 				                  </div>
+				                 
 				                </div>
 				               
 
 				                <div className="card-footer">
 				                  <button type="submit" className="btn btn-primary">Save</button>
-				                  <Link to="/nhanvien"><button type="submit" className="btn btn-danger ml-4">Cancel</button></Link>
+				                  {them==='new'? <Link to="/tuyendung"><button type="submit" className="btn btn-danger ml-4">Cancel</button></Link>
+				              	  : <Link to="/nguoigv"><button type="submit" className="btn btn-danger ml-4">Cancel</button></Link>}
 				                </div>
 				              </form>
 				            </div>
@@ -176,4 +172,4 @@ class themnhanvien extends Component{
 		);
 	}
 }
-export default withRouter(themnhanvien);
+export default withRouter(themnguoigv);

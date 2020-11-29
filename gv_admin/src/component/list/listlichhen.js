@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import {
   Link,
   withRouter
@@ -6,8 +8,135 @@ import {
 
 class listlichhen extends Component{
 
-	
+	constructor(props){
+		super(props);
+		this.state = {
+			lhs:[],
+			isLoading: true,
+			nvs:[],
+			ycs:[],
+			hdthues: [],
+		};
+		this.remove = this.remove.bind(this);
+	}
+
+	async componentDidMount(){
+		this.setState({isLoading: true});
+
+		const lh = await (await fetch('gvnhanh/lichhen')).json();
+		const nv = await (await fetch('gvnhanh/nhanvien')).json();
+		const yc = await (await fetch('gvnhanh/yeucau')).json();
+		const hdthue = await (await fetch('gvnhanh/hdthue')).json();
+
+		this.setState({
+			lhs: lh,
+			isLoading: false,
+			nvs: nv,
+			ycs: yc,
+			hdthues: hdthue,
+		})
+
+		console.log("state", this.state)
+	}
+
+	async remove(id){
+
+		await fetch(`/gvnhanh/lichhen/${id}`,{
+			method: 'DELETE',
+			headers:{
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			}
+		}).then(() =>{
+			let updateLichhen = [...this.state.lhs].filter(i => i.idlichhen !== id);
+			this.setState({lhs: updateLichhen});
+		});
+	}
+
+	handleClick(id){
+      confirmAlert({
+          title: 'Cảnh báo',
+          message: 'Bạn chắc chắn muốn xóa',
+          buttons: [
+            {
+              label: 'Đồng ý',
+              onClick: ()=> this.remove(id)
+            },
+            {
+              label: 'Không',
+           
+            },
+          ],
+           childrenElement: () => null,
+            closeOnClickOutside: true,
+            closeOnEscape: true,
+            willUnmount: () => null,
+            onClickOutside: () => null,
+            onKeypressEscape: () => null
+        });
+    }
+
+    formatter = new Intl.DateTimeFormat("en-GB", {
+          year: "numeric",
+          month: "numeric",
+          day: "2-digit"
+        });	
+
 	render(){
+
+		const {lhs, isLoading, nvs, ycs, hdthues} = this.state;
+
+		if (isLoading) {
+            return <p className="text-primary align-middle text-center">
+                    <i className="fas fa-spinner fa-pulse fa-4x fa-fw" />
+                    Loading...
+           
+
+                  </p>;
+        }
+
+        const lhList = lhs.map((lh, index)=>{
+	        return <tr key={index}>
+	        			<td className=" text-center">{lh.idlichhen}</td>
+						<td className=" text-center">
+							{ycs.map((yc,index)=>{
+								if(yc.idyc===lh.idkh)
+									return yc.hoten
+							})}
+						</td>
+						<td className=" text-center">
+							{nvs.map((nv,index)=>{
+								if(nv.idnv===lh.idnv)
+									return nv.hoten
+							})}
+						</td>
+						<td className=" text-center">{lh.gio}</td>
+						<td className=" text-center">{lh.ngay}</td>
+						<td className=" text-center">{lh.diachihen}</td>
+						<td className=" text-center">
+							<div class="btn-group" role="group" aria-label="Basic example">
+
+		                    	<Link to={"/lichhen/"+lh.idlichhen}>
+								  <button type="button" class="btn btn-outline-primary" title="Cập nhật">
+								  	<i className="fas fa-pencil-alt" />
+								  </button>	</Link>
+								  
+								
+
+								{lh.hopdong===0?<Link to={"/hdthue/"+lh.idlichhen+`_new`}>
+								  <button type="button" class="btn btn-outline-success" title="Cập nhật">
+								  	<i className="fas fa-calendar-check" />
+								  </button>	</Link>
+								  :null}
+
+								<button type="button" class="btn btn-outline-danger" onClick={this.handleClick.bind(this,lh.idlichhen)} title="Xóa">
+								  	<i className="fas fa-trash" />
+								</button>
+							</div> 
+						</td>
+					</tr>
+        })
+
 		return(
 			<div className="content-wrapper">
 
@@ -31,23 +160,17 @@ class listlichhen extends Component{
 						<table className="table table-bordered table-hover table-inverse table-striped">
 							<thead className="thead-dark">
 								<tr className="">
-									<th className="col-1 text-center" scope="col">Mã số</th>
-									<th className="col-2 text-center">Họ tên KH</th>
-									<th className="col-2 text-center">Họ tên NV</th>
+									<th className="text-center" scope="col">Mã số</th>
+									<th className="text-center">Họ tên KH</th>
+									<th className="text-center">Họ tên NV</th>
 									<th className="text-center">Giờ hẹn</th>
 									<th className="text-center">Ngày hẹn</th>
-									<th className="col-3 text-center">Địa điểm</th>
+									<th className="text-center">Địa điểm</th>
+									<th className="text-center"></th>
 								</tr>
 							</thead>
 							<tbody>
-								<tr className="">
-									<th className=" text-center">1</th>
-									<th className=" text-center">2</th>
-									<th className=" text-center">3</th>
-									<th className=" text-center">4</th>
-									<th className=" text-center">5</th>
-									<th className=" text-center">6</th>
-								</tr>
+								{lhList}
 							</tbody>
 						</table>
 					</div>

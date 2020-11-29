@@ -146,7 +146,7 @@ class listnhanvien extends Component{
 		            </div>{/* /.row */}
 
 		            <div className="mb-4 pb-4">
-						<Link to = "/nhanvien/themnhanvien">
+						<Link to = "/nhanvien/new">
 							<button className="btn btn-success float-right">Thêm nhân viên</button>
 						</Link>
 					</div>

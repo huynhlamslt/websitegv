@@ -9,7 +9,7 @@ import Listloaidv from './component/list/listloaidv';
 import Listbangphidv from './component/list/listbangphidv';
 import Listnguoigv from './component/list/listnguoigv';
 import Listtuyendung from './component/list/listtuyendung';
-import Listhdlaodong from './component/list/listdhlaodong';
+import Listhdlaodong from './component/list/listhdlaodong';
 import Listkhachhang from './component/list/listkhachhang';
 import Listyeucau from './component/list/listyeucau';
 import Listlichhen from './component/list/listlichhen';
@@ -21,6 +21,9 @@ import Thembangphidv from './component/new/thembangphidv';
 import Themhdlaodong from "./component/new/themhdlaodong";
 import Themnhanvien from "./component/new/themnhanvien";
 import Themtaikhoan from "./component/new/themtaikhoan";
+import Themnguoigv from "./component/new/themnguoigv";
+import Themlichhen from "./component/new/themlichhen";
+import Themhdthue from "./component/new/themhdthue";
 
 import Upload from "./component/Register.js";
 
@@ -41,7 +44,7 @@ class App extends Component {
 
             <Switch>
                 {/*Dashboard*/}
-                <Route path="/" component={Upload} exact />
+                 {/*<Route path="/" component={Upload} exact />*/}
             </Switch> 
                      
             <Switch>
@@ -66,12 +69,17 @@ class App extends Component {
 
            <Switch>
                 {/*Thêm bảng phí dịch vụ*/}
-                <Route path="/bangphidv/thembangphidv" component={Thembangphidv} exact />
+                <Route path="/bangphidv/:id" component={Thembangphidv} exact />
            </Switch>
 
            <Switch>
                 {/*Người giúp việc*/}
                 <Route path="/nguoigv" component={Listnguoigv} exact />
+           </Switch>
+
+           <Switch>
+                {/*Thêm người giúp việc*/}
+                <Route path="/nguoigv/:id" component={Themnguoigv} exact />
            </Switch>
 
            <Switch>
@@ -86,7 +94,7 @@ class App extends Component {
 
            <Switch>
                 {/*Thêm hợp đồng lao động*/}
-                <Route path="/hdlaodong/themhdlaodong" component={Themhdlaodong} exact />
+                <Route path="/hdlaodong/:id" component={Themhdlaodong} exact />
            </Switch>
 
            <Switch>
@@ -104,9 +112,19 @@ class App extends Component {
                 <Route path="/lichhen" component={Listlichhen} exact />
            </Switch>
 
+            <Switch>
+                {/*Thêm lịch hẹn*/}
+                <Route path="/lichhen/:id" component={Themlichhen} exact />
+           </Switch>
+
            <Switch>
                 {/*Danh sách hợp đồng thuê dịch vụ*/}
                 <Route path="/hdthue" component={Listhdthue} exact />
+           </Switch>
+
+            <Switch>
+                {/*Danh sách hợp đồng thuê dịch vụ*/}
+                <Route path="/hdthue/:id" component={Themhdthue} exact />
            </Switch>
 
            <Switch>
@@ -126,7 +144,7 @@ class App extends Component {
 
             <Switch>
                 {/*Thêm tài khoản*/}
-                <Route path="/taikhoan/themtaikhoan" component={Themtaikhoan} exact />
+                <Route path="/taikhoan/:id" component={Themtaikhoan} exact />
            </Switch>
 
            {/*Footer*/}
