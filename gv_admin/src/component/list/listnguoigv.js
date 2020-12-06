@@ -14,9 +14,15 @@ class listnguoigv extends Component{
           ngvs: [], 
           isLoading: true,
           item: [],
+          sortDate: 0,
+          sortHopDong: 0,
         };
         //this.remove = this.remove.bind(this);
         //this.handleChange = this.handleChange.bind(this);
+        this.sortByDateAsc = this.sortByDateAsc.bind(this);
+        this.sortByDateDesc = this.sortByDateDesc.bind(this);
+        this.sortByHopDongAsc = this.sortByHopDongAsc.bind(this);
+        this.sortByHopDongDesc = this.sortByHopDongDesc.bind(this);
     }
 
     componentDidMount() {
@@ -25,6 +31,41 @@ class listnguoigv extends Component{
         fetch('gvnhanh/nguoigv')
           .then(response => response.json())
           .then(data => this.setState({ngvs: data, isLoading: false}));
+    }
+
+    sortByDateAsc() {
+      let ngv = this.state.ngvs.sort((a,b) => (a.ngaysinh.localeCompare(b.ngaysinh)));
+      this.setState({
+        ngvs: ngv,
+        sortDate: 0,
+      })
+      console.log("sort", this.state);
+    }
+
+    sortByDateDesc() {
+      let ngv = this.state.ngvs.sort((a, b) => (b.ngaysinh.localeCompare(a.ngaysinh)));
+      this.setState({
+        ngvs: ngv,
+        sortDate: 1,
+      })
+    }
+
+    sortByHopDongAsc() {
+      let ngv = this.state.ngvs.sort((a,b) => (a.hopdong - b.hopdong));
+      this.setState({
+        ngvs: ngv,
+        sortHopDong: 0,
+      })
+      console.log("sort", this.state);
+    }
+
+    sortByHopDongDesc() {
+        let ngv = this.state.ngvs.sort((a,b) => (b.hopdong - a.hopdong));
+        this.setState({
+            ngvs: ngv,
+            sortHopDong: 1,
+        })
+        console.log("sort", this.state);
     }
 
     async remove(id) {
@@ -79,13 +120,13 @@ class listnguoigv extends Component{
 
     formatter = new Intl.DateTimeFormat("en-GB", {
           year: "numeric",
-          month: "numeric",
+          month: "2-digit",
           day: "2-digit"
         });
 	
 	render(){
 
-		const {ngvs, isLoading} = this.state;
+		const {ngvs, isLoading, sortDate, sortHopDong} = this.state;
 
 		if (isLoading) {
             return <p className="text-primary align-middle text-center">
@@ -152,13 +193,24 @@ class listnguoigv extends Component{
 							<thead className="thead-dark">
 								<tr className="">
 									<th className="text-center" scope="col">Mã NGV</th>
-									<th className="text-center">Họ tên</th>
+									<th className="text-center">Họ tên   
+                  </th>
 									<th className=" text-center">Giới tính</th>
-									<th className="text-center">Ngày sinh</th>
+									<th className="text-center">Ngày sinh {''}
+                    {sortDate===1?
+                      <i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByDateAsc}/>
+                      :<i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByDateDesc}/>
+                    }
+                  </th>
 									<th className="text-center">SĐT</th>
 									<th className=" text-center">CMND</th>
 									<th className="text-center">Quê quán</th>
-									<th className="text-center"></th>
+									<th className="text-center">
+                     {sortHopDong===1?
+                      <i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByHopDongAsc}/>
+                      :<i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByHopDongDesc}/>
+                    }
+                  </th>
 								</tr>
 							</thead>
 							<tbody>

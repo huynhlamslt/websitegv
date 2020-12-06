@@ -82,7 +82,7 @@ class listloaidv extends Component{
         	return <tr className="h-100" key={loaidv.idloaidv}>
 						<td className="col-1 text-center align-middle">{loaidv.idloaidv}</td>
 						<td className="col-3 align-middle">{loaidv.tenloai}</td>
-						<td className="col-7 ">{loaidv.gioithieu}</td>
+						<td className="col-7 text-justify">{loaidv.gioithieu}</td>
                         <td className="col-1 text-center align-middle">
                         	<div class="btn-group" role="group" aria-label="Basic example">
 	                        	<Link to={"/loaidv/"+loaidv.idloaidv}>

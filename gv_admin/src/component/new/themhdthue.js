@@ -22,12 +22,19 @@ class themhdthue extends Component{
 		giolamviec:'',
 		diachilam:''
 	};
+	emptyKhachhang = {
+		hoten: '',
+		sdt: '',
+		diachi: '',
+		trangthai: ''
+	};
 
 	constructor(props) {
 		super(props);
 		this.state = {
 			hdthue: this.emptyHdthue,
 			phieuthu: this.emptyPhieuthu,
+			khachhang: this.emptyKhachhang,
 		 	DVs:[],
 		 	nhanViens:[],
 		 	nguoiGVs:[],
@@ -59,7 +66,13 @@ class themhdthue extends Component{
 
 		const kh = await (await fetch(`/gvnhanh/yeucau/lichhen/${idLichhen}`)).json();
 		this.setState({
-				khs: kh
+				khs: kh,
+				khachhang:{
+					hoten: kh.hoten,
+					sdt: kh.sdt,
+					diachi: kh.diachi,
+					trangthai: 1
+				}
 			})
 
 		if (idThemhd !== 'new') {
@@ -203,6 +216,7 @@ class themhdthue extends Component{
 		event.preventDefault();
 		const {hdthue} = this.state;
 		const {phieuthu} = this.state;
+		const {khachhang} = this.state;
 		const {khs} = this.state;
 		const [idLichhen, idThemhd] = this.props.match.params.id.split('_');
 
@@ -239,6 +253,15 @@ class themhdthue extends Component{
 				body: JSON.stringify(phieuthu),
 			});
 
+			await fetch('/gvnhanh/khachhang', {
+				method:'POST',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(khachhang),
+			});
+
 			await fetch(`/gvnhanh/lichhen/capnhat/${idLichhen}`, {
 				method:'PUT',
 				headers: {
@@ -267,9 +290,10 @@ class themhdthue extends Component{
 			});	
 		}
 
-		console.log("hd", hdthue);
-		console.log("pt", phieuthu);
-		
+		// console.log("hd", hdthue);
+		// console.log("pt", phieuthu);
+		// console.log("kh", khachhang);
+
 		this.props.history.push('/hdthue');
 	}
 	

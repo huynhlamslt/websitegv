@@ -20,6 +20,10 @@ class Nav extends Component {
         console.log("loaidv", this.state.loaiDVs)
     }
 
+  // clickContact = () =>{
+  //   this.props.history.push('/contact')
+  // }
+
   render() {
     const {loaiDVs, isLoading} = this.state;
     return (
@@ -65,7 +69,7 @@ class Nav extends Component {
                   </div>
                 </li>
                 <li className="nav-item">
-                  <Link to="/contact" className="nav-link" href="contact.html">Liên hệ</Link>
+                  <Link to="/contact" className="nav-link" href="" >Liên hệ</Link>
                 </li>
                 <Link to="/dangkynguoigv">
                   <a className="nav-link">Đăng ký đi làm</a>

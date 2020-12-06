@@ -15,7 +15,13 @@ class listhdlaodong extends Component{
           isLoading: true,
           nhanViens: [],
           ngvs: [],
+          sortNgayky: 0,
+          sortNgayhethan: 0,
         };
+        this.sortByNgaykyAsc = this.sortByNgaykyAsc.bind(this);
+        this.sortByNgaykyDesc = this.sortByNgaykyDesc.bind(this);
+        this.sortByNgayhethanAsc = this.sortByNgayhethanAsc.bind(this);
+        this.sortByNgayhethanDesc = this.sortByNgayhethanDesc.bind(this);
     }
 
     async componentDidMount() {
@@ -32,6 +38,40 @@ class listhdlaodong extends Component{
         	nhanViens: nv,
         	ngvs: ngv
         })
+    }
+
+    sortByNgaykyAsc() {
+      let hdld = this.state.hdlds.sort((a,b) => (a.ngayky.localeCompare(b.ngayky)));
+      this.setState({
+        hdlds: hdld,
+        sortNgayky: 0,
+      })
+      console.log("sort", this.state);
+    }
+
+    sortByNgaykyDesc() {
+      let hdld = this.state.hdlds.sort((a, b) => (b.ngayky.localeCompare(a.ngayky)));
+      this.setState({
+        hdlds: hdld,
+        sortNgayky: 1,
+      })
+    }
+
+    sortByNgayhethanAsc() {
+      let hdld = this.state.hdlds.sort((a,b) => (a.ngayhethan.localeCompare(b.ngayhethan)));
+      this.setState({
+        hdlds: hdld,
+        sortNgayhethan: 0,
+      })
+      console.log("sort", this.state);
+    }
+
+    sortByNgayhethanDesc() {
+      let hdld = this.state.hdlds.sort((a, b) => (b.ngayhethan.localeCompare(a.ngayhethan)));
+      this.setState({
+        hdlds: hdld,
+        sortNgayhethan: 1,
+      })
     }
 
      async remove(id) {
@@ -79,7 +119,7 @@ class listhdlaodong extends Component{
 
 	render(){
 
-		const {hdlds, isLoading, nhanViens, ngvs} = this.state;
+		const {hdlds, isLoading, nhanViens, ngvs, sortNgayky, sortNgayhethan} = this.state;
 
 		if (isLoading) {
             return <p className="text-primary align-middle text-center">
@@ -153,8 +193,18 @@ class listhdlaodong extends Component{
 									<th className="text-center" scope="col">Mã số</th>
 									<th className="text-center">Họ tên NGV</th>
 									<th className="text-center">Họ tên NV</th>
-									<th className="text-center">Ngày ký</th>
-									<th className="text-center">Ngày hết hạn</th>
+									<th className="text-center">Ngày ký {''}
+										{sortNgayky===1?
+					                      <i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByNgaykyAsc}/>
+					                      :<i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByNgaykyDesc}/>
+					                    }
+									</th>
+									<th className="text-center">Ngày hết hạn {''}
+										{sortNgayhethan===1?
+					                      <i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByNgayhethanAsc}/>
+					                      :<i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByNgayhethanDesc}/>
+					                    }
+									</th>
 									<th className="text-center">% lương</th>
 									<th className="text-center"></th>
 								</tr>

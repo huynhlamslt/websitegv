@@ -13,8 +13,14 @@ class listyeucau extends Component{
 			ycs:[],
 			isLoading: true,
 			item:[],
+			sortTrangthai: 0,
+			sortNgaylam: 0,
 		};
 		this.remove = this.remove.bind(this);
+		this.sortByTrangthaiAsc = this.sortByTrangthaiAsc.bind(this);
+		this.sortByTrangthaiDesc = this.sortByTrangthaiDesc.bind(this);
+		this.sortByNgaylamAsc = this.sortByNgaylamAsc.bind(this);
+		this.sortByNgaylamDesc = this.sortByNgaylamDesc.bind(this);
 	}
 
 	componentDidMount(){
@@ -27,6 +33,42 @@ class listyeucau extends Component{
 				isLoading: false
 			}));
 	}
+
+	sortByTrangthaiAsc() {
+      let yc = this.state.ycs.sort((a,b) => (a.trangthai.localeCompare(b.trangthai)));
+      this.setState({
+        ycs: yc,
+        sortTrangthai: 0,
+      })
+      console.log("sort", this.state);
+    }
+
+    sortByTrangthaiDesc() {
+      let yc = this.state.ycs.sort((a, b) => (b.trangthai.localeCompare(a.trangthai)));
+      this.setState({
+        ycs: yc,
+        sortTrangthai: 1,
+      })
+       console.log("sort", this.state);
+    }
+
+    sortByNgaylamAsc() {
+      let yc = this.state.ycs.sort((a,b) => (a.ngaylam.localeCompare(b.ngaylam)));
+      this.setState({
+        ycs: yc,
+        sortNgaylam: 0,
+      })
+      console.log("sort", this.state);
+    }
+
+    sortByNgaylamDesc() {
+      let yc = this.state.ycs.sort((a, b) => (b.ngaylam.localeCompare(a.ngaylam)));
+      this.setState({
+        ycs: yc,
+        sortNgaylam: 1,
+      })
+       console.log("sort", this.state);
+    }
 
 	async remove(id){
 		await fetch(`/gvnhanh/yeucau/${id}`,{
@@ -73,7 +115,7 @@ class listyeucau extends Component{
 
 	render(){
 
-		const {ycs, isLoading} = this.state;
+		const {ycs, isLoading, sortTrangthai, sortNgaylam} = this.state;
 
 		if (isLoading) {
             return <p className="text-primary align-middle text-center">
@@ -83,9 +125,9 @@ class listyeucau extends Component{
         }
 
 
-        const ycList = ycs.map(yc =>{
+        const ycList = ycs.map((yc,index) =>{
         	return <tr key={yc.idyc}>
-				<td className="text-center">{yc.idyc}</td>
+				<td className="text-center">{index+1}</td>
 				<td className="text-center">{yc.hoten}</td>
 				<td className="text-center">{yc.sdt}</td>
 				 <td className="text-center">{yc.diachi}</td>
@@ -135,14 +177,24 @@ class listyeucau extends Component{
 						<table className="table table-bordered table-hover table-inverse table-striped">
 							<thead className="thead-dark">
 								<tr className="">
-									<th className="text-center" scope="col">Mã YC</th>
-									<th className="text-center">Họ tên KH</th>
-									<th className="text-center">SĐT</th>
-									<th className="text-center">Địa chỉ</th>
-									<th className="text-center">Ngày làm</th>
-									<th className="text-center">Chi tiết công việc</th>
-									<th className="text-center">Trạng thái</th>
-									<th className="text-center"></th>
+									<th className="text-center align-middle" scope="col">STT</th>
+									<th className="text-center align-middle">Họ tên KH</th>
+									<th className="text-center align-middle">SĐT</th>
+									<th className="text-center align-middle">Địa chỉ</th>
+									<th className="text-center align-middle">Ngày làm {' '}
+										{sortNgaylam===1?
+					                      <i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByNgaylamAsc}/>
+					                      :<i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByNgaylamDesc}/>
+					                    }
+									</th>
+									<th className="text-center align-middle">Chi tiết công việc</th>
+									<th className="text-center align-middle">Trạng thái {' '}
+										{sortTrangthai===1?
+					                      <i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByTrangthaiAsc}/>
+					                      :<i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByTrangthaiDesc}/>
+					                    }
+									</th>
+									<th className="text-center align-middle"></th>
 								</tr>
 							</thead>
 							<tbody>

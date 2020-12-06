@@ -131,7 +131,7 @@ class listtuyendung extends Component{
 									<th className="text-center">Ngày sinh</th>
 									<th className="text-center">SĐT</th>
 									<th className="text-center">Quê quán</th>
-									<th className="text-center">Quê quán</th>
+									<th className="text-center"></th>
 								</tr>
 							</thead>
 							<tbody>

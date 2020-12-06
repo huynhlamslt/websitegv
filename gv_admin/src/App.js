@@ -5,6 +5,7 @@ import Navbar from './component/navbar';
 import Sidebar from './component/sidebar';
 import Dashboard from './component/dashboard';
 import Footer from './component/footer';
+import Effect from './component/effect';
 import Listloaidv from './component/list/listloaidv';
 import Listbangphidv from './component/list/listbangphidv';
 import Listnguoigv from './component/list/listnguoigv';
@@ -44,7 +45,7 @@ class App extends Component {
 
             <Switch>
                 {/*Dashboard*/}
-                 {/*<Route path="/" component={Upload} exact />*/}
+                 <Route path="/" component={Upload} exact />
             </Switch> 
                      
             <Switch>
@@ -149,6 +150,7 @@ class App extends Component {
 
            {/*Footer*/}
            <Footer />
+           <Effect />
 
         </div>
         </body>

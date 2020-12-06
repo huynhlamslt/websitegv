@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { useState } from "react";
 import {
   Link,
   withRouter
@@ -13,17 +14,20 @@ class themnhanvien extends Component{
 		ngaysinh: '',
 		sdt: '',
 		cmnd: '',
-		luong: ''
+		luong: '',
+		hinhanh: ''
 	};
 
 	constructor(props) {
 		super(props);
 		this.state = {
-			item: this.emptyItem
+			item: this.emptyItem,
+			Picture: '',
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChangePhone = this.handleChangePhone.bind(this);
+		this.onChangePicture = this.onChangePicture.bind(this);
 	}
 
 	async componentDidMount() {
@@ -31,7 +35,30 @@ class themnhanvien extends Component{
 			const nv = await (await fetch(`/gvnhanh/nhanvien/${this.props.match.params.id}`)).json();
 			this.setState({item: nv});
 		}
-		console.log("nv", this.state.item)
+		
+	}
+
+	onChangePicture(e){
+
+	 //    var file = e.target.files[0]
+	 //    let reader = new FileReader()
+	 //    for(let i=0;i<file.length;i++){
+		//    reader.readAsDataURL(file[i]);
+		// }
+	 //    reader.onload = () => {
+	 //      this.setState({
+	 //        Picture: reader.result
+	 //      })
+	 //    };
+	 //    reader.onerror = function (error) {
+	 //      console.log('Error: ', error);
+	 //    } 
+	 //    console.log("st", this.state)
+		// binaryData.push(e.target.files[0]); 
+		// image.src = URL.createObjectURL(new Blob(binaryData, {type: "application/zip"})) 
+		// this.setState({
+		// 	// Picture: URL.createObjectURL(e.target.files[0]),
+		// })
 	}
 
 	handleChange(event) {
@@ -42,7 +69,7 @@ class themnhanvien extends Component{
 		item[name] = value;
 		this.setState({item});
 
-		console.log("nv",item);
+		console.log("state", this.state.item.hinhanh)
 
 		// this.setState({[event.target.id]: event.target.value});
 		
@@ -59,15 +86,16 @@ class themnhanvien extends Component{
 			this.state.item.gioitinh='Nam';
 			
 		}
-		await fetch('/gvnhanh/nhanvien', {
-			method: (item.id) ? 'PUT' : 'POST',
-			headers: {
-				'Accept': 'application/json',
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(item),
-		});
-		this.props.history.push('/nhanvien');
+		// await fetch('/gvnhanh/nhanvien', {
+		// 	method: (item.id) ? 'PUT' : 'POST',
+		// 	headers: {
+		// 		'Accept': 'application/json',
+		// 		'Content-Type': 'application/json'
+		// 	},
+		// 	body: JSON.stringify(item),
+		// });
+		// this.props.history.push('/nhanvien');
+		console.log("item", item)
 		
 	}
 
@@ -76,10 +104,19 @@ class themnhanvien extends Component{
 	      this.setState({item: e.target.value});
 	    }
 	  }
+
+	// changePicture(){
+	// 	const [picture, setPicture] = useState('');
+	// 	  const onChangePicture = e => {
+	// 	    console.log('picture: ', picture);
+	// 	    setPicture(URL.createObjectURL(e.target.files[0]));
+	// 	  };
+	// }
 	render(){
 
-		const {item} = this.state;
+		const {item, Picture} = this.state;
 		const title = <h1 className="h3 mb-2 text-gray-800 pb-3">{item.idnv ? 'Cập nhật nhân viên' : 'Thêm nhân viên'}</h1>;
+
 
 		return(
 			<div className="content-wrapper">
@@ -160,9 +197,18 @@ class themnhanvien extends Component{
 									  </div>
 									</div>
 				                  </div>
-				                </div>
-				               
 
+				                  <div className="form-group">
+					                    <label for="exampleInputPassword1">Hình ảnh</label>
+					               		<input type="file" className="form-control-file col-md-8" name="hinhanh" id="hinhanh" value={item.hinhanh || ''}
+										onChange={this.handleChange} accept="image/*" placeholder="" />
+										<div className="previewProfilePic" >
+							                <img className="playerProfilePic_home_tile w-25 h-25" src="\logo192.png" alt="..."/>
+							                <img src="https://images.viblo.asia/473010d1-c426-4dc4-bb27-b17d35612e05.png" class="img-fluid img-thumbnail" alt="..."/>
+							              </div>
+					                </div>
+
+				                </div>
 				                <div className="card-footer">
 				                  <button type="submit" className="btn btn-primary">Save</button>
 				                  <Link to="/nhanvien"><button type="submit" className="btn btn-danger ml-4">Cancel</button></Link>

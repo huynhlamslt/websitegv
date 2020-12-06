@@ -16,8 +16,11 @@ class listlichhen extends Component{
 			nvs:[],
 			ycs:[],
 			hdthues: [],
+			sortNgay: 0,
 		};
 		this.remove = this.remove.bind(this);
+		this.sortByNgayAsc = this.sortByNgayAsc.bind(this);
+		this.sortByNgayDesc = this.sortByNgayDesc.bind(this);
 	}
 
 	async componentDidMount(){
@@ -38,6 +41,24 @@ class listlichhen extends Component{
 
 		console.log("state", this.state)
 	}
+
+	sortByNgayAsc() {
+      let lh = this.state.lhs.sort((a,b) => (a.ngay.localeCompare(b.ngay)));
+      this.setState({
+        lhs: lh,
+        sortNgay: 0,
+      })
+      console.log("sort", this.state);
+    }
+
+    sortByNgayDesc() {
+      let lh = this.state.lhs.sort((a, b) => (b.ngay.localeCompare(a.ngay)));
+      this.setState({
+        lhs: lh,
+        sortNgay: 1,
+      })
+       console.log("sort", this.state);
+    }
 
 	async remove(id){
 
@@ -84,7 +105,7 @@ class listlichhen extends Component{
 
 	render(){
 
-		const {lhs, isLoading, nvs, ycs, hdthues} = this.state;
+		const {lhs, isLoading, nvs, ycs, hdthues, sortNgay} = this.state;
 
 		if (isLoading) {
             return <p className="text-primary align-middle text-center">
@@ -111,7 +132,7 @@ class listlichhen extends Component{
 							})}
 						</td>
 						<td className=" text-center">{lh.gio}</td>
-						<td className=" text-center">{lh.ngay}</td>
+						<td className=" text-center">{this.formatter.format(Date.parse(lh.ngay))}</td>
 						<td className=" text-center">{lh.diachihen}</td>
 						<td className=" text-center">
 							<div class="btn-group" role="group" aria-label="Basic example">
@@ -164,7 +185,12 @@ class listlichhen extends Component{
 									<th className="text-center">Họ tên KH</th>
 									<th className="text-center">Họ tên NV</th>
 									<th className="text-center">Giờ hẹn</th>
-									<th className="text-center">Ngày hẹn</th>
+									<th className="text-center">Ngày hẹn {' '}
+										{sortNgay===1?
+					                      <i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByNgayAsc}/>
+					                      :<i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByNgayDesc}/>
+					                    }
+									</th>
 									<th className="text-center">Địa điểm</th>
 									<th className="text-center"></th>
 								</tr>

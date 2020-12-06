@@ -82,6 +82,12 @@ class listhdthue extends Component{
 		   return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.') +' VNĐ'
 		}
 
+	formatter = new Intl.DateTimeFormat("en-GB", {
+	      year: "numeric",
+	      month: "2-digit",
+	      day: "2-digit"
+	    });
+
 	render(){
 
 		const {hdthues, phieuthus, DVs, ngvs, yeucaus, isLoading} = this.state;
@@ -122,13 +128,13 @@ class listhdthue extends Component{
                         <td className="text-center">
 	                        {phieuthus.map(pt=>{
 	                        	if(pt.idhdthue===hdthue.idhdthue)
-	                        		return pt.ngaybatdau
+	                        		return this.formatter.format(Date.parse(pt.ngaybatdau))
 	                        })}
                         </td>
                         <td className="text-center">
                         	{phieuthus.map(pt=>{
 	                        	if(pt.idhdthue===hdthue.idhdthue)
-	                        		return pt.ngayketthuc
+	                        		return this.formatter.format(Date.parse(pt.ngayketthuc))
 	                        })}
                         </td>
                         <td className="text-center">

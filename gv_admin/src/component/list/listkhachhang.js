@@ -14,9 +14,12 @@ class listkhachhang extends Component{
 			khs:[],
 			isLoading: true,
 			item:[],
+			sortTrangthai: 0,
 		};
 		this.clickTrue = this.clickTrue.bind(this);
 		this.clickFalse = this.clickFalse.bind(this);
+		this.sortByTrangthaiAsc = this.sortByTrangthaiAsc.bind(this);
+		this.sortByTrangthaiDesc = this.sortByTrangthaiDesc.bind(this);
 	}
 
 	componentDidMount(){
@@ -29,6 +32,24 @@ class listkhachhang extends Component{
 				isLoading: false
 			}));
 	}
+
+	sortByTrangthaiAsc() {
+      let kh = this.state.khs.sort((a,b) => (a.trangthai - b.trangthai));
+      this.setState({
+        khs: kh,
+        sortTrangthai: 0,
+      })
+      console.log("sort", this.state);
+    }
+
+    sortByTrangthaiDesc() {
+      let kh = this.state.khs.sort((a, b) => (b.trangthai - a.trangthai));
+      this.setState({
+        khs: kh,
+        sortTrangthai: 1,
+      })
+       console.log("sort", this.state);
+    }
 
     clickTrue(id){
     	confirmAlert({
@@ -102,7 +123,7 @@ class listkhachhang extends Component{
 
 	render(){
 
-		const {khs, isLoading} = this.state;
+		const {khs, isLoading, sortTrangthai} = this.state;
 
 		if (isLoading) {
             return <p className="text-primary align-middle text-center">
@@ -157,7 +178,12 @@ class listkhachhang extends Component{
 									<th className="col-2 text-center">Họ tên</th>
 									<th className=" text-center">SĐT</th>
 									<th className="text-center">Địa chỉ</th>
-									<th className="text-center">Trạng thái</th>
+									<th className="text-center">Trạng thái {' '}
+										{sortTrangthai===1?
+					                      <i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByTrangthaiAsc}/>
+					                      :<i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByTrangthaiDesc}/>
+					                    }
+									</th>
 								</tr>
 							</thead>
 							<tbody>

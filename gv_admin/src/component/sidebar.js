@@ -14,8 +14,8 @@ class sidebar extends Component{
 			<aside className="main-sidebar sidebar-dark-primary elevation-4">
               {/* Brand Logo */}
               <Link to ="/dashboard"><a className="brand-link pointer">
-                <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={{opacity: '.8'}} />
-                <span className="brand-text font-weight-light">GV NHANH</span>
+                <img src="logo.png" alt="AdminLTE Logo" className="brand-image img-circle elevation-3" style={{opacity: '.8'}} />
+                <span className="brand-text font-weight-normal text-success">GV NHANH</span>
               </a></Link>
               {/* Sidebar */}
               <div className="sidebar">
@@ -50,7 +50,7 @@ class sidebar extends Component{
                       <li className="nav-item">
                        <Link to ="/loaidv"  className="nav-link pointer" data-toggle="pill" >
                         <a>
-                          <i className="nav-icon far fa-calendar-alt" />
+                          <i className="nav-icon far fa-calendar-plus" />
                          <p>
                             Loại dịch vụ
                           </p>
@@ -61,7 +61,7 @@ class sidebar extends Component{
                       <li className="nav-item">
                       <Link to="/bangphidv" className="nav-link pointer" data-toggle="pill">
                         <a >
-                          <i className="nav-icon far fa-image" />
+                          <i className="nav-icon far fa-list-alt" />
                           <p>
                             Bảng phí dịch vụ
                           </p>
@@ -71,7 +71,7 @@ class sidebar extends Component{
 
                       <li className="nav-item">
                         <a className="nav-link pointer" data-toggle="pill">
-                         <i className="nav-icon fas fa-columns" />
+                         <i className="nav-icon fas fa-chalkboard-teacher" />
                           <p>
                             Người giúp việc
                           </p>
@@ -155,7 +155,7 @@ class sidebar extends Component{
                     <li className="nav-item">
                      <Link to="/nhanvien" className="nav-link pointer" data-toggle="pill" >
                       <a >
-                        <i className="nav-icon far fa-circle text-danger" />
+                        <i className="nav-icon far fa-id-card" />
                         <p className="text">Nhân viên</p>
                       </a>
                       </Link>
@@ -164,7 +164,7 @@ class sidebar extends Component{
                      
                         <Link to="/taikhoan" className="nav-link pointer" data-toggle="pill">
                            <a >
-                          <i className="nav-icon far fa-circle text-warning" />
+                          <i className="nav-icon far fa-user-circle" />
                           <p>Tài khoản</p>
                           </a>
                         </Link>

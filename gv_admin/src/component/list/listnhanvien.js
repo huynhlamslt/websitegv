@@ -19,11 +19,13 @@ class listnhanvien extends Component{
 		this.state = {
 			nvs:[],
 			isLoading: true,
-			item:[],
 		};
-		this.remove = this.remove.bind(this);
-		
+		this.remove = this.remove.bind(this);	
 		this.currencyFormat = this.currencyFormat.bind(this);
+		this.sortByPriceAsc = this.sortByPriceAsc.bind(this);
+        this.sortByPriceDesc = this.sortByPriceDesc.bind(this);
+        this.sortByNgaysinhAsc = this.sortByNgaysinhAsc.bind(this);
+        this.sortByNgaysinhDesc = this.sortByNgaysinhDesc.bind(this);
 	}
 
 	componentDidMount(){
@@ -33,7 +35,9 @@ class listnhanvien extends Component{
 			.then(response => response.json())
 			.then(data => this.setState({
 				nvs: data,
-				isLoading: false
+				isLoading: false,
+				sort: 0,
+				sortNgaysinh: 0,
 			}));
 	}
 
@@ -75,7 +79,7 @@ class listnhanvien extends Component{
 
     formatter = new Intl.DateTimeFormat("en-GB", {
           year: "numeric",
-          month: "numeric",
+          month: "2-digit",
           day: "2-digit"
         });	
 
@@ -87,12 +91,44 @@ class listnhanvien extends Component{
     currencyFormat(num){
 		   return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.') +' VNĐ'
 		}
+
+	sortByPriceAsc() {
+    	let nv = this.state.nvs.sort((a,b) => (a.luong - b.luong));
+    	this.setState({
+    		nvs: nv,
+    		sort: 0,
+    	})
+    	console.log("sort", this.state);
+    }
+
+    sortByPriceDesc() {
+        let nv = this.state.nvs.sort((a, b) => (b.luong - a.luong))
+    	this.setState({
+    		nvs: nv,
+    		sort: 1,
+    	})
+    }
+
+    sortByNgaysinhAsc() {
+    	let nv = this.state.nvs.sort((a,b) => (a.ngaysinh.localeCompare(b.ngaysinh)));
+    	this.setState({
+    		nvs: nv,
+    		sortNgaysinh: 0,
+    	})
+    	console.log("sort", this.state);
+    }
+
+    sortByNgaysinhDesc() {
+        let nv = this.state.nvs.sort((a, b) => (b.ngaysinh.localeCompare(a.ngaysinh)));
+    	this.setState({
+    		nvs: nv,
+    		sortNgaysinh: 1,
+    	})
+    }
 	
 	render(){
 
-		const {nvs, isLoading} = this.state;
-		const {item} = this.state;
-
+		const {nvs, isLoading, sort, sortNgaysinh} = this.state;
 
         if (isLoading) {
             return <p className="text-primary align-middle text-center">
@@ -163,10 +199,20 @@ class listnhanvien extends Component{
 									<th className="text-center">Mã NV</th>
 									<th className="text-center">Họ tên</th>
 									<th className="text-center">Giới tính</th>
-									<th className="text-center">Ngày sinh</th>
+									<th className="text-center">Ngày sinh {' '}
+										{sortNgaysinh===1?
+	                                    	<i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByNgaysinhAsc}/>
+	                                    	: <i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByNgaysinhDesc}/>
+	                                    }
+									</th>
                                     <th className="text-center">SĐT</th>
                                     <th className="text-center">CMND</th>
-                                    <th className="text-center">Lương</th>
+                                    <th className="text-center">Lương {' '}
+	                                    {sort===1?
+	                                    	<i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByPriceAsc}/>
+	                                    	: <i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByPriceDesc}/>
+	                                    }                               
+                                    </th>
                                     <th className="text-center"></th>
 								</tr>
 							</thead>
