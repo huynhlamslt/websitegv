@@ -143,8 +143,9 @@ class themhdthue extends Component{
 
 		const dg = await (await fetch(`/gvnhanh/bangphidv/${phieuthu["iddv"]}`)).json();
 		this.setState({
-				dongia: dg
+				dongia: dg,
 			})
+		
 
 		//console.log("pt", phieuthu);
 		//const ldv = await (await fetch(`/gvnhanh/bangphidv/${phieuthu["iddv"]}`)).json();
@@ -164,6 +165,9 @@ class themhdthue extends Component{
 		}
 
 		const [idLichhen, idThemhd] = this.props.match.params.id.split('_');
+		if(idThemhd === 'new'){
+			this.state.phieuthu.dongia = dg.gia;
+		}
 		if(idThemhd === 'new'){
 			if(this.state.phieuthu["ngaybatdau"] && this.state.phieuthu["ngaybatdau"]<ng){
 					alert("Không được chọn ngày đã qua!");
@@ -234,7 +238,14 @@ class themhdthue extends Component{
 
 		if(idThemhd==='new'){
 			let today = new Date();
-			this.state.hdthue.ngaythue = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+			let year = today.getFullYear();
+			let month = today.getMonth()+1;
+			let date = today.getDate();
+			if (month < 10) 
+		        month = '0' + month;
+		    if (date < 10) 
+		        date = '0' + date;
+			this.state.hdthue.ngaythue = year+'-'+month+'-'+date;
 			await fetch('/gvnhanh/hdthue', {
 				method:'POST',
 				headers: {
@@ -290,9 +301,9 @@ class themhdthue extends Component{
 			});	
 		}
 
-		// console.log("hd", hdthue);
-		// console.log("pt", phieuthu);
-		// console.log("kh", khachhang);
+		console.log("hd", hdthue);
+		console.log("pt", phieuthu);
+		console.log("kh", khachhang);
 
 		this.props.history.push('/hdthue');
 	}
@@ -423,7 +434,7 @@ class themhdthue extends Component{
 				                <div className="card-footer d-flex justify-content-center">
 				                  <button type="submit" className="btn btn-primary ">Save</button>
 				                  {idThemhd==='new'?<Link to="/lichhen"><button type="submit" className="btn btn-danger ml-4">Cancel</button></Link>
-				              		: <Link to="/hdlaodong"><button type="submit" className="btn btn-danger ml-4">Cancel</button></Link>}
+				              		: <Link to="/hdthue"><button type="submit" className="btn btn-danger ml-4">Cancel</button></Link>}
 				              	  {/*<Link to="/hdthue"><button type="submit" className="btn btn-danger ml-4">Cancel</button></Link>*/}
 				                </div>
 				             

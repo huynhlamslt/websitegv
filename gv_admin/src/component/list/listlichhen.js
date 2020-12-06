@@ -145,7 +145,7 @@ class listlichhen extends Component{
 								
 
 								{lh.hopdong===0?<Link to={"/hdthue/"+lh.idlichhen+`_new`}>
-								  <button type="button" class="btn btn-outline-success" title="Cập nhật">
+								  <button type="button" class="btn btn-outline-success" title="Ký hợp đồng">
 								  	<i className="fas fa-calendar-check" />
 								  </button>	</Link>
 								  :null}
