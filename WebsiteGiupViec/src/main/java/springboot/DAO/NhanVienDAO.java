@@ -43,4 +43,9 @@ public class NhanVienDAO {
 	public void delete(NhanVien nv) {
 		nhanVienRepository.delete(nv);
 	}
+
+	//Find nhan vien by name
+	public List<NhanVien> findByName(String ten){
+		return nhanVienRepository.findByName(ten);
+	}
 }

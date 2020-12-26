@@ -69,7 +69,7 @@ class themnhanvien extends Component{
 		item[name] = value;
 		this.setState({item});
 
-		console.log("state", this.state.item.hinhanh)
+		//console.log("state", this.state)
 
 		// this.setState({[event.target.id]: event.target.value});
 		
@@ -86,15 +86,15 @@ class themnhanvien extends Component{
 			this.state.item.gioitinh='Nam';
 			
 		}
-		// await fetch('/gvnhanh/nhanvien', {
-		// 	method: (item.id) ? 'PUT' : 'POST',
-		// 	headers: {
-		// 		'Accept': 'application/json',
-		// 		'Content-Type': 'application/json'
-		// 	},
-		// 	body: JSON.stringify(item),
-		// });
-		// this.props.history.push('/nhanvien');
+		await fetch('/gvnhanh/nhanvien', {
+			method: (item.id) ? 'PUT' : 'POST',
+			headers: {
+				'Accept': 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(item),
+		});
+		this.props.history.push('/nhanvien');
 		console.log("item", item)
 		
 	}

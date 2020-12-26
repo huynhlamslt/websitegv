@@ -6,6 +6,8 @@ import {
   Link,
   withRouter
 } from "react-router-dom";
+import ReactPaginate from "react-paginate";
+import "./phantrang.css";
 
 
 class listnhanvien extends Component{
@@ -18,6 +20,10 @@ class listnhanvien extends Component{
 		super(props);
 		this.state = {
 			nvs:[],
+			currentPage: 1,
+			pageSize: 6,
+			totalColumns: 0,
+			search: '',
 			isLoading: true,
 		};
 		this.remove = this.remove.bind(this);	
@@ -26,19 +32,35 @@ class listnhanvien extends Component{
         this.sortByPriceDesc = this.sortByPriceDesc.bind(this);
         this.sortByNgaysinhAsc = this.sortByNgaysinhAsc.bind(this);
         this.sortByNgaysinhDesc = this.sortByNgaysinhDesc.bind(this);
+        this.handlePaging = this.handlePaging.bind(this);
+        this.searchChange = this.searchChange.bind(this);
+        this.searchSubmit = this.searchSubmit.bind(this);
 	}
 
-	componentDidMount(){
+	async componentDidMount(){
+		const { pageSize } = this.state
 		this.setState({isLoading: true});
 
-		fetch('gvnhanh/nhanvien')
-			.then(response => response.json())
-			.then(data => this.setState({
-				nvs: data,
-				isLoading: false,
-				sort: 0,
-				sortNgaysinh: 0,
-			}));
+		const nv = await(await fetch('gvnhanh/nhanvien')).json();
+		const temp = nv.slice(0, pageSize);
+
+		this.setState({
+			nvs: temp,
+			totalColumns: Math.ceil(nv.length / pageSize),
+			sort: 0,
+			sortNgaysinh: 0,
+			search: '',
+			isLoading: false
+		})
+
+		// fetch('gvnhanh/nhanvien')
+		// 	.then(response => response.json())
+		// 	.then(data => this.setState({
+		// 		nvs: data,
+		// 		isLoading: false,
+		// 		sort: 0,
+		// 		sortNgaysinh: 0,
+		// 	}));
 	}
 
 	async remove(id){
@@ -92,6 +114,50 @@ class listnhanvien extends Component{
 		   return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.') +' VNĐ'
 		}
 
+	async handlePaging({ selected }){
+
+		// (current - 1 ) = selected| * size lấy : size row
+		const { pageSize } = this.state;
+		const list = await (await fetch(`/gvnhanh/nhanvien/`)).json();
+
+		//myFish.splice(2, 1); // xóa 1 phần tử từ vị trí 2
+		const start = selected * pageSize;
+		// size = 6, vị trí 1 bắt đầu từ 0 đến 5
+		// size = 6, vị trí 2 bắt đầu từ 6 đến 11
+		const end = start + pageSize;
+
+		const newList = list.slice(start, end)
+
+		this.setState({
+			nvs: newList,
+			currentPage: selected + 1,
+		})
+	}
+
+	async searchChange(event){
+		const target = event.target;
+		const value = target.value;
+		const name= target.name;
+		let item = {...this.state.search};
+		item = value;
+		if(item===''){
+			this.componentDidMount()
+		}
+		this.setState({
+			search: item
+		});
+		
+	}
+	async searchSubmit(event){
+		event.preventDefault();
+		const search = this.state.search;
+		const find = await(await fetch(`gvnhanh/nhanvien/find/${search}`)).json();
+		this.setState({
+			nvs: find
+		})
+		
+	}
+
 	sortByPriceAsc() {
     	let nv = this.state.nvs.sort((a,b) => (a.luong - b.luong));
     	this.setState({
@@ -128,14 +194,14 @@ class listnhanvien extends Component{
 	
 	render(){
 
-		const {nvs, isLoading, sort, sortNgaysinh} = this.state;
+		const {nvs, isLoading, sort, sortNgaysinh, pageSize, currentPage, totalColumns, search} = this.state;
 
-        if (isLoading) {
-            return <p className="text-primary align-middle text-center">
-                    <i className="fas fa-spinner fa-pulse fa-4x fa-fw" />
-                    Loading...
-                  </p>;
-        }
+        // if (isLoading) {
+        //     return <p className="text-primary align-middle text-center">
+        //             <i className="fas fa-spinner fa-pulse fa-4x fa-fw" />
+        //             Loading...
+        //           </p>;
+        // }
 
         const nvList = nvs.map(nv =>{
         	return <tr key={nv.idnv}>
@@ -155,12 +221,12 @@ class listnhanvien extends Component{
                         <td className="text-center">
                         	<div class="btn-group" role="group" aria-label="Basic example">
 	                        	<Link to={"/nhanvien/"+nv.idnv}>
-								  <button type="button" class="btn btn-outline-primary" title="Cập nhật">
+								  <button type="button" className="btn btn-outline-primary" title="Cập nhật">
 								  	<i className="fas fa-pencil-alt" />
 								  </button>
 								</Link>
 
-							  <button type="button" class="btn btn-outline-danger" onClick={this.handleClick.bind(this,nv.idnv)} title="Xóa">
+							  <button type="button" className="btn btn-outline-danger" onClick={this.handleClick.bind(this,nv.idnv)} title="Xóa">
 							  	<i className="fas fa-trash" />
 							  </button>
 							</div>                       	
@@ -181,12 +247,29 @@ class listnhanvien extends Component{
 		              
 		            </div>{/* /.row */}
 
-		            <div className="mb-4 pb-4">
-						<Link to = "/nhanvien/new">
-							<button className="btn btn-success float-right">Thêm nhân viên</button>
-						</Link>
-					</div>
+		            <div className="pb-2 pt-2">      
+			            <div className="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">				  
+						  <div className="input-group">
+						  	<form className="form-inline" onSubmit={this.searchSubmit}>
+						  	  <div className="input-group">
+								  <input className="form-control" type="search" placeholder="Nhập tên cần tìm..." 
+								  onChange={this.searchChange} aria-label="Search" />
+								  <div className="input-group-append">
+								    <button className="btn bg-secondary rounded-right" type="submit">
+				                      <i className="fas fa-search" />
+				                    </button>
+								  </div>
+							  </div>
+							 </form>
+						  </div>
 
+						  <div>
+						  	<Link to = "/nhanvien/new">
+								<button className="btn btn-success float-right">Thêm nhân viên</button>
+							</Link>
+						  </div>
+						</div>		
+					</div>
 		          </div>{/* /.container-fluid */}
 		        </div>
 
@@ -223,6 +306,24 @@ class listnhanvien extends Component{
 							</tbody>
 						</table>
 					</div>
+
+					<div className="container-fluid ">
+		                <div className="Page navigation example d-flex justify-content-center">
+							<ReactPaginate
+								containerClassName="paging-container"
+								pageClassName="paging-container__item"
+								activeClassName="paging-container__item active"
+								previousClassName="paging-container__item previous"
+								nextClassName="paging-container__item next"
+								pageLinkClassName="link"
+								previousLabel={<span>{'<'}</span>}
+								nextLabel={<span>{'>'}</span>}
+								marginPagesDisplayed={currentPage}
+								onPageChange={this.handlePaging.bind(this)}
+								pageRangeDisplayed={pageSize}
+								pageCount={totalColumns} />
+				 		</div>
+		            </div>
 				</div>
 
 				{/*<section className="content">

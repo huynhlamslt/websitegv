@@ -48,6 +48,18 @@ public class HopDongDKGVController {
         return ResponseEntity.ok().body(hopDongDKGV);
     }
 
+    //Lấy phan tram luong theo Id
+    @GetMapping("hopdongdk/ptluong/{id}")
+    public int getPhanTramLuongById(@PathVariable(value="id") Integer idnguoigv){
+        int phantramluong = hopDongDKGVDAO.findPhamTramLuong(idnguoigv);
+
+        // if(phantramluong==0){
+        //     return ResponseEntity.notFound().build();
+        // }
+
+        return phantramluong;
+    }
+
     //Cập nhật hợp đồng đăng ký
     @PutMapping("/hopdongdk/{id}")
     public ResponseEntity<HopDongDKGV> updateHopDongDK(@PathVariable(value="id") Integer idhddk, @Validated @RequestBody HopDongDKGV hddkDetail){

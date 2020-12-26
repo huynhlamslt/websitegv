@@ -86,7 +86,7 @@ class infService extends Component {
        const chiTietList = chiTiets.map((ct, idx) =>{
           return <div key={idx} className="col-sm-4 pricing text-center">
             <div className="card mb-5 mb-lg-0">
-              <div className="card-body">
+              <div className="card-body mt-2">
                 <h1 className="card-title text-center namepk1">{ct.tendv}</h1>
                 <h6 className="card-price text-center">{this.currencyFormat(ct.gia)}<span className="period">VNĐ/{ct.donvitinh}</span></h6>
                 <hr />

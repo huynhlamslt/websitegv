@@ -53,4 +53,9 @@ public class NguoiGVDAO {
     public void deleteNguoigv(Integer idngv){
         nguoiGVRepository.deleteNguoigv(idngv);
     }
+
+    //Count nguoi giup viec
+    public int countTotalNGV(){
+        return nguoiGVRepository.countNGV();
+    }
 }

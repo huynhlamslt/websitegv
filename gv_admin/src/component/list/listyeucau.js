@@ -140,8 +140,8 @@ class listyeucau extends Component{
                 <td className="text-center">
                 	<div class="btn-group" role="group" aria-label="Basic example">
 
-                    {yc.trangthai==='Chưa duyệt'? <Link to={"/lichhen/"+ `${yc.idyc}_new`}>
-						  <button type="button" class="btn btn-outline-primary" title="Cập nhật">
+                    {yc.trangthai==='Chưa duyệt'? <Link to={"/hdthue/"+ `${yc.idyc}_new`}>
+						  <button type="button" class="btn btn-outline-primary" title="Duyệt yêu cầu">
 						  	<i className="fas fa-calendar-check" />
 						  </button>	</Link> : null}
 

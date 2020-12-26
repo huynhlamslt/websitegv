@@ -19,5 +19,8 @@ public interface NhanVienRepository extends JpaRepository<NhanVien, Integer>{
     @Query(value ="select * from nhanvien\r\n" + 
 			"where idnv not in (select idnv from lichhen \r\n" + 
 			"where ngay=:ngay and gio=:gio)", nativeQuery = true)
-	List<NhanVien> findbyTime(@Param("gio") String gio, @Param("ngay") String ngay);
+    List<NhanVien> findbyTime(@Param("gio") String gio, @Param("ngay") String ngay);
+    
+    @Query(value="SELECT * FROM nhanvien WHERE hoten LIKE %:ten%", nativeQuery = true)
+    List<NhanVien> findByName(@Param("ten") String ten);
 }

@@ -1,8 +1,79 @@
 import React, {Component} from 'react';
+import {Link} from "react-router-dom";
 
 class navbar extends Component{
+
+
+  constructor(props){
+    super(props);
+    this.state = {
+      ycs: [{hoten: 'A'}],
+      count: 0,
+      isLoading: true,
+    }
+    this.timer = this.timer.bind(this)
+  }
+
+  // async componentWillReceiveProps (newProps){
+  //   const yc = await(await fetch('gvnhanh/yeucau/chuaduyet')).json();
+
+  //   this.setState({
+  //     ycs: yc,
+  //     count: yc.length,
+  //     isLoading: false,
+  //   })
+  // }
+
+  async timer() {
+    this.setState({isLoading: true});
+
+    const yc = await(await fetch('http://localhost:3100/gvnhanh/yeucau/chuaduyet')).json();
+
+    if(yc){
+      this.setState({
+        ycs: yc,
+        count: yc.length,
+        isLoading: false,
+      })
+    }
+  }
+
+  async componentDidMount(){
+    // this.setState({isLoading: true});
+
+    // const yc = await(await fetch('gvnhanh/yeucau/chuaduyet')).json();
+
+    // this.setState({
+    //   ycs: yc,
+    //   count: yc.length,
+    //   isLoading: false,
+    // })
+
+    this.intervalId = setInterval(this.timer.bind(this), 2000);
+
+    console.log("nav", this.state)
+  }
+
+  componentWillUnmount(){
+    clearInterval(this.intervalId);
+  }
    
 	render(){
+
+    const {ycs, count} = this.state;
+
+    const list = ycs.map((yc, index) =>{
+      return <div><a  className="dropdown-item pointer">
+                <Link to = "/yeucau" className="text-color"> 
+                  <i className="fas fa-exclamation-circle mr-2 text-success" /><strong> {yc.hoten}</strong> đã gửi yêu cầu
+                </Link>
+                {/*<span className="float-right text-muted text-sm">3 mins</span>*/}
+               
+              </a>
+              <div className="dropdown-divider" />
+              </div>
+    })
+
 		return(
 			<nav className="main-header navbar navbar-expand navbar-white navbar-light">
               <ul className="navbar-nav">
@@ -34,7 +105,7 @@ class navbar extends Component{
                 <li className="nav-item dropdown">
                   <a className="nav-link pointer" data-toggle="dropdown" >
                     <i className="far fa-comments" />
-                    <span className="badge badge-danger navbar-badge">3</span>
+                    <span className="badge badge-danger navbar-badge">{count}</span>
                   </a>
                   <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                     <a className="dropdown-item pointer">
@@ -91,13 +162,13 @@ class navbar extends Component{
                 {/* Notifications Dropdown Menu */}
                 <li className="nav-item dropdown">
                   <a className="nav-link pointer" data-toggle="dropdown" >
-                    <i className="far fa-bell" />
-                    <span className="badge badge-warning navbar-badge">15</span>
+                    <i className="far fa-bell text-gray-400" />
+                    <span className="badge badge-warning navbar-badge">{count}</span>
                   </a>
-                  <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                    <span className="dropdown-item dropdown-header">15 Notifications</span>
+                  <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right shadow animated--grow-in">
+                    <span className="dropdown-item dropdown-header bg-secondary font-weight-bold" >{count} thông báo mới</span>
                     <div className="dropdown-divider" />
-                    <a  className="dropdown-item pointer">
+                   {/* <a  className="dropdown-item pointer">
                       <i className="fas fa-envelope mr-2" /> 4 new messages
                       <span className="float-right text-muted text-sm">3 mins</span>
                     </a>
@@ -110,9 +181,33 @@ class navbar extends Component{
                     <a  className="dropdown-item pointer">
                       <i className="fas fa-file mr-2" /> 3 new reports
                       <span className="float-right text-muted text-sm">2 days</span>
+                    </a>*/}
+                    {list}
+                    {/*<div className="dropdown-divider" />
+                    <a  className="dropdown-item dropdown-footer pointer">See All Notifications</a>*/}
+                  </div>
+                </li>
+
+                <li className="nav-item dropdown no-arrow">
+                  <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span className="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
+                    <img className="img-profile rounded-circle image-size" src="dist/img/user2-160x160.jpg" />
+                  </a>
+                  {/* Dropdown - User Information */}
+                  <div className="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                    <a className="dropdown-item" href="#">
+                      <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400" />
+                      Thông tin tài khoản
+                    </a>
+                    <a className="dropdown-item" href="#">
+                      <i className="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400" />
+                      Cài đặt
                     </a>
                     <div className="dropdown-divider" />
-                    <a  className="dropdown-item dropdown-footer pointer">See All Notifications</a>
+                    <button className="dropdown-item" >
+                      <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" />
+                      Đăng xuất
+                    </button>
                   </div>
                 </li>
                 <li className="nav-item">

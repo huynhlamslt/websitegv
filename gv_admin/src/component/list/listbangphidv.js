@@ -6,6 +6,9 @@ import {
   withRouter
 } from "react-router-dom";
 
+import ReactPaginate from "react-paginate";
+import "./phantrang.css";
+
 class listbangphidv extends Component{
 
 	constructor(props){
@@ -15,6 +18,9 @@ class listbangphidv extends Component{
 			isLoading: true,
 			item:[],
 			loaiDVs:[],
+			currentPage: 1,
+			pageSize: 6,
+			totalColumns: 0
 		};
 		//this.findTenloaidv = this.findTenloaidv.bind(this);
 		//this.find = this.find.bind(this);
@@ -23,40 +29,19 @@ class listbangphidv extends Component{
 	}
 
 	async componentDidMount(){
+		const { pageSize } = this.state
 		this.setState({isLoading: true});
 
-		// fetch('gvnhanh/bangphidv')
-		// 	.then(response => response.json())
-		// 	.then(data => this.setState({
-		// 		bpdvs: data,
-		// 		isLoading: false
-		// 	}));
-
 		const bangphi = await (await fetch(`/gvnhanh/bangphidv/`)).json();
+		const temp = bangphi.slice(0, pageSize);
 		const loaiDV = await (await fetch('/gvnhanh/loaidv')).json();
 		this.setState({
-				bpdvs: bangphi,
-				loaiDVs: loaiDV,
-				isLoading: false,
-			})
+			bpdvs: temp,
+			loaiDVs: loaiDV,
+			isLoading: false,
+			totalColumns: Math.ceil(bangphi.length / pageSize)
+		})
 	}
-
-	// findTenloaidv(id){
-	// 	const idldv = id;
-	// 	//console.log("id",idldv)
-	// 	const {loaiDVs} = this.state;
-	// 	//console.log("loai", loaidv.tenloai);
-	// 	// this.setState({
-	// 	// 	loaiDV:loaidv
-	// 	// })
-	// 	// console.log("state", this.state.loaiDV)
-	// 	loaiDVs.map(function(item){
-	// 		if(item.idloaidv===idldv){
-	// 			return <td className="text-center">{item.tenloai}</td>
-	// 		}
-	// 		//console.log("ok",item.idloaidv)
-	// 	});
-	// }
 
 	async remove(id){
 		await fetch(`/gvnhanh/bangphidv/${id}`,{
@@ -70,13 +55,6 @@ class listbangphidv extends Component{
 			this.setState({bpdvs: updateBangphidv});
 		});
 	}
-
-	// find(id){
-	// 	const ten = null
-	// 	const rs = this.findTenloaidv(id);
-	// 	rs.then(result => ten = (result.tenloai)).catch( err => console.log(err));
-	// 	console.log("ten",ten);
-	// }
 
 	handleClick(id){
       confirmAlert({
@@ -105,10 +83,29 @@ class listbangphidv extends Component{
 		   return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.') +' VNĐ'
 		}
 
+	handlePaging = async ({ selected }) => {
+
+		// (current - 1 ) = selected| * size lấy : size row
+		const { pageSize } = this.state;
+		const list = await (await fetch(`/gvnhanh/bangphidv/`)).json();
+
+		//myFish.splice(2, 1); // xóa 1 phần tử từ vị trí 2
+		const start = selected * pageSize;
+		// size = 6, vị trí 1 bắt đầu từ 0 đến 5
+		// size = 6, vị trí 2 bắt đầu từ 6 đến 11
+		const end = start + pageSize;
+
+		const newList = list.slice(start, end)
+
+		this.setState({
+			bpdvs: newList,
+			currentPage: selected + 1,
+		})
+	}
+
 	render(){
 
-		const {bpdvs, isLoading} = this.state;
-		const {loaiDVs} = this.state;
+		const {bpdvs, isLoading, loaiDVs, pageSize, currentPage, totalColumns } = this.state;
 
         if (isLoading) {
             return <p className="text-primary align-middle text-center">
@@ -186,11 +183,33 @@ class listbangphidv extends Component{
 							<tbody>
 								{bpdvList}
 							</tbody>
+
+							<div className="row">
+								
+							</div>
+
 						</table>
 					</div>
+
+					<div className="container-fluid ">
+		                <div className="Page navigation example d-flex justify-content-center">
+							<ReactPaginate
+								containerClassName="paging-container"
+								pageClassName="paging-container__item"
+								activeClassName="paging-container__item active"
+								previousClassName="paging-container__item previous"
+								nextClassName="paging-container__item next"
+								pageLinkClassName="link"
+								previousLabel={<span>{'<'}</span>}
+								nextLabel={<span>{'>'}</span>}
+								marginPagesDisplayed={currentPage}
+								onPageChange={this.handlePaging.bind(this)}
+								pageRangeDisplayed={pageSize}
+								pageCount={totalColumns} />
+				 		</div>
+		            </div>{/* /.container-fluid */}
 				</div>
-				
-				
+			
 
 				{/*<table className="table table-striped">
 					<thead className="thead-dark mx-auto">

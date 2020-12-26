@@ -110,4 +110,15 @@ public class KhachHangController {
         khachHangDAO.delete(khachHang);
         return ResponseEntity.ok().build();
     }
+
+    //Tính tổng khách hàng
+    @GetMapping("/khachhang/count")
+    public int countTotalKH(){
+        try{
+            return khachHangDAO.countTotal();
+        }
+        catch(Exception ex){
+            return 0;
+        }
+    }
 }

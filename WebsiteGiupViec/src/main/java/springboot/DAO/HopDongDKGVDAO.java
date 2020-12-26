@@ -29,6 +29,11 @@ public class HopDongDKGVDAO {
         return hopDongDKGVRepository.findById(idhddk).orElse(null);
     }
 
+    //Get phan tram uong by Id
+    public int findPhamTramLuong(Integer idnguoigv){
+        return hopDongDKGVRepository.findPhanTramLuong(idnguoigv);
+    }
+
     //Delete
     public void delete(HopDongDKGV hddkgv){
         hopDongDKGVRepository.delete(hddkgv);

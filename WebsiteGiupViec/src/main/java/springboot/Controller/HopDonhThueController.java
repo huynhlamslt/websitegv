@@ -78,4 +78,26 @@ public class HopDonhThueController {
         hopDongThueDAO.delete(hopDongThue);
         return ResponseEntity.ok().build();
     }
+
+    //Tính số lần đặt dịch vụ theo ngày
+    @GetMapping("/hdthue/count/{ngaythue}")
+    public int countHDThue(@PathVariable(value="ngaythue") String ngaythue){
+        try{
+            return hopDongThueDAO.countDV(ngaythue);
+        }
+        catch(Exception e){
+            return 0;
+        }
+    }
+
+    //Tính tổng số hợp đồng thuê
+     @GetMapping("/hdthue/count")
+     public int countTongHDThue(){
+         try{
+             return hopDongThueDAO.countTongLuotDV();
+         }
+         catch(Exception e){
+             return 0;
+         }
+     }
 }

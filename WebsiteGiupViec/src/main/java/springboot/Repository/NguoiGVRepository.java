@@ -39,4 +39,7 @@ public interface NguoiGVRepository extends JpaRepository<NguoiGV, Integer>{
 				"(ngaybatdau<=:end and ngayketthuc>=:end) or\r\n"+ 
 				"(ngaybatdau>=:start and ngayketthuc<=:end))));", nativeQuery = true)
 	List<NguoiGV> findbyHopDong(@Param("idloaidv") int idloaidv, @Param("start") String start, @Param("end") String end);
+
+	@Query(value="SELECT COUNT(idnguoigv) AS soluong FROM nguoigiupviec WHERE hopdong=1", nativeQuery = true)
+	int countNGV();
 }

@@ -24,6 +24,11 @@ public class YeuCauDAO {
         return yeuCauRepository.findAll();
     }
 
+    //Get all
+    public List<YeuCau> findAllYeuCau(){
+        return yeuCauRepository.findYeuCau();
+    }
+
     //Get by Id
     public YeuCau findOne(Integer idyc){
         return yeuCauRepository.findById(idyc).orElse(null);
@@ -32,6 +37,16 @@ public class YeuCauDAO {
     //Get by Idlichhen
     public YeuCau findByIdlichhen(Integer idlichhen){
         return yeuCauRepository.findYeuCauByLichHen(idlichhen);
+    }
+
+    //Get yeu cau chua duyet
+    public List<YeuCau> findYeuCauChuaDuyet(){
+        return yeuCauRepository.findYeuCauChuaDuyet();
+    }
+
+    //Thay doi trang thai yeu cau
+    public void changeTrangThai(int idyc){
+        yeuCauRepository.changeYeuYau(idyc);
     }
 
     //Delete

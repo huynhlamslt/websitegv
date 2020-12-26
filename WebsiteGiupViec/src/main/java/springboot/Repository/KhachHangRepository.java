@@ -25,4 +25,7 @@ public interface KhachHangRepository extends JpaRepository<KhachHang, Integer>{
     @Query(value ="SELECT * FROM khachhang WHERE sdt=:sdt AND trangthai=0;", nativeQuery = true)
     List<KhachHang> findKHDV(@Param("sdt") String sdt);
 
+    @Query(value ="SELECT COUNT(idkh) AS soluong FROM khachhang", nativeQuery = true)
+    int countKH();
+
 }

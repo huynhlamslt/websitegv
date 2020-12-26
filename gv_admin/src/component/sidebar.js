@@ -132,14 +132,14 @@ class sidebar extends Component{
                           </a>
                         </Link>
                         </li>
-                        <li className="nav-item">
+                       {/* <li className="nav-item">
                         <Link to="/lichhen" className="nav-link pointer">
                           <a >                         
                             <i className="far fa-circle nav-icon text-danger" />
                             <p>Lịch hẹn</p>                     
                           </a>
                          </Link>
-                        </li>
+                        </li>*/}
                         <li className="nav-item">
                         <Link to="/hdthue" className="nav-link pointer">
                           <a >                         

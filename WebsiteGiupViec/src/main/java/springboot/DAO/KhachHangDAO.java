@@ -48,4 +48,9 @@ public class KhachHangDAO {
     public void delete(KhachHang kh){
         khachHangRepository.delete(kh);
     }
+
+    //Count total khachhang
+    public int countTotal(){
+        return khachHangRepository.countKH();
+    }
 }

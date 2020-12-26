@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import {
   Link,
   withRouter
@@ -20,7 +22,11 @@ class themhdthue extends Component{
 		ngaybatdau:'',
 		ngayketthuc:'',
 		giolamviec:'',
-		diachilam:''
+		gioketthuc:'',
+		diachilam:'',
+		tongtien: '',
+		phantramluong: '',
+		tienthu: ''
 	};
 	emptyKhachhang = {
 		hoten: '',
@@ -40,6 +46,8 @@ class themhdthue extends Component{
 		 	nguoiGVs:[],
 		 	khs:[],
 		 	dongia:[],
+		 	tienthu: '',
+		 	gio: false,
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -64,7 +72,9 @@ class themhdthue extends Component{
 				nguoiGVs: ngv
 			})
 
-		const kh = await (await fetch(`/gvnhanh/yeucau/lichhen/${idLichhen}`)).json();
+		const ls = await (await fetch(`/gvnhanh/hopdongdk/ptluong/${ngv[0]['idnguoigv']}`)).json();
+
+		const kh = await (await fetch(`/gvnhanh/yeucau/${idLichhen}`)).json();
 		this.setState({
 				khs: kh,
 				khachhang:{
@@ -86,11 +96,12 @@ class themhdthue extends Component{
 				phieuthu: pt
 			})
 
-
 			const dg = await (await fetch(`/gvnhanh/bangphidv/${pt.iddv}`)).json();
 			this.setState({
 				dongia: dg
 			})
+
+			console.log("hd", this.state)
 		}
 		else{
 			const dg = await (await fetch(`/gvnhanh/bangphidv/${dv[0].iddv}`)).json();
@@ -102,8 +113,13 @@ class themhdthue extends Component{
 					diachilam: kh.diachi,
 					ngaybatdau:'',
 					ngayketthuc:'',
+					giolamviec:'',
+					gioketthuc:'',
 					diachi: kh.diachi,
 					dongia: dg.gia,
+					tongtien: '',
+					phantramluong: ls,
+					tienthi: '',
 				},
 				hdthue:{
 					idhdthue:idLichhen,
@@ -140,16 +156,16 @@ class themhdthue extends Component{
 		this.setState({hdthue});
 		this.setState({phieuthu}); 
 		
+		//Khai báo biến phần trăm lương
+		let ls = null;
 
+		//Lấy đơn giá theo dịch vụ
 		const dg = await (await fetch(`/gvnhanh/bangphidv/${phieuthu["iddv"]}`)).json();
 		this.setState({
 				dongia: dg,
-			})
-		
+			})		
 
-		//console.log("pt", phieuthu);
-		//const ldv = await (await fetch(`/gvnhanh/bangphidv/${phieuthu["iddv"]}`)).json();
-		
+		//Tạo ngày
 		var months = ["01", "02", "03", "04", "05", "06", "07",
          "08", "09", "10", "11", "12"];
 
@@ -164,11 +180,16 @@ class themhdthue extends Component{
 			ng = `${d.getFullYear()}-${namedMonth}-${d.getDate()}`;
 		}
 
+		//Gán đơn giá cho phiếu thu
 		const [idLichhen, idThemhd] = this.props.match.params.id.split('_');
 		if(idThemhd === 'new'){
 			this.state.phieuthu.dongia = dg.gia;
 		}
+
+		//Sự kiện xử lý khi tạo mới
 		if(idThemhd === 'new'){
+
+			//Kiểm tra không cho chọn ngày đã qua
 			if(this.state.phieuthu["ngaybatdau"] && this.state.phieuthu["ngaybatdau"]<ng){
 					alert("Không được chọn ngày đã qua!");
 					this.setState({
@@ -182,38 +203,167 @@ class themhdthue extends Component{
 					})
 				}
 
+			//Tìm người giúp việc phù hợp với thời gian
 			if (this.state.phieuthu["iddv"] && this.state.phieuthu["ngaybatdau"] && this.state.phieuthu["ngayketthuc"]) {
-				ngv = await (await fetch(`/gvnhanh/nguoigv/timngv/${dg.idloaidv}/${phieuthu["ngaybatdau"]}/${phieuthu["ngayketthuc"]}`)).json();
-				this.setState({
-					nguoiGVs:ngv
-				})
+				ngv = await (await fetch(`/gvnhanh/nguoigv/timngv/${dg.idloaidv}/${this.state.phieuthu["ngaybatdau"]}/${this.state.phieuthu["ngayketthuc"]}`)).json();
+
+				if(ngv.length===0){
+					confirmAlert({
+			          title: 'Thông báo',
+			          message: 'Không tìm thấy người giúp việc phù hợp! Vui lòng chọn thời gian khác!',
+			          buttons: [
+			            {
+			              label: 'Đồng ý',
+			              onClick: this.setState({
+										phieuthu:{
+											ngayketthuc: '',
+											ngaybatdau: '',
+											iddv: this.state.phieuthu["iddv"],
+											diachilam: this.state.phieuthu["diachilam"],
+											dongia: this.state.phieuthu["dongia"],
+											giolamviec: this.state.phieuthu["giolamviec"],
+											gioketthuc: this.state.phieuthu["gioketthuc"]
+										}
+									})
+			            },
+			            
+			          ],
+			           childrenElement: () => null,
+			            closeOnClickOutside: true,
+			            closeOnEscape: true,
+			            willUnmount: () => null,
+			            onClickOutside: () => null,
+			            onKeypressEscape: () => null
+			        });
+				}
+				else{
+					this.setState({
+						nguoiGVs:ngv
+					})
+
+					ls = await (await fetch(`/gvnhanh/hopdongdk/ptluong/${ngv[0]['idnguoigv']}`)).json();
+					this.setState({
+						tienthu: ls,
+						
+					})
+					this.state.phieuthu.phantramluong = ls;
+					console.log("luong", this.state.phieuthu.phantramluong)
+				}
 			}
-		}
 
-		//console.log("ngv", this.state.nguoiGVs);
+			//Xử lý sự kiện nếu đặt dịch vụ theo giờ
+			if(dg.donvitinh === 'Giờ'){
+				this.setState({
+					phieuthu:{
+						ngayketthuc: this.state.phieuthu["ngaybatdau"],
+						ngaybatdau: this.state.phieuthu["ngaybatdau"],
+						iddv: this.state.phieuthu["iddv"],
+						diachilam: this.state.phieuthu["diachilam"],
+						dongia: this.state.phieuthu["dongia"],
+						giolamviec: this.state.phieuthu["giolamviec"],
+						gioketthuc: this.state.phieuthu["gioketthuc"],
 
-		
-		
-		// this.setState(async () => {
-			if (this.state.phieuthu["ngayketthuc"]!=='' && this.state.phieuthu["ngaybatdau"]!==''){
-				if(this.state.phieuthu["ngayketthuc"] < this.state.phieuthu["ngaybatdau"]){
-					//let start = hdthue["ngaybatdau"];
-					alert("Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu");
+					}
+				})
+
+				if(this.state.phieuthu["giolamviec"] && this.state.phieuthu["gioketthuc"]){
+					if(this.state.phieuthu["giolamviec"] >= this.state.phieuthu["gioketthuc"]){
+						alert("Giờ kết thúc không được nhỏ hơn giờ làm việc");
+						this.setState({
+							phieuthu:{
+								ngayketthuc: this.state.phieuthu["ngaybatdau"],
+								ngaybatdau: this.state.phieuthu["ngaybatdau"],
+								iddv: this.state.phieuthu["iddv"],
+								diachilam: this.state.phieuthu["diachilam"],
+								dongia: this.state.phieuthu["dongia"],
+								giolamviec: this.state.phieuthu["giolamviec"],
+								gioketthuc: ''
+							}
+						})
+					}
+
+					const d1  = new Date('2020-12-12 ' + this.state.phieuthu["giolamviec"]);
+					const time1 = d1.getTime();
+					const d2  = new Date('2020-12-12 ' + this.state.phieuthu["gioketthuc"]);
+					const time2 = d2.getTime();
+					const minus = (d2-d1)/3600000;
+					console.log("gio", minus)
+
 					this.setState({
 						phieuthu:{
-							ngayketthuc: '',
+							ngayketthuc: this.state.phieuthu["ngayketthuc"],
 							ngaybatdau: this.state.phieuthu["ngaybatdau"],
 							iddv: this.state.phieuthu["iddv"],
 							diachilam: this.state.phieuthu["diachilam"],
-							dongia: this.state.phieuthu["dongia"]
-						}
-						
+							dongia: this.state.phieuthu["dongia"],
+							giolamviec: this.state.phieuthu["giolamviec"],
+							gioketthuc: this.state.phieuthu["gioketthuc"],
+							tongtien: minus * dg.gia,
+							phantramluong: ls,
+							tienthu: (100-ls)*minus*dg.gia/100
+						}		
 					})
+
+					console.log("tien gio", this.state.phieuthu['phantramluong'])
+					
 				}
-				// console.log("pt",this.state.phieuthu)
+				
 			}
-			
-		//});
+
+			//Xử lý sự kiện nếu đặt dịch vụ theo ngày
+			else{
+				if (this.state.phieuthu["ngayketthuc"]!=='' && this.state.phieuthu["ngaybatdau"]!==''){
+					if(this.state.phieuthu["ngayketthuc"] < this.state.phieuthu["ngaybatdau"]){
+						//let start = hdthue["ngaybatdau"];
+						alert("Ngày kết thúc phải lớn hơn hoặc bằng ngày bắt đầu");
+						this.setState({
+							phieuthu:{
+								ngayketthuc: '',
+								ngaybatdau: this.state.phieuthu["ngaybatdau"],
+								iddv: this.state.phieuthu["iddv"],
+								diachilam: this.state.phieuthu["diachilam"],
+								dongia: this.state.phieuthu["dongia"],
+								giolamviec: this.state.phieuthu["giolamviec"],
+								gioketthuc: this.state.phieuthu["gioketthuc"]
+							}
+							
+						})
+					}
+
+					// let ds = Date.parse(this.state.phieuthu['ngaybatdau']);
+					// let de = Date.parse(this.state.phieuthu['ngayketthuc'])
+					// let diff = de-ds;
+					// let dd = diff/ (1000 * 60 * 60 * 24)
+
+					const date1 = new Date(this.state.phieuthu['ngaybatdau']);
+					const date2 = new Date(this.state.phieuthu['ngayketthuc']);
+					const diffTime = Math.abs(date2 - date1);
+					const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1
+
+					// console.log("ngay", diffDays);
+
+					this.setState({
+							phieuthu:{
+								ngayketthuc: this.state.phieuthu["ngayketthuc"],
+								ngaybatdau: this.state.phieuthu["ngaybatdau"],
+								iddv: this.state.phieuthu["iddv"],
+								diachilam: this.state.phieuthu["diachilam"],
+								dongia: this.state.phieuthu["dongia"],
+								giolamviec: this.state.phieuthu["giolamviec"],
+								gioketthuc: this.state.phieuthu["gioketthuc"],
+								tongtien: diffDays * dg.gia,
+								phantramluong: this.state.phieuthu["phantramluong"],
+								tienthu: (100-this.state.phieuthu["phantramluong"])*diffDays * dg.gia/100
+							}
+							
+						})
+					//this.state.phieuthu['tongtien'] = diffDays * dg.gia;
+					//console.log("tien", this.state.phieuthu)
+				}
+			}
+	
+		}
+
 	}
 
 	async handleSubmit(event) {
@@ -223,6 +373,7 @@ class themhdthue extends Component{
 		const {khachhang} = this.state;
 		const {khs} = this.state;
 		const [idLichhen, idThemhd] = this.props.match.params.id.split('_');
+		
 
 		if(this.state.hdthue.idnv===''){
 			this.state.hdthue.idnv=this.state.nhanViens[0].idnv;
@@ -231,7 +382,8 @@ class themhdthue extends Component{
 			this.state.hdthue.idnguoigv=this.state.nguoiGVs[0].idnguoigv;
 		}
 		this.state.hdthue.idkh = khs.idyc;
-		this.state.hdthue.trangthai = "Đã đặt"
+		this.state.hdthue.trangthai = "Đã đặt";
+		this.state.phieuthu.idhdthue = idLichhen;
 
 		// console.log("it",hdthue)
 		// console.log("pt", phieuthu)
@@ -273,7 +425,17 @@ class themhdthue extends Component{
 				body: JSON.stringify(khachhang),
 			});
 
-			await fetch(`/gvnhanh/lichhen/capnhat/${idLichhen}`, {
+			
+
+			// await fetch(`/gvnhanh/lichhen/capnhat/${idLichhen}`, {
+			// 	method:'PUT',
+			// 	headers: {
+			// 		'Accept': 'application/json',
+			// 		'Content-Type': 'application/json'
+			// 	}
+			// });
+
+			await fetch(`/gvnhanh/yeucau/trangthai/${idLichhen}`, {
 				method:'PUT',
 				headers: {
 					'Accept': 'application/json',
@@ -315,6 +477,7 @@ class themhdthue extends Component{
 		const {phieuthu} = this.state;
 		const {khs} = this.state;
 		const {dongia} = this.state;
+
 		//const {loaiDVs} = this.state;
 		//console.log("dv",loaiDVs);
 		const title = <h1 className="h3 mb-2 text-gray-800 pb-3">{idThemhd ? 'Thêm hợp đồng' : 'Thông tin hợp đồng'}</h1>;
@@ -384,6 +547,25 @@ class themhdthue extends Component{
 									                  </div>
 									            </div>
 							                </div>
+
+							                {dongia.donvitinh==='Giờ' ? 
+							                	<div class="form-row">
+								                  	<div className="col">
+									                	<div className="form-group ">
+										                    <label for="exampleInputPassword1">Giờ làm việc</label>
+										                    <input type="time" className="form-control col-md-10" name="giolamviec" id="giolamviec" value={phieuthu.giolamviec || ''}
+															onChange={this.handleChange}/>
+										                 </div>
+										            </div>
+										            <div className="col">
+										                 <div className="form-group ">
+										                    <label for="exampleInputPassword1">Giờ kết thúc</label>
+										                    <input type="time" className="form-control col-md-10 " name="gioketthuc" id="gioketthuc" value={phieuthu.gioketthuc || ''}
+										                    onChange={this.handleChange} />
+										                  </div>
+										            </div>
+								                </div> : null
+							            	}
 						                  						                      
 					                        <div className="form-group">
 							                    <label for="exampleInputPassword1">Người giúp việc</label>
@@ -419,13 +601,35 @@ class themhdthue extends Component{
 							                    <label for="exampleInputPassword1">Đơn giá</label>
 							                    <div class="input-group">
 								                    <input type="number" className="form-control" name="dongia" id="dongia" value={phieuthu.dongia || ''}
-														onChange={this.handleChange}/>
+														onChange={this.handleChange} disabled/>
 													<div class="input-group-append">
 													    <span class="input-group-text">VNĐ /</span>
 													    <span class="input-group-text">{dongia.donvitinh}</span>
 													</div>
 												</div>
-							                 </div>	
+							                 </div>
+
+							                 <div className="form-group">
+							                    <label for="exampleInputPassword1">Tổng giá</label>
+							                    <div class="input-group">
+								                    <input type="number" className="form-control" name="tongtien" id="tongtien" value={phieuthu.tongtien || ''}
+														onChange={this.handleChange} disabled/>
+													<div class="input-group-append">
+													    <span class="input-group-text">VNĐ</span>
+													</div>
+												</div>
+							                 </div>
+
+							                 <div className="form-group">
+							                    <label for="exampleInputPassword1">Tiền nộp lại</label>
+							                    <div class="input-group">
+								                    <input type="number" className="form-control" name="tienthu" id="tienthu" value={phieuthu.tienthu || ''}
+														onChange={this.handleChange} disabled/>
+													<div class="input-group-append">
+													    <span class="input-group-text">VNĐ</span>
+													</div>
+												</div>
+							                 </div>		
 
 							                </div>
 				                		</div>
@@ -433,7 +637,7 @@ class themhdthue extends Component{
 
 				                <div className="card-footer d-flex justify-content-center">
 				                  <button type="submit" className="btn btn-primary ">Save</button>
-				                  {idThemhd==='new'?<Link to="/lichhen"><button type="submit" className="btn btn-danger ml-4">Cancel</button></Link>
+				                  {idThemhd==='new'?<Link to="/yeucau"><button type="submit" className="btn btn-danger ml-4">Cancel</button></Link>
 				              		: <Link to="/hdthue"><button type="submit" className="btn btn-danger ml-4">Cancel</button></Link>}
 				              	  {/*<Link to="/hdthue"><button type="submit" className="btn btn-danger ml-4">Cancel</button></Link>*/}
 				                </div>

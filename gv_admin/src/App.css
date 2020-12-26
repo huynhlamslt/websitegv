@@ -1,7 +1,6 @@
 /*body {
   font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }*/
-
 .App {
   text-align: center;
 }
@@ -42,3 +41,18 @@
 }
 
 .pointer {cursor: pointer;}
+
+.bd-radius {
+  border-radius: 25px;
+}
+
+.text-color{
+  color: black
+}
+
+.image-size{
+  width: 30px;
+  height: 30px;
+}
+
+

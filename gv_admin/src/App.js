@@ -27,6 +27,7 @@ import Themlichhen from "./component/new/themlichhen";
 import Themhdthue from "./component/new/themhdthue";
 
 import Upload from "./component/Register.js";
+import Main from "./component/main";
 
 class App extends Component {
   
@@ -45,7 +46,7 @@ class App extends Component {
 
             <Switch>
                 {/*Dashboard*/}
-                 <Route path="/" component={Upload} exact />
+                <Route path="/" component={Dashboard} exact />
             </Switch> 
                      
             <Switch>

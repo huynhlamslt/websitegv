@@ -92,5 +92,11 @@ public class NhanVienController {
 		nhanVienDAO.delete(nVien);
 		return ResponseEntity.ok().build();
 	}
+
+	//Get list nhan vien by name
+	@GetMapping("/nhanvien/find/{ten}")
+	public List<NhanVien> findByName(@PathVariable(value="ten") String ten){
+		return nhanVienDAO.findByName(ten);
+	}
 }
 

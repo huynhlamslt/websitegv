@@ -33,4 +33,14 @@ public class HopDongThueDAO {
     public void delete(HopDongThue hdthue){
         hopDongThueRepository.delete(hdthue);
     }
+
+    //Count hopdongthue by date
+    public int countDV(String ngaythue){
+        return hopDongThueRepository.countLuotDV(ngaythue);
+    }
+
+    //Count tong hopdongthue
+    public int countTongLuotDV(){
+        return hopDongThueRepository.countTongLuotDV();
+    }
 }

@@ -114,6 +114,17 @@ public class NguoiGVController {
          nguoiGVDAO.deleteNguoigv(idngv);
          return ResponseEntity.ok().build();
      }
+
+    //Tính tổng người giúp việc
+    @GetMapping("/nguoigv/count")
+    public int countTotalNgv(){
+        try{
+            return nguoiGVDAO.countTotalNGV();
+        }
+        catch(Exception ex){
+            return 0;
+        }
+    }
 }
 
 

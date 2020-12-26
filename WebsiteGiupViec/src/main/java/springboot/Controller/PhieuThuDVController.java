@@ -16,24 +16,31 @@ import org.springframework.web.bind.annotation.RestController;
 
 import springboot.DAO.PhieuThuDVDAO;
 import springboot.Model.PhieuThuDV;
+import springboot.Model.ThongKe;
 
 @RestController
 @RequestMapping("/gvnhanh")
 public class PhieuThuDVController {
-    
+
     @Autowired
     PhieuThuDVDAO phieuThuDVDAO;
 
-    //Lưu phiếu thu
+    // Lưu phiếu thu
     @PostMapping("/phieuthudv")
-    public PhieuThuDV creaPhieuThuDV(@Validated @RequestBody PhieuThuDV ptdv){
+    public PhieuThuDV creaPhieuThuDV(@Validated @RequestBody PhieuThuDV ptdv) {
         return phieuThuDVDAO.save(ptdv);
     }
 
-    //Lấy ds phiếu thu
+    // Lấy ds phiếu thu
     @GetMapping("/phieuthudv")
-    public List<PhieuThuDV> getAlPhieuThuDV(){
+    public List<PhieuThuDV> getAllPhieuThuDV() {
         return phieuThuDVDAO.findAll();
+    }
+
+    // Lấy ds phiếu thu
+    @GetMapping("/phieuthudv/count")
+    public List<ThongKe> getCountPhieuThuDV() {
+        return phieuThuDVDAO.countDV();
     }
 
     //Lấy phiếu thu bằng Id
@@ -62,7 +69,11 @@ public class PhieuThuDVController {
         phieuThuDV.setNgaybatdau(ptDetail.getNgaybatdau());
         phieuThuDV.setNgayketthuc(ptDetail.getNgayketthuc());
         phieuThuDV.setGiolamviec(ptDetail.getGiolamviec());
+        phieuThuDV.setGioketthuc(ptDetail.getGioketthuc());
         phieuThuDV.setDiachilam(ptDetail.getDiachilam());
+        phieuThuDV.setTongtien(ptDetail.getTongtien());
+        phieuThuDV.setPhantramluong(ptDetail.getPhantramluong());
+        phieuThuDV.setTienthu(ptDetail.getTienthu());
 
         PhieuThuDV updatePhieuThuDV = phieuThuDVDAO.save(phieuThuDV);
         return ResponseEntity.ok().body(updatePhieuThuDV);

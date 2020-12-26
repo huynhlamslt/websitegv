@@ -33,7 +33,7 @@ public class YeuCauController {
     //Lấy ds yêu cầu
     @GetMapping("/yeucau")
     public List<YeuCau> getAllYeuCau(){
-        return yeuCauDAO.findAll();
+        return yeuCauDAO.findAllYeuCau();
     }
 
     //Lấy yêu cầu qua Id
@@ -59,6 +59,12 @@ public class YeuCauController {
  
          return ResponseEntity.ok().body(yc);
      }
+    
+    //Lấy ds yêu cầu chưa duyệt
+    @GetMapping("/yeucau/chuaduyet")
+    public List<YeuCau> getAllYeuCauChuaDuyet(){
+        return yeuCauDAO.findYeuCauChuaDuyet();
+    }
 
     //Cập nhật yêu cầu
     @PutMapping("/yeucau/{id}")
@@ -79,6 +85,19 @@ public class YeuCauController {
 
         YeuCau updateYeuCau = yeuCauDAO.save(yc);
         return ResponseEntity.ok().body(updateYeuCau);
+    }
+
+    //Cập nhật trạng thái yêu cầu
+    @PutMapping("/yeucau/trangthai/{id}")
+    public ResponseEntity<YeuCau> updateTrangThaiYeuCau(@PathVariable(value = "id") Integer idyc){
+        YeuCau yc = yeuCauDAO.findOne(idyc);
+
+        if(yc==null){
+            return ResponseEntity.notFound().build();
+        }
+
+        yeuCauDAO.changeTrangThai(idyc);
+        return ResponseEntity.ok().build();
     }
 
     //Xóa yêu cầu
