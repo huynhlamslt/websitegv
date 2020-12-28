@@ -28,4 +28,6 @@ public interface KhachHangRepository extends JpaRepository<KhachHang, Integer>{
     @Query(value ="SELECT COUNT(idkh) AS soluong FROM khachhang", nativeQuery = true)
     int countKH();
 
+    @Query(value = "SELECT * FROM khachhang WHERE hoten LIKE %:ten%", nativeQuery = true)
+    List<KhachHang> findByName(@Param("ten") String ten);
 }

@@ -38,4 +38,9 @@ public class BangPhiDVDAO {
     public void delete(BangPhiDV bpdv){
         bangPhiDVRepository.delete(bpdv);
     }
+
+    //Find by name
+    public List<BangPhiDV> findByName(String ten){
+        return bangPhiDVRepository.findByName(ten);
+    }
 }

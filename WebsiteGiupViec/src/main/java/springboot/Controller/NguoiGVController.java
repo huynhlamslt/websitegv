@@ -125,6 +125,18 @@ public class NguoiGVController {
             return 0;
         }
     }
+
+    //Tìm người giúp việc theo tên
+    @GetMapping("/nguoigv/find/{ten}")
+    public List<NguoiGV> findNguoiGVByName(@PathVariable(value="ten") String ten){
+        return nguoiGVDAO.findByName(ten);
+    }
+
+    //Tìm ứng viên theo tên
+    @GetMapping("/nguoigv/finduv/{ten}")
+    public List<NguoiGV> findUVByName(@PathVariable(value="ten") String ten){
+        return nguoiGVDAO.findUTByName(ten);
+    }
 }
 
 

@@ -43,4 +43,9 @@ public class HopDongThueDAO {
     public int countTongLuotDV(){
         return hopDongThueRepository.countTongLuotDV();
     }
+
+    //Tim theo ten
+    public List<HopDongThue> findByName(String ten){
+        return hopDongThueRepository.findByName(ten);
+    }
 }

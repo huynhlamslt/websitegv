@@ -5,6 +5,7 @@ import {
   Link,
   withRouter
 } from "react-router-dom";
+import ReactPaginate from "react-paginate";
 
 class listhdthue extends Component{
 
@@ -12,15 +13,22 @@ class listhdthue extends Component{
 		super(props);
 		this.state = {
 			hdthues:[],
-			isLoading: true,
 			DVs:[],
 			phieuthus:[],
 			ngvs:[],
 			yeucaus:[],
-
+			serach:'',
+			currentPage: 1,
+			pageSize: 6,
+			totalColumns: 0,
+			search: '',
+			isLoading: true,
 		};
 		this.remove = this.remove.bind(this);
 		this.currencyFormat = this.currencyFormat.bind(this);	
+		this.paging = this.paging.bind(this);
+		this.searchChange = this.searchChange.bind(this);
+        this.searchSubmit = this.searchSubmit.bind(this);
 	}
 
 	async componentDidMount(){
@@ -37,10 +45,40 @@ class listhdthue extends Component{
 				phieuthus: phieuthu,
 				ngvs: ngv,
 				yeucaus: yeucau,
+				search: '',
 				isLoading: false,
-			})
+		})
+		this.paging(hdthue);
 	}
 
+	paging(list){
+		const pageSize = this.state.pageSize;
+		const temp = list.slice(0, pageSize);
+		this.setState({
+			hdthues: temp,
+			totalColumns: Math.ceil(list.length / pageSize),
+		})
+	}
+
+	async handlePaging({ selected }){
+
+		// (current - 1 ) = selected| * size lấy : size row
+		const { pageSize } = this.state;
+		const list = await (await fetch(`/gvnhanh/hdthue/`)).json();
+
+		//myFish.splice(2, 1); // xóa 1 phần tử từ vị trí 2
+		const start = selected * pageSize;
+		// size = 6, vị trí 1 bắt đầu từ 0 đến 5
+		// size = 6, vị trí 2 bắt đầu từ 6 đến 11
+		const end = start + pageSize;
+
+		const newList = list.slice(start, end)
+
+		this.setState({
+			hdthues: newList,
+			currentPage: selected + 1,
+		})
+	}
 
 	async remove(id){
 		await fetch(`/gvnhanh/hdthue/${id}`,{
@@ -88,9 +126,35 @@ class listhdthue extends Component{
 	      day: "2-digit"
 	    });
 
+	async searchChange(event){
+		const target = event.target;
+		const value = target.value;
+		const name= target.name;
+		let item = {...this.state.search};
+		item = value;
+		if(item===''){
+			this.componentDidMount()
+		}
+		this.setState({
+			search: item
+		});
+		
+	}
+	async searchSubmit(event){
+		event.preventDefault();
+		const pageSize = this.state["pageSize"];
+		const search = this.state.search;
+		const find = await(await fetch(`gvnhanh/hdthue/find/${search}`)).json();
+		this.setState({
+			hdthues: find,
+			totalColumns: Math.ceil(find.length / pageSize)
+		})
+		
+	}
+
 	render(){
 
-		const {hdthues, phieuthus, DVs, ngvs, yeucaus, isLoading} = this.state;
+		const {hdthues, phieuthus, DVs, ngvs, yeucaus, isLoading, pageSize, currentPage, totalColumns, search} = this.state;
 		//console.log("dv", DVs)
 
 		if (isLoading) {
@@ -166,7 +230,23 @@ class listhdthue extends Component{
 		              
 		            </div>{/* /.row */}
 
-		           
+					 <div className="pb-2 pt-2">      
+			            <div className="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">				  
+						  <div className="input-group">
+						  	<form className="form-inline" onSubmit={this.searchSubmit}>
+						  	  <div className="input-group">
+								  <input className="form-control" type="search" placeholder="Nhập tên cần tìm..." 
+								  onChange={this.searchChange} aria-label="Search" />
+								  <div className="input-group-append">
+								    <button className="btn bg-secondary rounded-right" type="submit">
+				                      <i className="fas fa-search" />
+				                    </button>
+								  </div>
+							  </div>
+							 </form>
+						  </div>
+						</div>		
+					</div>		           
 
 		          </div>{/* /.container-fluid */}
 		        </div>
@@ -191,6 +271,24 @@ class listhdthue extends Component{
 							</tbody>
 						</table>
 					</div>
+
+					<div className="container-fluid ">
+		                <div className="Page navigation example d-flex justify-content-center">
+							<ReactPaginate
+								containerClassName="paging-container"
+								pageClassName="paging-container__item"
+								activeClassName="paging-container__item active"
+								previousClassName="paging-container__item previous"
+								nextClassName="paging-container__item next"
+								pageLinkClassName="link"
+								previousLabel={<span>{'<'}</span>}
+								nextLabel={<span>{'>'}</span>}
+								marginPagesDisplayed={currentPage}
+								onPageChange={this.handlePaging.bind(this)}
+								pageRangeDisplayed={pageSize}
+								pageCount={totalColumns} />
+				 		</div>
+		            </div>
 				</div>
 				
 			</div>

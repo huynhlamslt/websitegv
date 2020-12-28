@@ -5,32 +5,71 @@ import {
   Link,
   withRouter
 } from "react-router-dom";
+import ReactPaginate from "react-paginate";
 
 class listkhachhang extends Component{
 
 	constructor(props){
 		super(props);
 		this.state = {
-			khs:[],
-			isLoading: true,
+			khs:[],	
 			item:[],
 			sortTrangthai: 0,
+			currentPage: 1,
+			pageSize: 6,
+			totalColumns: 0,
+			isLoading: true,
 		};
 		this.clickTrue = this.clickTrue.bind(this);
 		this.clickFalse = this.clickFalse.bind(this);
 		this.sortByTrangthaiAsc = this.sortByTrangthaiAsc.bind(this);
 		this.sortByTrangthaiDesc = this.sortByTrangthaiDesc.bind(this);
+		this.paging = this.paging.bind(this);
+		this.searchChange = this.searchChange.bind(this);
+        this.searchSubmit = this.searchSubmit.bind(this);
 	}
 
-	componentDidMount(){
+	async componentDidMount(){
 		this.setState({isLoading: true});
 
-		fetch('gvnhanh/khachhang')
-			.then(response => response.json())
-			.then(data => this.setState({
-				khs: data,
-				isLoading: false
-			}));
+		const kh = await(await fetch('gvnhanh/khachhang')).json();
+
+		this.setState({
+			khs: kh,
+			search: '',
+			isLoading: false
+		})
+
+		this.paging(kh);
+	}
+
+	paging(list){
+		const pageSize = this.state.pageSize;
+		const temp = list.slice(0, pageSize);
+		this.setState({
+			khs: temp,
+			totalColumns: Math.ceil(list.length / pageSize),
+		})
+	}
+
+	async handlePaging({ selected }){
+
+		// (current - 1 ) = selected| * size lấy : size row
+		const { pageSize } = this.state;
+		const list = await (await fetch(`/gvnhanh/khachhang/`)).json();
+
+		//myFish.splice(2, 1); // xóa 1 phần tử từ vị trí 2
+		const start = selected * pageSize;
+		// size = 6, vị trí 1 bắt đầu từ 0 đến 5
+		// size = 6, vị trí 2 bắt đầu từ 6 đến 11
+		const end = start + pageSize;
+
+		const newList = list.slice(start, end)
+
+		this.setState({
+			khs: newList,
+			currentPage: selected + 1,
+		})
 	}
 
 	sortByTrangthaiAsc() {
@@ -121,9 +160,35 @@ class listkhachhang extends Component{
         });
     }
 
+    async searchChange(event){
+		const target = event.target;
+		const value = target.value;
+		const name= target.name;
+		let item = {...this.state.search};
+		item = value;
+		if(item===''){
+			this.componentDidMount()
+		}
+		this.setState({
+			search: item
+		});
+		
+	}
+	async searchSubmit(event){
+		event.preventDefault();
+		const pageSize = this.state["pageSize"];
+		const search = this.state.search;
+		const find = await(await fetch(`gvnhanh/khachhang/find/${search}`)).json();
+		this.setState({
+			khs: find,
+			totalColumns: Math.ceil(find.length / pageSize)
+		})
+		
+	}
+
 	render(){
 
-		const {khs, isLoading, sortTrangthai} = this.state;
+		const {khs, isLoading, sortTrangthai, pageSize, currentPage, totalColumns} = this.state;
 
 		if (isLoading) {
             return <p className="text-primary align-middle text-center">
@@ -165,6 +230,23 @@ class listkhachhang extends Component{
 		              
 		            </div>{/* /.row */}
 
+		            <div className="pb-2 pt-2">      
+			            <div className="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">				  
+						  <div className="input-group">
+						  	<form className="form-inline" onSubmit={this.searchSubmit}>
+						  	  <div className="input-group">
+								  <input className="form-control" type="search" placeholder="Nhập tên cần tìm..." 
+								  onChange={this.searchChange} aria-label="Search" />
+								  <div className="input-group-append">
+								    <button className="btn bg-secondary rounded-right" type="submit">
+				                      <i className="fas fa-search" />
+				                    </button>
+								  </div>
+							  </div>
+							 </form>
+						  </div>
+						</div>		
+					</div>
 		          </div>{/* /.container-fluid */}
 		        </div>
 
@@ -191,6 +273,22 @@ class listkhachhang extends Component{
 							</tbody>
 						</table>
 					</div>
+
+					<div className="Page navigation example d-flex justify-content-center">
+						<ReactPaginate
+							containerClassName="paging-container"
+							pageClassName="paging-container__item"
+							activeClassName="paging-container__item active"
+							previousClassName="paging-container__item previous"
+							nextClassName="paging-container__item next"
+							pageLinkClassName="link"
+							previousLabel={<span>{'<'}</span>}
+							nextLabel={<span>{'>'}</span>}
+							marginPagesDisplayed={currentPage}
+							onPageChange={this.handlePaging.bind(this)}
+							pageRangeDisplayed={pageSize}
+							pageCount={totalColumns} />
+			 		</div>
 				</div>
 				
 			</div>

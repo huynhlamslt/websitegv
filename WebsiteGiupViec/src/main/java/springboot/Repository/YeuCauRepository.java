@@ -25,4 +25,7 @@ public interface YeuCauRepository extends JpaRepository<YeuCau, Integer>{
     @Modifying
 	@Query(value ="UPDATE yeucau SET trangthai = 'Đã duyệt' WHERE idyc =:idyc", nativeQuery = true)
     void changeYeuYau(@Param("idyc") int idyc);
+
+    @Query(value = "SELECT * FROM yeucau WHERE hoten LIKE %:ten%", nativeQuery = true)
+    List<YeuCau> findByName(@Param("ten") String ten);
 }

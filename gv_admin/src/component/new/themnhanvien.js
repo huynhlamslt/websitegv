@@ -204,7 +204,6 @@ class themnhanvien extends Component{
 										onChange={this.handleChange} accept="image/*" placeholder="" />
 										<div className="previewProfilePic" >
 							                <img className="playerProfilePic_home_tile w-25 h-25" src="\logo192.png" alt="..."/>
-							                <img src="https://images.viblo.asia/473010d1-c426-4dc4-bb27-b17d35612e05.png" class="img-fluid img-thumbnail" alt="..."/>
 							              </div>
 					                </div>
 

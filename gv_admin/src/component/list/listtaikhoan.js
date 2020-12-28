@@ -12,12 +12,14 @@ class listtaikhoan extends Component{
 		super(props);
 		this.state = {
 			tks:[],
-			isLoading: true,
 			item:[],
-			nvs:[]
+			nvs:[],
+			search:'',
+			isLoading: true,
 		};
 		this.remove = this.remove.bind(this);
-		
+		this.searchChange = this.searchChange.bind(this);
+		this.searchSubmit = this.searchSubmit.bind(this);		
 	}
 
 	 async componentDidMount() {
@@ -26,6 +28,7 @@ class listtaikhoan extends Component{
         const nv = await (await fetch('gvnhanh/nhanvien')).json();
         this.setState({ 
         	tks: body, 
+        	search:'',
         	isLoading: false ,
         	nvs: nv
         });
@@ -66,6 +69,30 @@ class listtaikhoan extends Component{
             onKeypressEscape: () => null
         });
     }
+
+    async searchChange(event){
+		const target = event.target;
+		const value = target.value;
+		const name= target.name;
+		let item = {...this.state.search};
+		item = value;
+		if(item===''){
+			this.componentDidMount()
+		}
+		this.setState({
+			search: item
+		});
+		
+	}
+	async searchSubmit(event){
+		event.preventDefault();
+		const search = this.state.search;
+		const find = await(await fetch(`gvnhanh/taikhoan/find/${search}`)).json();
+		this.setState({
+			tks: find
+		})
+		console.log("find", search)
+	}
 
 	render(){
 
@@ -120,10 +147,28 @@ class listtaikhoan extends Component{
 		              
 		            </div>{/* /.row */}
 
-		            <div className="mb-4 pb-4">
-						<Link to = "/taikhoan/new">
-							<button className="btn btn-success float-right">Thêm tài khoản</button>
-						</Link>
+		             <div className="pb-2 pt-2">      
+			            <div className="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">				  
+						  <div className="input-group">
+						  	<form className="form-inline" onSubmit={this.searchSubmit}>
+						  	  <div className="input-group">
+								  <input className="form-control" type="search" placeholder="Nhập tên cần tìm..." 
+								  onChange={this.searchChange} aria-label="Search" />
+								  <div className="input-group-append">
+								    <button className="btn bg-secondary rounded-right" type="submit">
+				                      <i className="fas fa-search" />
+				                    </button>
+								  </div>
+							  </div>
+							 </form>
+						  </div>
+
+						  <div>
+						  	<Link to = "/taikhoan/new">
+								<button className="btn btn-success float-right">Thêm tài khoản</button>
+							</Link>
+						  </div>
+						</div>		
 					</div>
 
 		          </div>{/* /.container-fluid */}

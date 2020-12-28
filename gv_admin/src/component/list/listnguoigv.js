@@ -5,6 +5,7 @@ import {
   Link,
   withRouter
 } from "react-router-dom";
+import ReactPaginate from "react-paginate";
 
 class listnguoigv extends Component{
 
@@ -12,10 +13,13 @@ class listnguoigv extends Component{
         super(props);
         this.state = {
           ngvs: [], 
-          isLoading: true,
-          item: [],
           sortDate: 0,
           sortHopDong: 0,
+          currentPage: 1,
+          pageSize: 6,
+          totalColumns: 0,
+          search: '',
+          isLoading: true,
         };
         //this.remove = this.remove.bind(this);
         //this.handleChange = this.handleChange.bind(this);
@@ -23,14 +27,52 @@ class listnguoigv extends Component{
         this.sortByDateDesc = this.sortByDateDesc.bind(this);
         this.sortByHopDongAsc = this.sortByHopDongAsc.bind(this);
         this.sortByHopDongDesc = this.sortByHopDongDesc.bind(this);
+        this.paging = this.paging.bind(this);
+        this.searchChange = this.searchChange.bind(this);
+        this.searchSubmit = this.searchSubmit.bind(this);
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         this.setState({isLoading: true});
 
-        fetch('gvnhanh/nguoigv')
-          .then(response => response.json())
-          .then(data => this.setState({ngvs: data, isLoading: false}));
+        const ngv = await(await fetch('gvnhanh/nguoigv')).json();
+
+        this.setState({
+          ngvs: ngv,
+          search:'',
+          isLoading: false
+        })
+
+        this.paging(ngv)
+    }
+
+    paging(list){
+      const pageSize = this.state.pageSize;
+      const temp = list.slice(0, pageSize);
+      this.setState({
+        ngvs: temp,
+        totalColumns: Math.ceil(list.length / pageSize),
+      })
+    }
+
+    async handlePaging({ selected }){
+
+        // (current - 1 ) = selected| * size lấy : size row
+        const { pageSize } = this.state;
+        const list = await (await fetch(`/gvnhanh/nguoigv/`)).json();
+
+        //myFish.splice(2, 1); // xóa 1 phần tử từ vị trí 2
+        const start = selected * pageSize;
+        // size = 6, vị trí 1 bắt đầu từ 0 đến 5
+        // size = 6, vị trí 2 bắt đầu từ 6 đến 11
+        const end = start + pageSize;
+
+        const newList = list.slice(start, end)
+
+        this.setState({
+            ngvs: newList,
+            currentPage: selected + 1,
+        })
     }
 
     sortByDateAsc() {
@@ -124,9 +166,35 @@ class listnguoigv extends Component{
           day: "2-digit"
         });
 	
+    async searchChange(event){
+        const target = event.target;
+        const value = target.value;
+        const name= target.name;
+        let item = {...this.state.search};
+        item = value;
+        if(item===''){
+            this.componentDidMount()
+        }
+        this.setState({
+            search: item
+        });
+        
+    }
+    async searchSubmit(event){
+        event.preventDefault();
+        const pageSize = this.state["pageSize"];
+        const search = this.state.search;
+        const find = await(await fetch(`gvnhanh/nguoigv/find/${search}`)).json();
+        this.setState({
+            ngvs: find,
+            totalColumns: Math.ceil(find.length / pageSize)
+        })
+        
+    }
+
 	render(){
 
-		const {ngvs, isLoading, sortDate, sortHopDong} = this.state;
+		const {ngvs, isLoading, sortDate, sortHopDong, pageSize, currentPage, totalColumns, search} = this.state;
 
 		if (isLoading) {
             return <p className="text-primary align-middle text-center">
@@ -177,11 +245,29 @@ class listnguoigv extends Component{
 		              
 		            </div>{/* /.row */}
 
-		            <div className="mb-4 pb-4">
-						<Link to = "/nguoigv/new">
-							<button className="btn btn-success float-right">Thêm mới</button>
-						</Link>
-					</div>
+		             <div className="pb-2 pt-2">      
+                        <div className="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">                  
+                          <div className="input-group">
+                            <form className="form-inline" onSubmit={this.searchSubmit}>
+                              <div className="input-group">
+                                  <input className="form-control" type="search" placeholder="Nhập tên cần tìm..." 
+                                  onChange={this.searchChange} aria-label="Search" />
+                                  <div className="input-group-append">
+                                    <button className="btn bg-secondary rounded-right" type="submit">
+                                      <i className="fas fa-search" />
+                                    </button>
+                                  </div>
+                              </div>
+                             </form>
+                          </div>
+
+                          <div>
+                            <Link to = "/nguoigv/new">
+                                <button className="btn btn-success float-right">Thêm nhân viên</button>
+                            </Link>
+                          </div>
+                        </div>      
+                    </div>
 
 		          </div>{/* /.container-fluid */}
 		        </div>
@@ -194,23 +280,23 @@ class listnguoigv extends Component{
 								<tr className="">
 									<th className="text-center" scope="col">Mã NGV</th>
 									<th className="text-center">Họ tên   
-                  </th>
+                                    </th>
 									<th className=" text-center">Giới tính</th>
 									<th className="text-center">Ngày sinh {''}
-                    {sortDate===1?
-                      <i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByDateAsc}/>
-                      :<i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByDateDesc}/>
-                    }
-                  </th>
+                                    {sortDate===1?
+                                      <i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByDateAsc}/>
+                                      :<i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByDateDesc}/>
+                                    }
+                                    </th>
 									<th className="text-center">SĐT</th>
 									<th className=" text-center">CMND</th>
 									<th className="text-center">Quê quán</th>
 									<th className="text-center">
-                     {sortHopDong===1?
-                      <i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByHopDongAsc}/>
-                      :<i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByHopDongDesc}/>
-                    }
-                  </th>
+                                     {sortHopDong===1?
+                                      <i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByHopDongAsc}/>
+                                      :<i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByHopDongDesc}/>
+                                    }
+                                    </th>
 								</tr>
 							</thead>
 							<tbody>
@@ -218,6 +304,24 @@ class listnguoigv extends Component{
 							</tbody>
 						</table>
 					</div>
+
+                      <div className="container-fluid ">
+                          <div className="Page navigation example d-flex justify-content-center">
+                            <ReactPaginate
+                              containerClassName="paging-container"
+                              pageClassName="paging-container__item"
+                              activeClassName="paging-container__item active"
+                              previousClassName="paging-container__item previous"
+                              nextClassName="paging-container__item next"
+                              pageLinkClassName="link"
+                              previousLabel={<span>{'<'}</span>}
+                              nextLabel={<span>{'>'}</span>}
+                              marginPagesDisplayed={currentPage}
+                              onPageChange={this.handlePaging.bind(this)}
+                              pageRangeDisplayed={pageSize}
+                              pageCount={totalColumns} />
+                          </div>
+                      </div>
 				</div>
 				
 			</div>

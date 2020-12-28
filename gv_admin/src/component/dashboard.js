@@ -80,14 +80,24 @@ class dashboard extends Component{
                 '#C9DE00',
                 '#2FDE00',
                 '#00A6B4',
-                '#6800B4'
+                '#6800B4',
+                '#0515F5',
+                '#EFAA2A',
+                '#0E7C6B',
+                '#3E107B',
+                '#EC6064'
               ],
               hoverBackgroundColor: [
               '#501800',
               '#4B5000',
               '#175000',
               '#003350',
-              '#35014F'
+              '#35014F',
+              '#0515F5',
+              '#EFAA2A',
+              '#0E7C6B',
+              '#3E107B',
+              '#EC6064'
               ],
               data: []
             }
@@ -182,10 +192,10 @@ class dashboard extends Component{
                 <h1 className="m-0">Dashboard</h1>
               </div>{/* /.col */}
               <div className="col-sm-6">
-                <ol className="breadcrumb float-sm-right">
+               {/* <ol className="breadcrumb float-sm-right">
                   <li className="breadcrumb-item"><a >Home</a></li>
                   <li className="breadcrumb-item active">Dashboard</li>
-                </ol>
+                </ol>*/}
               </div>{/* /.col */}
             </div>{/* /.row */}
           </div>{/* /.container-fluid */}
@@ -206,7 +216,7 @@ class dashboard extends Component{
                   <div className="icon">
                     <i className="fas fa-shopping-bag" />
                   </div>
-                 {/* <a  className="small-box-footer">More info <i className="fas fa-arrow-circle-right" /></a>*/}
+                  {/*<a  className="small-box-footer">More info <i className="fas fa-arrow-circle-right" /></a>*/}
                 </div>
               </div>
               {/* ./col */}
@@ -294,7 +304,7 @@ class dashboard extends Component{
                           scales: {
                             xAxes: [{
                               gridLines: {
-                                display: true,
+                                display: false,
                               },
                             }],
                             yAxes: [{
@@ -302,6 +312,10 @@ class dashboard extends Component{
                               gridLines: {
                                 display: true,
                               },
+                               ticks: {
+                                beginAtZero: true,
+                                stepSize: 1
+                              }
                             }],
                           },
                           tooltips: {
@@ -350,6 +364,21 @@ class dashboard extends Component{
                           legend:{
                             display:true,
                             position:'right'
+                          },
+                          tooltips:{
+                                callbacks: {
+                                    label: function(tooltipItem, data) {
+                                        let dataset = data.datasets[tooltipItem.datasetIndex];
+                                        let meta = dataset._meta[Object.keys(dataset._meta)[0]];
+                                        let total = meta.total;
+                                        let currentValue = dataset.data[tooltipItem.index];
+                                        let percentage = parseFloat((currentValue/total*100).toFixed(1));
+                                        return currentValue + ' (' + percentage + '%)';
+                                    },
+                                    title: function(tooltipItem, data) {
+                                        return data.labels[tooltipItem[0].index];
+                                    }
+                                }
                           }
                         }}
                       />

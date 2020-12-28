@@ -79,4 +79,10 @@ public class TaiKhoanController {
         taiKhoanDAO.delete(taiKhoan);
         return ResponseEntity.ok().build();
     }
+
+    //Tìm theo tên
+    @GetMapping("taikhoan/find/{ten}")
+    public List<TaiKhoan> findTaiKhoanByName(@PathVariable(value = "ten") String ten){
+        return taiKhoanDAO.findByName(ten);
+    }
 }

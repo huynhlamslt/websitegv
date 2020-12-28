@@ -39,4 +39,8 @@ public class LoaiDichVuDAO {
         loaiDichVuRepository.delete(loaidv);
     }
     
+    //Find by name
+    public List<LoaiDichVu> findByName(String ten){
+        return loaiDichVuRepository.findByName(ten);
+    }
 }

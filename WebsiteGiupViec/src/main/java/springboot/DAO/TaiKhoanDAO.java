@@ -33,4 +33,9 @@ public class TaiKhoanDAO {
     public void delete(TaiKhoan tk){
         taiKhoanRepository.delete(tk);
     }
+
+    //Get by name
+    public List<TaiKhoan> findByName(String ten){
+        return taiKhoanRepository.findByName(ten);
+    }
 }

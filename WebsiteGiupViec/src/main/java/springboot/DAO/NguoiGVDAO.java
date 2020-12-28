@@ -58,4 +58,14 @@ public class NguoiGVDAO {
     public int countTotalNGV(){
         return nguoiGVRepository.countNGV();
     }
+
+    //Find nguoi giup viec by name
+    public List<NguoiGV> findByName(String ten){
+        return nguoiGVRepository.findByName(ten);
+    }
+
+    //Find ung tuyen by name
+    public List<NguoiGV> findUTByName(String ten){
+        return nguoiGVRepository.findUTByName(ten);
+    }
 }

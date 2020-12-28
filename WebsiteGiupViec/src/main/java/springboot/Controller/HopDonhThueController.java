@@ -91,13 +91,19 @@ public class HopDonhThueController {
     }
 
     //Tính tổng số hợp đồng thuê
-     @GetMapping("/hdthue/count")
-     public int countTongHDThue(){
-         try{
-             return hopDongThueDAO.countTongLuotDV();
-         }
-         catch(Exception e){
-             return 0;
-         }
-     }
+    @GetMapping("/hdthue/count")
+    public int countTongHDThue(){
+        try{
+            return hopDongThueDAO.countTongLuotDV();
+        }
+        catch(Exception e){
+            return 0;
+        }
+    }
+    
+    //Tìm hợp đồng thuê theo tên người giúp việc/khách hàng
+    @GetMapping("/hdthue/find/{ten}")
+    public List<HopDongThue> findHDThueByName(@PathVariable(value= "ten") String ten){
+        return hopDongThueDAO.findByName(ten);
+    }
 }

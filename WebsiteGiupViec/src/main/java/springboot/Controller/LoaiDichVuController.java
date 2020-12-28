@@ -91,4 +91,10 @@ public class LoaiDichVuController {
         loaiDichVuDAO.delete(loaiDichVu);
         return ResponseEntity.ok().build();
     }
+
+    //Tìm loại dịch vụ theo tên
+    @GetMapping("/loaidv/find/{ten}")
+    public List<LoaiDichVu> findLoaiDVByName(@PathVariable(value = "ten") String ten){
+        return loaiDichVuDAO.findByName(ten);
+    }
 }

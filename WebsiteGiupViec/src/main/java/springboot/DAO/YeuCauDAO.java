@@ -53,4 +53,9 @@ public class YeuCauDAO {
     public void delete(YeuCau yc){
         yeuCauRepository.delete(yc);
     }
+
+    //Tim theo ten
+    public List<YeuCau> findByName(String ten){
+        return yeuCauRepository.findByName(ten);
+    }
 }

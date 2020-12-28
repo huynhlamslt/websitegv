@@ -53,4 +53,9 @@ public class KhachHangDAO {
     public int countTotal(){
         return khachHangRepository.countKH();
     }
+
+    //Find ten khach hang
+    public List<KhachHang> findByName(String ten){
+        return khachHangRepository.findByName(ten);
+    }
 }

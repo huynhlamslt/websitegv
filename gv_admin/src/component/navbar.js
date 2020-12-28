@@ -80,15 +80,15 @@ class navbar extends Component{
                 <li className="nav-item">
                   <a className="nav-link" data-widget="pushmenu" role="button"><i className="fas fa-bars" /></a>
                 </li>
-                <li className="nav-item d-none d-sm-inline-block">
+                {/*<li className="nav-item d-none d-sm-inline-block">
                   <a className="nav-link pointer">Home</a>
                 </li>
                 <li className="nav-item d-none d-sm-inline-block">
                   <a className="nav-link pointer">Contact</a>
-                </li>
+                </li>*/}
               </ul>
               {/* SEARCH FORM */}
-              <form className="form-inline ml-3">
+              {/*<form className="form-inline ml-3">
                 <div className="input-group input-group-sm">
                   <input className="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search" />
                   <div className="input-group-append">
@@ -97,19 +97,19 @@ class navbar extends Component{
                     </button>
                   </div>
                 </div>
-              </form>
+              </form>*/}
               
               {/* Right navbar links */}
               <ul className="navbar-nav ml-auto">
                 {/* Messages Dropdown Menu */}
-                <li className="nav-item dropdown">
+               {/* <li className="nav-item dropdown">
                   <a className="nav-link pointer" data-toggle="dropdown" >
                     <i className="far fa-comments" />
                     <span className="badge badge-danger navbar-badge">{count}</span>
                   </a>
                   <div className="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                     <a className="dropdown-item pointer">
-                      {/* Message Start */}
+                      
                       <div className="media">
                         <img src="dist/img/user1-128x128.jpg" alt="User Avatar" className="img-size-50 mr-3 img-circle" />
                         <div className="media-body">
@@ -121,11 +121,11 @@ class navbar extends Component{
                           <p className="text-sm text-muted"><i className="far fa-clock mr-1" /> 4 Hours Ago</p>
                         </div>
                       </div>
-                      {/* Message End */}
+                      
                     </a>
                     <div className="dropdown-divider" />
                     <a className="dropdown-item pointer">
-                      {/* Message Start */}
+                      
                       <div className="media">
                         <img src="dist/img/user8-128x128.jpg" alt="User Avatar" className="img-size-50 img-circle mr-3" />
                         <div className="media-body">
@@ -137,11 +137,11 @@ class navbar extends Component{
                           <p className="text-sm text-muted"><i className="far fa-clock mr-1" /> 4 Hours Ago</p>
                         </div>
                       </div>
-                      {/* Message End */}
+                      
                     </a>
                     <div className="dropdown-divider" />
                     <a className="dropdown-item pointer">
-                      {/* Message Start */}
+                      
                       <div className="media">
                         <img src="dist/img/user3-128x128.jpg" alt="User Avatar" className="img-size-50 img-circle mr-3" />
                         <div className="media-body">
@@ -153,12 +153,12 @@ class navbar extends Component{
                           <p className="text-sm text-muted"><i className="far fa-clock mr-1" /> 4 Hours Ago</p>
                         </div>
                       </div>
-                      {/* Message End */}
+                      
                     </a>
                     <div className="dropdown-divider" />
                     <a className="dropdown-item dropdown-footer pointer">See All Messages</a>
                   </div>
-                </li>
+                </li>*/}
                 {/* Notifications Dropdown Menu */}
                 <li className="nav-item dropdown">
                   <a className="nav-link pointer" data-toggle="dropdown" >

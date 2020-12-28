@@ -4,6 +4,8 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import {
   Link
 } from "react-router-dom";
+import ReactPaginate from "react-paginate";
+
 
 class listyeucau extends Component{
 
@@ -15,23 +17,99 @@ class listyeucau extends Component{
 			item:[],
 			sortTrangthai: 0,
 			sortNgaylam: 0,
+			currentPage: 1,
+			pageSize: 6,
+			totalColumns: 0,
+			search: '',
 		};
 		this.remove = this.remove.bind(this);
 		this.sortByTrangthaiAsc = this.sortByTrangthaiAsc.bind(this);
 		this.sortByTrangthaiDesc = this.sortByTrangthaiDesc.bind(this);
 		this.sortByNgaylamAsc = this.sortByNgaylamAsc.bind(this);
 		this.sortByNgaylamDesc = this.sortByNgaylamDesc.bind(this);
+		this.handlePaging = this.handlePaging.bind(this);
+        this.searchChange = this.searchChange.bind(this);
+        this.searchSubmit = this.searchSubmit.bind(this);
+        this.paging = this.paging.bind(this);
 	}
 
-	componentDidMount(){
+	async componentDidMount(){
+		const { pageSize } = this.state;
 		this.setState({isLoading: true});
 
-		fetch('gvnhanh/yeucau')
-			.then(response => response.json())
-			.then(data => this.setState({
-				ycs: data,
-				isLoading: false
-			}));
+		const yc = await(await fetch('gvnhanh/yeucau')).json();
+
+		// fetch('gvnhanh/yeucau')
+		// 	.then(response => response.json())
+		// 	.then(data => this.setState({
+		// 		ycs: data,
+		// 		isLoading: false
+		// 	}));
+
+		this.setState({
+			ycs: yc,
+			sortNgaylam: 0,
+			sortTrangthai: 0,
+			search: '',
+			isLoading: false
+		})
+		this.paging(yc);
+	}
+
+	paging(list){
+		const pageSize = this.state.pageSize;
+		const temp = list.slice(0, pageSize);
+		this.setState({
+			ycs: temp,
+			totalColumns: Math.ceil(list.length / pageSize),
+		})
+	}
+
+	async handlePaging({ selected }){
+
+		// (current - 1 ) = selected| * size lấy : size row
+		const { pageSize } = this.state;
+		const list = await (await fetch(`/gvnhanh/yeucau/`)).json();
+
+		//myFish.splice(2, 1); // xóa 1 phần tử từ vị trí 2
+		const start = selected * pageSize;
+		// size = 6, vị trí 1 bắt đầu từ 0 đến 5
+		// size = 6, vị trí 2 bắt đầu từ 6 đến 11
+		const end = start + pageSize;
+
+		const newList = list.slice(start, end)
+
+		this.setState({
+			ycs: newList,
+			currentPage: selected + 1,
+		})
+	}
+
+	async searchChange(event){
+		const target = event.target;
+		const value = target.value;
+		const name= target.name;
+		let item = {...this.state.search};
+		item = value;
+		if(item===''){
+			this.componentDidMount()
+		}
+		this.setState({
+			search: item,
+
+		});
+		
+	}
+	async searchSubmit(event){
+		event.preventDefault();
+		const pageSize = this.state.pageSize;
+		const search = this.state.search;
+		const find = await(await fetch(`gvnhanh/yeucau/find/${search}`)).json();
+		this.setState({
+			ycs: find,
+			totalColumns: Math.ceil(find.length/ pageSize)
+		})
+		
 	}
 
 	sortByTrangthaiAsc() {
@@ -108,14 +186,14 @@ class listyeucau extends Component{
 
     formatter = new Intl.DateTimeFormat("en-GB", {
           year: "numeric",
-          month: "numeric",
+          month: "2-digit",
           day: "2-digit"
         });	
 
 
 	render(){
 
-		const {ycs, isLoading, sortTrangthai, sortNgaylam} = this.state;
+		const {ycs, isLoading, sortTrangthai, sortNgaylam, pageSize, currentPage, totalColumns, search} = this.state;
 
 		if (isLoading) {
             return <p className="text-primary align-middle text-center">
@@ -127,7 +205,7 @@ class listyeucau extends Component{
 
         const ycList = ycs.map((yc,index) =>{
         	return <tr key={yc.idyc}>
-				<td className="text-center">{index+1}</td>
+				<td className="text-center">{yc.idyc}</td>
 				<td className="text-center">{yc.hoten}</td>
 				<td className="text-center">{yc.sdt}</td>
 				 <td className="text-center">{yc.diachi}</td>
@@ -166,8 +244,24 @@ class listyeucau extends Component{
 		              
 		            </div>{/* /.row */}
 
+		            <div className="pb-2 pt-2">      
+			            <div className="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">				  
+						  <div className="input-group">
+						  	<form className="form-inline" onSubmit={this.searchSubmit}>
+						  	  <div className="input-group">
+								  <input className="form-control" type="search" placeholder="Nhập tên cần tìm..." 
+								  onChange={this.searchChange} aria-label="Search" />
+								  <div className="input-group-append">
+								    <button className="btn bg-secondary rounded-right" type="submit">
+				                      <i className="fas fa-search" />
+				                    </button>
+								  </div>
+							  </div>
+							 </form>
+						  </div>
+						</div>		
+					</div>
 		           
-
 		          </div>{/* /.container-fluid */}
 		        </div>
 
@@ -177,7 +271,7 @@ class listyeucau extends Component{
 						<table className="table table-bordered table-hover table-inverse table-striped">
 							<thead className="thead-dark">
 								<tr className="">
-									<th className="text-center align-middle" scope="col">STT</th>
+									<th className="text-center align-middle" scope="col">TT</th>
 									<th className="text-center align-middle">Họ tên KH</th>
 									<th className="text-center align-middle">SĐT</th>
 									<th className="text-center align-middle">Địa chỉ</th>
@@ -202,6 +296,24 @@ class listyeucau extends Component{
 							</tbody>
 						</table>
 					</div>
+
+					<div className="container-fluid ">
+		                <div className="Page navigation example d-flex justify-content-center">
+							<ReactPaginate
+								containerClassName="paging-container"
+								pageClassName="paging-container__item"
+								activeClassName="paging-container__item active"
+								previousClassName="paging-container__item previous"
+								nextClassName="paging-container__item next"
+								pageLinkClassName="link"
+								previousLabel={<span>{'<'}</span>}
+								nextLabel={<span>{'>'}</span>}
+								marginPagesDisplayed={currentPage}
+								onPageChange={this.handlePaging.bind(this)}
+								pageRangeDisplayed={pageSize}
+								pageCount={totalColumns} />
+				 		</div>
+		            </div>
 				</div>
 				
 			</div>

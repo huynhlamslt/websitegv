@@ -7,8 +7,6 @@ import {
   withRouter
 } from "react-router-dom";
 import ReactPaginate from "react-paginate";
-import "./phantrang.css";
-
 
 class listnhanvien extends Component{
 
@@ -35,23 +33,25 @@ class listnhanvien extends Component{
         this.handlePaging = this.handlePaging.bind(this);
         this.searchChange = this.searchChange.bind(this);
         this.searchSubmit = this.searchSubmit.bind(this);
+        this.paging = this.paging.bind(this);
 	}
 
 	async componentDidMount(){
-		const { pageSize } = this.state
 		this.setState({isLoading: true});
 
 		const nv = await(await fetch('gvnhanh/nhanvien')).json();
-		const temp = nv.slice(0, pageSize);
+		//const temp = nv.slice(0, pageSize);
 
 		this.setState({
-			nvs: temp,
-			totalColumns: Math.ceil(nv.length / pageSize),
+			nvs: nv,
 			sort: 0,
 			sortNgaysinh: 0,
 			search: '',
 			isLoading: false
 		})
+
+		//phân trang
+		this.paging(nv);
 
 		// fetch('gvnhanh/nhanvien')
 		// 	.then(response => response.json())
@@ -61,6 +61,15 @@ class listnhanvien extends Component{
 		// 		sort: 0,
 		// 		sortNgaysinh: 0,
 		// 	}));
+	}
+
+	paging(list){
+		const pageSize = this.state.pageSize;
+		const temp = list.slice(0, pageSize);
+		this.setState({
+			nvs: temp,
+			totalColumns: Math.ceil(list.length / pageSize),
+		})
 	}
 
 	async remove(id){
@@ -150,10 +159,12 @@ class listnhanvien extends Component{
 	}
 	async searchSubmit(event){
 		event.preventDefault();
+		const pageSize = this.state["pageSize"];
 		const search = this.state.search;
 		const find = await(await fetch(`gvnhanh/nhanvien/find/${search}`)).json();
 		this.setState({
-			nvs: find
+			nvs: find,
+			totalColumns: Math.ceil(find.length / pageSize)
 		})
 		
 	}

@@ -7,7 +7,6 @@ import {
 } from "react-router-dom";
 
 import ReactPaginate from "react-paginate";
-import "./phantrang.css";
 
 class listbangphidv extends Component{
 
@@ -15,17 +14,19 @@ class listbangphidv extends Component{
 		super(props);
 		this.state = {
 			bpdvs:[],
-			isLoading: true,
-			item:[],
 			loaiDVs:[],
 			currentPage: 1,
 			pageSize: 6,
-			totalColumns: 0
+			totalColumns: 0,
+			isLoading: true,
 		};
 		//this.findTenloaidv = this.findTenloaidv.bind(this);
 		//this.find = this.find.bind(this);
 		this.remove = this.remove.bind(this);
-		this.currencyFormat = this.currencyFormat.bind(this);	
+		this.currencyFormat = this.currencyFormat.bind(this);
+		this.searchChange = this.searchChange.bind(this);
+        this.searchSubmit = this.searchSubmit.bind(this);	
+		this.paging = this.paging.bind(this);
 	}
 
 	async componentDidMount(){
@@ -33,13 +34,23 @@ class listbangphidv extends Component{
 		this.setState({isLoading: true});
 
 		const bangphi = await (await fetch(`/gvnhanh/bangphidv/`)).json();
-		const temp = bangphi.slice(0, pageSize);
+		//const temp = bangphi.slice(0, pageSize);
 		const loaiDV = await (await fetch('/gvnhanh/loaidv')).json();
 		this.setState({
-			bpdvs: temp,
+			bpdvs: bangphi,
 			loaiDVs: loaiDV,
+			search: '',
 			isLoading: false,
-			totalColumns: Math.ceil(bangphi.length / pageSize)
+		})
+		this.paging(bangphi)
+	}
+
+	paging(list){
+		const pageSize = this.state.pageSize;
+		const temp = list.slice(0, pageSize);
+		this.setState({
+			bpdvs: temp,
+			totalColumns: Math.ceil(list.length / pageSize),
 		})
 	}
 
@@ -103,9 +114,35 @@ class listbangphidv extends Component{
 		})
 	}
 
+	async searchChange(event){
+		const target = event.target;
+		const value = target.value;
+		const name= target.name;
+		let item = {...this.state.search};
+		item = value;
+		if(item===''){
+			this.componentDidMount()
+		}
+		this.setState({
+			search: item
+		});
+		
+	}
+	async searchSubmit(event){
+		event.preventDefault();
+		const pageSize = this.state["pageSize"];
+		const search = this.state.search;
+		const find = await(await fetch(`gvnhanh/bangphidv/find/${search}`)).json();
+		this.setState({
+			bpdvs: find,
+			totalColumns: Math.ceil(find.length / pageSize)
+		})
+		
+	}
+
 	render(){
 
-		const {bpdvs, isLoading, loaiDVs, pageSize, currentPage, totalColumns } = this.state;
+		const {bpdvs, isLoading, loaiDVs, pageSize, currentPage, totalColumns, search } = this.state;
 
         if (isLoading) {
             return <p className="text-primary align-middle text-center">
@@ -149,17 +186,35 @@ class listbangphidv extends Component{
 
 				<div className="content-header">
 		          <div className="container-fluid">
-		            <div className="row mb-2">
+		            <div className="row mb-1">
 		              <div className="col-sm-6">
 		                <h1 className="m-0">Bảng phí dịch vụ</h1>
 		              </div>{/* /.col */}
 		              
 		            </div>{/* /.row */}
 
-		            <div className="mb-4 pb-4">
-						<Link to = "/bangphidv/new">
-							<button className="btn btn-success float-right">Thêm phí dịch vụ</button>
-						</Link>
+		            <div className="pb-2 pt-2">      
+			            <div className="btn-toolbar justify-content-between" role="toolbar" aria-label="Toolbar with button groups">				  
+						  <div className="input-group">
+						  	<form className="form-inline" onSubmit={this.searchSubmit}>
+						  	  <div className="input-group">
+								  <input className="form-control" type="search" placeholder="Nhập tên cần tìm..." 
+								  onChange={this.searchChange} aria-label="Search" />
+								  <div className="input-group-append">
+								    <button className="btn bg-secondary rounded-right" type="submit">
+				                      <i className="fas fa-search" />
+				                    </button>
+								  </div>
+							  </div>
+							 </form>
+						  </div>
+
+						  <div>
+						  	<Link to = "/bangphidv/new">
+								<button className="btn btn-success float-right">Thêm phí dịch vụ</button>
+							</Link>
+						  </div>
+						</div>		
 					</div>
 
 		          </div>{/* /.container-fluid */}

@@ -121,4 +121,10 @@ public class KhachHangController {
             return 0;
         }
     }
+
+    //Tìm theo tên khách hàng
+    @GetMapping("/khachhang/find/{ten}")
+    public List<KhachHang> findKhachHangByName(@PathVariable(value="ten") String ten){
+        return khachHangDAO.findByName(ten);
+    }
 }

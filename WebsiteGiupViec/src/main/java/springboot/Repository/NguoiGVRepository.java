@@ -42,4 +42,10 @@ public interface NguoiGVRepository extends JpaRepository<NguoiGV, Integer>{
 
 	@Query(value="SELECT COUNT(idnguoigv) AS soluong FROM nguoigiupviec WHERE hopdong=1", nativeQuery = true)
 	int countNGV();
+
+	@Query(value="SELECT * FROM nguoigiupviec WHERE hopdong=1 and del=0 and hoten LIKE %:ten%", nativeQuery = true)
+	List<NguoiGV> findByName(@Param("ten") String ten);
+
+	@Query(value="SELECT * FROM nguoigiupviec WHERE ungtuyen=1 and hoten LIKE %:ten%", nativeQuery = true)
+	List<NguoiGV> findUTByName(@Param("ten") String ten);
 }

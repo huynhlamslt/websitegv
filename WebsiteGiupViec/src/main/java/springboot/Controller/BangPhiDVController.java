@@ -91,4 +91,10 @@ public class BangPhiDVController {
         bangPhiDVDAO.delete(bangPhiDV);
         return ResponseEntity.ok().build();
     }
+
+    //Tìm bảng phí theo tên
+    @GetMapping("/bangphidv/find/{ten}")
+    public List<BangPhiDV> findBPByName(@PathVariable(value = "ten") String ten){
+        return bangPhiDVDAO.findByName(ten);
+    }
 }

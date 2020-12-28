@@ -111,4 +111,10 @@ public class YeuCauController {
         yeuCauDAO.delete(yc);
         return ResponseEntity.ok().build();
     }
+
+    //Tìm yêu cầu theo tên
+    @GetMapping("/yeucau/find/{ten}")
+    public List<YeuCau> findYeuCauByName(@PathVariable(value = "ten") String ten){
+        return yeuCauDAO.findByName(ten);
+    }
 }
