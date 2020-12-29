@@ -3,7 +3,7 @@ import {
   Link,
   withRouter
 } from "react-router-dom";
-import CurrencyFormat from 'react-currency-format';
+// import CurrencyFormat from 'react-currency-format';
 
 class themnguoigv extends Component{
 
@@ -19,6 +19,7 @@ class themnguoigv extends Component{
 		hinhanh: '',
 		del: '', 
 		hopdong: '',
+		hinhanh: '',
 	};
 
 	constructor(props) {
@@ -28,6 +29,7 @@ class themnguoigv extends Component{
 			dichVus:[],
 			dvdangky:'',
 			upload: '',
+			picture: '',
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -40,7 +42,10 @@ class themnguoigv extends Component{
 		const [update, them] = this.props.match.params.id.split('_');
 		if (update !== 'new') {
 			const ngv = await (await fetch(`/gvnhanh/nguoigv/${update}`)).json();
-			this.setState({item: ngv});
+			this.setState({
+				item: ngv,
+				picture: ngv.hinhanh
+			});
 		}
 	}
 
@@ -56,13 +61,16 @@ class themnguoigv extends Component{
 	async handleSubmit(event) {
 		event.preventDefault();
 
-		const {item} = this.state;
+		const {item, picture} = this.state;
 		if(this.state.item.gioitinh===''){
 			this.state.item.gioitinh='Nam';	
 		}
 		this.state.item.del=0;
-		this.state.item.hopdong=0;
+		if(this.state.item.hopdong!==1){
+			this.state.item.hopdong=0;
+		}
 		this.state.item.ungtuyen=0;
+		this.state.item.hinhanh = picture;
 		await fetch('/gvnhanh/nguoigv', {
 			method: (item.id) ? 'PUT' : 'POST',
 			headers: {
@@ -74,9 +82,18 @@ class themnguoigv extends Component{
 		this.props.history.push('/nguoigv');
 	}
 
+	onImageChange = (event) => {
+	    if (event.target.files && event.target.files[0]) {
+	      let img = event.target.files[0];
+	      this.setState({
+	      	picture: URL.createObjectURL(img)
+	      })
+	    }
+    }
+
 	render(){
 
-		const {item} = this.state;
+		const {item, picture} = this.state;
 		const title = <h1 className="h3 mb-2 text-gray-800 pb-3">{item.idnguoigv ? 'Cập nhật người giúp việc' : 'Thêm người giúp việc'}</h1>;
 		const [update, them] = this.props.match.params.id.split('_');
 
@@ -154,6 +171,14 @@ class themnguoigv extends Component{
 				                    <input type="text" className="form-control col-md-10" name="quequan" id="quaquan" value={item.quequan || ''} 
 				                    onChange={this.handleChange} placeholder="" required/>
 				                  </div>
+
+				                  <div className="form-group">
+					                    <label for="exampleInputPassword1">Hình ảnh</label>
+					               		<input type="file" className="form-control-file" id="customFile" onChange={this.onImageChange} accept="image/*"/>
+										<div className="previewProfilePic" >
+							                <img className="playerProfilePic_home_tile w-25 h-25" src={picture} alt=""/>
+							            </div>
+					              </div>
 				                 
 				                </div>
 				               

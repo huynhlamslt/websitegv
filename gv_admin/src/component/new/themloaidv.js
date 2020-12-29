@@ -17,7 +17,8 @@ class themloaidv extends Component{
 	constructor(props) {
 		super(props);
 		this.state = {
-			item: this.emptyItem
+			item: this.emptyItem,
+			picture: '',
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -27,7 +28,10 @@ class themloaidv extends Component{
 	async componentDidMount() {
 		if (this.props.match.params.id !== 'new') {
 			const loaidv = await (await fetch(`/gvnhanh/loaidv/${this.props.match.params.id}`)).json();
-			this.setState({item: loaidv});
+			this.setState({
+				item: loaidv,
+				picture: loaidv.anh,
+			});
 		}
 	}
 
@@ -43,12 +47,12 @@ class themloaidv extends Component{
 	async handleSubmit(event) {
 		event.preventDefault();
 
-		const {item} = this.state;
+		const {item, picture} = this.state;
 		// if(this.state.item.gioitinh===undefined){
 		// 	this.state.item.gioitinh='Nam';
 			
 		// }
-		console.log(item)
+		this.state.item.anh = picture;
 		await fetch('/gvnhanh/loaidv', {
 			method: (item.id) ? 'PUT' : 'POST',
 			headers: {
@@ -61,9 +65,18 @@ class themloaidv extends Component{
 		
 	}
 
+	onImageChange = (event) => {
+	    if (event.target.files && event.target.files[0]) {
+	      let img = event.target.files[0];
+	      this.setState({
+	      	picture: URL.createObjectURL(img)
+	      })
+	    }
+    }
+
 	render(){
 
-		const {item} = this.state;
+		const {item, picture} = this.state;
 		const title = <h1 className="h3 mb-2 text-gray-800 pb-3">{item.idloaidv ? 'Cập nhật dịch vụ' : 'Thêm dịch vụ'}</h1>;
 
 		return(
@@ -112,17 +125,12 @@ class themloaidv extends Component{
 				                    value={item.kynang||''} onChange={this.handleChange} rows="2"></textarea>
 				                  </div>
 				                  <div className="form-group">
-				                    <label for="exampleInputFile">Hình ảnh</label>
-				                    <div className="input-group">
-				                      <div className="custom-file col-md-6">
-				                        <input type="file" className="custom-file-input" id="exampleInputFile"/>
-				                        <label className="custom-file-label" for="exampleInputFile">Choose file</label>
-				                      </div>
-				                      <div className="input-group-append">
-				                        <span className="input-group-text">Upload</span>
-				                      </div>
-				                    </div>
-				                  </div>
+					                    <label for="exampleInputPassword1">Hình ảnh</label>
+					               		<input type="file" className="form-control-file" id="customFile" onChange={this.onImageChange} accept="image/*"/>
+										<div className="previewProfilePic" >
+							                <img className="playerProfilePic_home_tile w-25 h-25" src={picture} alt=""/>
+							            </div>
+					              </div>
 				                </div>
 				               
 

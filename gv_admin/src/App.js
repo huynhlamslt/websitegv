@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Switch, Link, useParams, useRouteMatch } from 'react-router-dom';
+import { withGlobalState } from 'react-globally';
 import './App.css';
 import Navbar from './component/navbar';
 import Sidebar from './component/sidebar';
@@ -25,16 +26,33 @@ import Themtaikhoan from "./component/new/themtaikhoan";
 import Themnguoigv from "./component/new/themnguoigv";
 import Themlichhen from "./component/new/themlichhen";
 import Themhdthue from "./component/new/themhdthue";
+import Login from "./component/login";
 
 import Upload from "./component/Register.js";
 import Main from "./component/main";
 
+const CounterInfo = withGlobalState(({ globalState }) => {
+    console.log(globalState)
+    return (
+        <div>{globalState.couter}</div>
+    )
+ })
+
 class App extends Component {
   
   render(){
-
+      var log = 1;
       return (
         <Router>
+       <CounterInfo/>
+
+       {/*<Switch>
+            
+            <Route path="/">
+              <Login/>
+            </Route>
+        </Switch>*/}
+             
         <body className="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
             
@@ -44,10 +62,7 @@ class App extends Component {
            {/* <!-- Main Sidebar Container -->*/}
            <Sidebar />
 
-            <Switch>
-                {/*Dashboard*/}
-                <Route path="/" component={Dashboard} exact />
-            </Switch> 
+           
                      
             <Switch>
                 {/*Dashboard*/}
@@ -161,4 +176,4 @@ class App extends Component {
   
 }
 
-export default App;
+export default withGlobalState(App);

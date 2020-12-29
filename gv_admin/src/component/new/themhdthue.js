@@ -5,6 +5,7 @@ import {
   Link,
   withRouter
 } from "react-router-dom"; 
+import CurrencyInput from 'react-currency-input-field';
 
 class themhdthue extends Component{
 
@@ -109,7 +110,7 @@ class themhdthue extends Component{
 				dongia: dg,
 				phieuthu:{
 					idhdthue: idLichhen,
-					iddv: dv[0].iddv,
+					iddv: kh.iddv,
 					diachilam: kh.diachi,
 					ngaybatdau:'',
 					ngayketthuc:'',
@@ -539,13 +540,23 @@ class themhdthue extends Component{
 														onChange={this.handleChange}/>
 									                 </div>
 									            </div>
-									            <div className="col">
-									                 <div className="form-group ">
-									                    <label for="exampleInputPassword1">Ngày kết thúc</label>
-									                    <input type="date" className="form-control col-md-10 " name="ngayketthuc" id="ngayketthu" value={phieuthu.ngayketthuc || ''}
-									                    onChange={this.handleChange} />
-									                  </div>
-									            </div>
+									            {dongia.donvitinh=== 'Giờ'?
+									            	<div className="col">
+										                <div className="form-group ">
+										                    <label for="exampleInputPassword1">Ngày kết thúc</label>
+										                    <input type="date" className="form-control col-md-10 " name="ngayketthuc" id="ngayketthu" value={phieuthu.ngayketthuc || ''}
+										                    onChange={this.handleChange} disabled/>
+										                </div>
+										            </div>:
+										            <div className="col">
+										                <div className="form-group ">
+										                    <label for="exampleInputPassword1">Ngày kết thúc</label>
+										                    <input type="date" className="form-control col-md-10 " name="ngayketthuc" id="ngayketthu" value={phieuthu.ngayketthuc || ''}
+										                    onChange={this.handleChange} />
+										                </div>
+										            </div>
+									            }
+									           
 							                </div>
 
 							                {dongia.donvitinh==='Giờ' ? 
@@ -600,8 +611,10 @@ class themhdthue extends Component{
 							                <div className="form-group">
 							                    <label for="exampleInputPassword1">Đơn giá</label>
 							                    <div class="input-group">
-								                    <input type="number" className="form-control" name="dongia" id="dongia" value={phieuthu.dongia || ''}
-														onChange={this.handleChange} disabled/>
+								                    {/*<input type="number" className="form-control" name="dongia" id="dongia" value={phieuthu.dongia || ''}
+														onChange={this.handleChange} disabled/>*/}
+													<CurrencyInput className="form-control" name = "dongia" id="dongia" value = {phieuthu.dongia || ''}
+													decimalSeparator="," groupSeparator="." disabled/>
 													<div class="input-group-append">
 													    <span class="input-group-text">VNĐ /</span>
 													    <span class="input-group-text">{dongia.donvitinh}</span>
@@ -612,8 +625,10 @@ class themhdthue extends Component{
 							                 <div className="form-group">
 							                    <label for="exampleInputPassword1">Tổng giá</label>
 							                    <div class="input-group">
-								                    <input type="number" className="form-control" name="tongtien" id="tongtien" value={phieuthu.tongtien || ''}
-														onChange={this.handleChange} disabled/>
+								                    {/*<input type="number" className="form-control" name="tongtien" id="tongtien" value={phieuthu.tongtien || ''}
+														onChange={this.handleChange} disabled/>*/}
+													<CurrencyInput className="form-control" name = "tongtien" id="tongtien" value = {phieuthu.tongtien || ''}
+													 decimalSeparator="," groupSeparator="." disabled/>
 													<div class="input-group-append">
 													    <span class="input-group-text">VNĐ</span>
 													</div>
@@ -623,8 +638,10 @@ class themhdthue extends Component{
 							                 <div className="form-group">
 							                    <label for="exampleInputPassword1">Tiền nộp lại</label>
 							                    <div class="input-group">
-								                    <input type="number" className="form-control" name="tienthu" id="tienthu" value={phieuthu.tienthu || ''}
-														onChange={this.handleChange} disabled/>
+								                    {/*<input type="number" className="form-control" name="tienthu" id="tienthu" value={phieuthu.tienthu || ''}
+														onChange={this.handleChange} disabled/>*/}
+													<CurrencyInput className="form-control" name = "tienthu" id="tienthu" value = {phieuthu.tienthu || ''}
+													 decimalSeparator="," groupSeparator="." disabled/>
 													<div class="input-group-append">
 													    <span class="input-group-text">VNĐ</span>
 													</div>

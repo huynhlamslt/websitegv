@@ -3,7 +3,7 @@ import {
   Link,
   withRouter
 } from "react-router-dom";
-import CurrencyFormat from 'react-currency-format';
+// import CurrencyFormat from 'react-currency-format';
 
 class themnhanvien extends Component{
 

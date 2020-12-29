@@ -4,7 +4,8 @@ import {
   Link,
   withRouter
 } from "react-router-dom";
-import CurrencyFormat from 'react-currency-format';
+// import CurrencyFormat from 'react-currency-format';
+import CurrencyInput from 'react-currency-input-field';
 
 class themnhanvien extends Component{
 
@@ -22,18 +23,24 @@ class themnhanvien extends Component{
 		super(props);
 		this.state = {
 			item: this.emptyItem,
-			Picture: '',
+			luong: ''
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.handleChangePhone = this.handleChangePhone.bind(this);
 		this.onChangePicture = this.onChangePicture.bind(this);
+		this.numberChange = this.numberChange.bind(this);
 	}
 
 	async componentDidMount() {
 		if (this.props.match.params.id !== 'new') {
 			const nv = await (await fetch(`/gvnhanh/nhanvien/${this.props.match.params.id}`)).json();
-			this.setState({item: nv});
+			this.setState({
+				item: nv,
+				picture: nv.hinhanh,
+				luong: nv.luong
+			});
+
 		}
 		
 	}
@@ -61,6 +68,19 @@ class themnhanvien extends Component{
 		// })
 	}
 
+	onImageChange = (event) => {
+    if (event.target.files && event.target.files[0]) {
+      let img = event.target.files[0];
+      // this.setState({
+      //   image: URL.createObjectURL(img)
+      // });
+      this.setState({
+      	picture: URL.createObjectURL(img)
+      })
+      //console.log("image", this.state.item)
+    }
+  };
+
 	handleChange(event) {
 		const target = event.target;
 		const value = target.value;
@@ -78,14 +98,23 @@ class themnhanvien extends Component{
 	  //   });
 	}
 
+	numberChange(val){
+		let {luong} = this.state;
+		this.setState({
+			luong: val
+		})
+		this.state.item.luong = val;
+	}
+
 	async handleSubmit(event) {
 		event.preventDefault();
 
-		const {item} = this.state;
+		const {item, picture} = this.state;
 		if(this.state.item.gioitinh===''){
 			this.state.item.gioitinh='Nam';
 			
 		}
+		this.state.item.hinhanh = picture;
 		await fetch('/gvnhanh/nhanvien', {
 			method: (item.id) ? 'PUT' : 'POST',
 			headers: {
@@ -114,9 +143,10 @@ class themnhanvien extends Component{
 	// }
 	render(){
 
-		const {item, Picture} = this.state;
+		const {item, picture, luong} = this.state;
 		const title = <h1 className="h3 mb-2 text-gray-800 pb-3">{item.idnv ? 'Cập nhật nhân viên' : 'Thêm nhân viên'}</h1>;
-
+		//console.log("item", item.hinhanh)
+		
 
 		return(
 			<div className="content-wrapper">
@@ -190,8 +220,14 @@ class themnhanvien extends Component{
 				                  <div className="form-group">
 				                    <label for="exampleInputPassword1">Lương</label>
 				                    <div class="input-group mb-3 col-md-4">
-									  <input type="number" className="form-control" name="luong" id="luong" min="0" value={item.luong || ''}
-											onChange={this.handleChange}/>
+									  {/*<input type="number" className="form-control" name="luong" id="luong" min="0" value={item.luong || ''}
+											onChange={this.handleChange} pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$"/>*/}
+										<CurrencyInput className="form-control"
+										  name = "luong" id="luong" value = {luong}
+										  onChange={(value, name) => this.numberChange(value)}
+										  decimalSeparator=","
+										  groupSeparator="."
+										/>
 									  <div class="input-group-append">
 									    <span class="input-group-text" id="basic-addon2">VNĐ</span>
 									  </div>
@@ -200,10 +236,10 @@ class themnhanvien extends Component{
 
 				                  <div className="form-group">
 					                    <label for="exampleInputPassword1">Hình ảnh</label>
-					               		<input type="file" className="form-control-file col-md-8" name="hinhanh" id="hinhanh" value={item.hinhanh || ''}
-										onChange={this.handleChange} accept="image/*" placeholder="" />
+					               		<input type="file" className="form-control-file col-md-8" 
+										onChange={this.onImageChange} accept="image/*" placeholder="" />
 										<div className="previewProfilePic" >
-							                <img className="playerProfilePic_home_tile w-25 h-25" src="\logo192.png" alt="..."/>
+							                <img className="playerProfilePic_home_tile w-25 h-25" src={picture} alt=""/>
 							              </div>
 					                </div>
 

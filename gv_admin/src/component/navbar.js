@@ -204,10 +204,11 @@ class navbar extends Component{
                       Cài đặt
                     </a>
                     <div className="dropdown-divider" />
-                    <button className="dropdown-item" >
+                    <Link to="/"><button className="dropdown-item" >
                       <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" />
                       Đăng xuất
                     </button>
+                    </Link>
                   </div>
                 </li>
                 <li className="nav-item">

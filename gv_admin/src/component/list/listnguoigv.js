@@ -263,7 +263,7 @@ class listnguoigv extends Component{
 
                           <div>
                             <Link to = "/nguoigv/new">
-                                <button className="btn btn-success float-right">Thêm nhân viên</button>
+                                <button className="btn btn-success float-right">Thêm mới</button>
                             </Link>
                           </div>
                         </div>      

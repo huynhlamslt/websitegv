@@ -1,13 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-globally'; 
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+const initialState = {
+  counter: 0
+}
+
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+    <Provider globalState={initialState}>
+		<App />
+	</Provider>,
   document.getElementById('root')
 );
 
