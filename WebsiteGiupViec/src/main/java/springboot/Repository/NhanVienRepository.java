@@ -23,4 +23,7 @@ public interface NhanVienRepository extends JpaRepository<NhanVien, Integer>{
     
     @Query(value="SELECT * FROM nhanvien WHERE hoten LIKE %:ten%", nativeQuery = true)
     List<NhanVien> findByName(@Param("ten") String ten);
+
+    @Query(value="SELECT * FROM nhanvien WHERE sdt=:sdt", nativeQuery = true)
+    NhanVien findByPhone(@Param("sdt") String sdt);
 }

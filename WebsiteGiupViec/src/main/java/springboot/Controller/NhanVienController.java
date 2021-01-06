@@ -98,5 +98,15 @@ public class NhanVienController {
 	public List<NhanVien> findByName(@PathVariable(value="ten") String ten){
 		return nhanVienDAO.findByName(ten);
 	}
+
+	//Get nhan vien qua sdt
+	@GetMapping("nhanvien/phone/{sdt}")
+	public ResponseEntity<NhanVien> getNhanVienByPhone(@PathVariable(value="sdt") String sdt){
+		NhanVien nv = nhanVienDAO.findByPhone(sdt);
+		if(nv==null){
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok().body(nv);
+	}
 }
 

@@ -38,4 +38,9 @@ public class TaiKhoanDAO {
     public List<TaiKhoan> findByName(String ten){
         return taiKhoanRepository.findByName(ten);
     }
+
+    //Check login
+    public String findLogin(String sdt, String pass){
+        return taiKhoanRepository.findLogin(sdt, pass);
+    }
 }

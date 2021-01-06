@@ -3,9 +3,14 @@ import {
   Link,
   withRouter
 } from "react-router-dom";
-
+import {loadTree} from "./treeviewhelper.js";
+import { withGlobalState } from 'react-globally';
 
 class sidebar extends Component{
+
+  async componentDidMount(){
+    loadTree();
+  }
 
 	render(){
 
@@ -150,8 +155,9 @@ class sidebar extends Component{
                         </li>
                       </ul>
                     </li>
-                   
+
                     <li className="nav-header">NHÂN VIÊN</li>
+                  {this.props.globalState.counter===1?
                     <li className="nav-item">
                      <Link to="/nhanvien" className="nav-link pointer" data-toggle="pill" >
                       <a >
@@ -160,6 +166,8 @@ class sidebar extends Component{
                       </a>
                       </Link>
                     </li>
+                  :null}
+                  {this.props.globalState.counter===1?
                     <li className="nav-item">
                      
                         <Link to="/taikhoan" className="nav-link pointer" data-toggle="pill">
@@ -170,7 +178,11 @@ class sidebar extends Component{
                         </Link>
                       
                     </li>
+                  :null}
+
+                    
                   </ul>
+
                 </nav>
                 {/* /.sidebar-menu */}
               </div>
@@ -179,4 +191,4 @@ class sidebar extends Component{
 		);
 	}
 }
-export default sidebar;
+export default withGlobalState(withRouter(sidebar));

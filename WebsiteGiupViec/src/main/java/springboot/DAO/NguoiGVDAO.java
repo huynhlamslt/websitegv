@@ -68,4 +68,9 @@ public class NguoiGVDAO {
     public List<NguoiGV> findUTByName(String ten){
         return nguoiGVRepository.findUTByName(ten);
     }
+
+    //Find max id
+    public int maxId(){
+        return nguoiGVRepository.maxId();
+    }
 }

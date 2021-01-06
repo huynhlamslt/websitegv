@@ -214,7 +214,7 @@ class listyeucau extends Component{
                 	
                 </td>
                 <td className="text-center">{yc.congviec}</td>
-                <td className="text-center">{yc.trangthai}</td>
+                {/*<td className="text-center">{yc.trangthai}</td>*/}
                 <td className="text-center">
                 	<div class="btn-group" role="group" aria-label="Basic example">
 
@@ -282,13 +282,15 @@ class listyeucau extends Component{
 					                    }
 									</th>
 									<th className="text-center align-middle">Chi tiết công việc</th>
-									<th className="text-center align-middle">Trạng thái {' '}
+									{/*<th className="text-center align-middle">Trạng thái {' '}
+										
+									</th>*/}
+									<th className="text-center align-middle">
 										{sortTrangthai===1?
 					                      <i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByTrangthaiAsc}/>
 					                      :<i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByTrangthaiDesc}/>
 					                    }
 									</th>
-									<th className="text-center align-middle"></th>
 								</tr>
 							</thead>
 							<tbody>

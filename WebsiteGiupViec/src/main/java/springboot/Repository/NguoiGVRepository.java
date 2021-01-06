@@ -48,4 +48,7 @@ public interface NguoiGVRepository extends JpaRepository<NguoiGV, Integer>{
 
 	@Query(value="SELECT * FROM nguoigiupviec WHERE ungtuyen=1 and hoten LIKE %:ten%", nativeQuery = true)
 	List<NguoiGV> findUTByName(@Param("ten") String ten);
+
+	@Query(value = "SELECT MAX(idnguoigv) FROM nguoigiupviec", nativeQuery = true)
+	int maxId();
 }

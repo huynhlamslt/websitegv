@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Link} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
+import { withGlobalState } from 'react-globally';
 
 class navbar extends Component{
 
@@ -9,9 +10,11 @@ class navbar extends Component{
     this.state = {
       ycs: [{hoten: 'A'}],
       count: 0,
+      nvs: '',
       isLoading: true,
     }
-    this.timer = this.timer.bind(this)
+    this.timer = this.timer.bind(this);
+    this.onLogout = this.onLogout.bind(this);
   }
 
   // async componentWillReceiveProps (newProps){
@@ -51,16 +54,26 @@ class navbar extends Component{
 
     this.intervalId = setInterval(this.timer.bind(this), 2000);
 
-    console.log("nav", this.state)
+    const nv = await(await fetch(`gvnhanh/nhanvien/phone/${this.props.globalState.sdt}`)).json();
+    this.setState({
+      nvs: nv
+    })
+
+    console.log("nav", this.props.globalState.sdt)
   }
 
   componentWillUnmount(){
     clearInterval(this.intervalId);
   }
+
+  onLogout(){
+    this.props.setGlobalState({ counter: 0 });
+    this.props.history.push("/");
+  }
    
 	render(){
 
-    const {ycs, count} = this.state;
+    const {ycs, count, nvs} = this.state;
 
     const list = ycs.map((yc, index) =>{
       return <div><a  className="dropdown-item pointer">
@@ -190,25 +203,25 @@ class navbar extends Component{
 
                 <li className="nav-item dropdown no-arrow">
                   <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span className="mr-2 d-none d-lg-inline text-gray-600 small">Admin</span>
-                    <img className="img-profile rounded-circle image-size" src="dist/img/user2-160x160.jpg" />
+                    <span className="mr-2 d-none d-lg-inline text-gray-600 small">{nvs.hoten}</span>
+                    <img className="img-profile rounded-circle image-size" src={nvs.hinhanh} />
                   </a>
                   {/* Dropdown - User Information */}
                   <div className="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                    <a className="dropdown-item" href="#">
+                    <Link to ={"/nhanvien/"+nvs.idnv} ><a className="dropdown-item" href="#">
                       <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400" />
                       Thông tin tài khoản
                     </a>
+                    </Link>
                     <a className="dropdown-item" href="#">
                       <i className="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400" />
                       Cài đặt
                     </a>
                     <div className="dropdown-divider" />
-                    <Link to="/"><button className="dropdown-item" >
+                    <button className="dropdown-item" onClick={this.onLogout}>
                       <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" />
                       Đăng xuất
                     </button>
-                    </Link>
                   </div>
                 </li>
                 <li className="nav-item">
@@ -221,4 +234,4 @@ class navbar extends Component{
 		);
 	}
 }
-export default navbar;
+export default withGlobalState(withRouter(navbar));

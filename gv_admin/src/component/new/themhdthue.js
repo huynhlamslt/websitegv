@@ -188,7 +188,7 @@ class themhdthue extends Component{
 		}
 
 		//Sự kiện xử lý khi tạo mới
-		if(idThemhd === 'new'){
+		// if(idThemhd === 'new'){
 
 			//Kiểm tra không cho chọn ngày đã qua
 			if(this.state.phieuthu["ngaybatdau"] && this.state.phieuthu["ngaybatdau"]<ng){
@@ -363,7 +363,7 @@ class themhdthue extends Component{
 				}
 			}
 	
-		}
+		// }
 
 	}
 

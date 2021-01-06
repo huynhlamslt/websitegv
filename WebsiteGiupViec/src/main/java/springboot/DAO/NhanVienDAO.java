@@ -48,4 +48,9 @@ public class NhanVienDAO {
 	public List<NhanVien> findByName(String ten){
 		return nhanVienRepository.findByName(ten);
 	}
+
+	//Find nhan vien by phone
+	public NhanVien findByPhone(String sdt){
+		return nhanVienRepository.findByPhone(sdt);
+	}
 }

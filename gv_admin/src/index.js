@@ -4,9 +4,11 @@ import { Provider } from 'react-globally';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import * as serviceWorker from './serviceWorker';
 
 const initialState = {
-  counter: 0
+  counter: 1,
+  sdt: '',
 }
 
 ReactDOM.render(

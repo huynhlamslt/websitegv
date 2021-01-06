@@ -85,4 +85,21 @@ public class TaiKhoanController {
     public List<TaiKhoan> findTaiKhoanByName(@PathVariable(value = "ten") String ten){
         return taiKhoanDAO.findByName(ten);
     }
+
+    //Kiểm tra đăng nhập
+    @GetMapping("taikhoan/check/{sdt}/{pass}")
+    public int checkLogin(@PathVariable(value = "sdt") String sdt, @PathVariable(value = "pass") String pass){
+        try{
+            String rs = taiKhoanDAO.findLogin(sdt, pass);
+            if(rs.equals("Admin")){
+                return 1;
+            }
+            else{
+                return 2;
+            }
+        }
+        catch(Exception ex){
+            return 0;
+        }
+    }
 }

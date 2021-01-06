@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 // import CurrencyFormat from 'react-currency-format';
 import CurrencyInput from 'react-currency-input-field';
+import { withGlobalState } from 'react-globally';
 
 class themnhanvien extends Component{
 
@@ -216,7 +217,7 @@ class themnhanvien extends Component{
 						                </div>
 				                    </div>
 				                  </div>
-				                 
+				                {this.props.globalState.counter===1?
 				                  <div className="form-group">
 				                    <label for="exampleInputPassword1">Lương</label>
 				                    <div class="input-group mb-3 col-md-4">
@@ -233,6 +234,23 @@ class themnhanvien extends Component{
 									  </div>
 									</div>
 				                  </div>
+				                  :<div className="form-group">
+				                    <label for="exampleInputPassword1">Lương</label>
+				                    <div class="input-group mb-3 col-md-4">
+									  {/*<input type="number" className="form-control" name="luong" id="luong" min="0" value={item.luong || ''}
+											onChange={this.handleChange} pattern="^\$\d{1,3}(,\d{3})*(\.\d+)?$"/>*/}
+										<CurrencyInput className="form-control"
+										  name = "luong" id="luong" value = {luong}
+										  onChange={(value, name) => this.numberChange(value)}
+										  decimalSeparator=","
+										  groupSeparator="." disabled
+										/>
+									  <div class="input-group-append">
+									    <span class="input-group-text" id="basic-addon2">VNĐ</span>
+									  </div>
+									</div>
+				                  </div>}
+
 
 				                  <div className="form-group">
 					                    <label for="exampleInputPassword1">Hình ảnh</label>
@@ -257,4 +275,4 @@ class themnhanvien extends Component{
 		);
 	}
 }
-export default withRouter(themnhanvien);
+export default withGlobalState(withRouter(themnhanvien));

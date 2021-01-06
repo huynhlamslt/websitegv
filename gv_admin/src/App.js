@@ -34,7 +34,7 @@ import Main from "./component/main";
 const CounterInfo = withGlobalState(({ globalState }) => {
     console.log(globalState)
     return (
-        <div>{globalState.couter}</div>
+        <div>{globalState.counter}</div>
     )
  })
 
@@ -43,17 +43,16 @@ class App extends Component {
   render(){
       var log = 1;
       return (
-        <Router>
-       <CounterInfo/>
+      <Router>
+       {/* <CounterInfo/>*/}
 
-       {/*<Switch>
-            
-            <Route path="/">
+       {/* <Switch>
+            <Route exact path="/">
               <Login/>
             </Route>
         </Switch>*/}
-             
-        <body className="hold-transition sidebar-mini layout-fixed">
+        
+        {this.props.globalState.counter!==0?<body className="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
             
             {/*navbar*/}
@@ -169,7 +168,7 @@ class App extends Component {
            <Effect />
 
         </div>
-        </body>
+        </body>:null}
         </Router>
       );
   }

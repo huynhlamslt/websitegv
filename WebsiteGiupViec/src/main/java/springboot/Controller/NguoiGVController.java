@@ -137,6 +137,12 @@ public class NguoiGVController {
     public List<NguoiGV> findUVByName(@PathVariable(value="ten") String ten){
         return nguoiGVDAO.findUTByName(ten);
     }
+
+    //Tính id người giúp việc tiếp theo
+    @GetMapping("/nguoigv/next")
+    public Integer findNextId(){
+        return nguoiGVDAO.maxId()+1;
+    }
 }
 
 
