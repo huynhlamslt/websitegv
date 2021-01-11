@@ -157,7 +157,7 @@ class sidebar extends Component{
                     </li>
 
                     <li className="nav-header">NHÂN VIÊN</li>
-                  {this.props.globalState.counter===1?
+                  {localStorage.getItem("login")==1?
                     <li className="nav-item">
                      <Link to="/nhanvien" className="nav-link pointer" data-toggle="pill" >
                       <a >
@@ -167,7 +167,7 @@ class sidebar extends Component{
                       </Link>
                     </li>
                   :null}
-                  {this.props.globalState.counter===1?
+                  {localStorage.getItem("login")==1?
                     <li className="nav-item">
                      
                         <Link to="/taikhoan" className="nav-link pointer" data-toggle="pill">

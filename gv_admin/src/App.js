@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { BrowserRouter as Router, Route, Switch, Link, useParams, useRouteMatch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Link, useParams, useRouteMatch, Redirect } from 'react-router-dom';
 import { withGlobalState } from 'react-globally';
 import './App.css';
 import Navbar from './component/navbar';
@@ -39,20 +39,24 @@ const CounterInfo = withGlobalState(({ globalState }) => {
  })
 
 class App extends Component {
+
+  async componentDidMount(){     
+      
+  }
   
   render(){
       var log = 1;
       return (
-      <Router>
+          <Router>
        {/* <CounterInfo/>*/}
 
-       {/* <Switch>
-            <Route exact path="/">
-              <Login/>
-            </Route>
-        </Switch>*/}
+         <Switch>
+              <Route exact path="/">
+                {localStorage.getItem("login")==null?<Login/>:<Redirect to="/dashboard" />}
+              </Route>
+          </Switch>
         
-        {this.props.globalState.counter!==0?<body className="hold-transition sidebar-mini layout-fixed">
+        {localStorage.getItem("login")!==null? <body className="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
             
             {/*navbar*/}
@@ -61,7 +65,10 @@ class App extends Component {
            {/* <!-- Main Sidebar Container -->*/}
            <Sidebar />
 
-           
+            <Switch>
+                {/*Dashboard*/}
+                <Route path="/main" component={Main} exact />
+            </Switch> 
                      
             <Switch>
                 {/*Dashboard*/}

@@ -23,6 +23,14 @@ class login extends Component{
         this.handleClick = this.handleClick.bind(this);
     }
 
+    async componentDidMount(){
+        const rmb = localStorage.getItem("login");
+        if(rmb === 'true'){
+          console.log("ok")
+        }
+        console.log("st", localStorage.getItem("login"))
+    }
+
     handleChange(event) {
         
         const target = event.target;
@@ -60,8 +68,12 @@ class login extends Component{
                   counter: dn,
                   sdt: item["sdt"]
                 });
+                localStorage.setItem("login", dn);
+                localStorage.setItem("sdt", item["sdt"])
+                console.log("log", localStorage.getItem("login"))
                 console.log("props", this.props)
-                this.props.history.push("/dashboard")
+                this.props.history.push("/dashboard");
+                window.location.reload();
             }
         });
     }

@@ -23,6 +23,8 @@ public class TaiKhoan {
     private String quyen;
     private String trangthai;
 
+    public static int login = 0;
+
     public TaiKhoan(){
 
     }
@@ -82,5 +84,9 @@ public class TaiKhoan {
 
     public void setTrangthai(String trangthai) {
         this.trangthai = trangthai;
+    }
+
+    public static void setLogin(int log){
+        login = log;
     }
 }

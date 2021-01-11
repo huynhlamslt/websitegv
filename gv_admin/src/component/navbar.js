@@ -54,7 +54,7 @@ class navbar extends Component{
 
     this.intervalId = setInterval(this.timer.bind(this), 2000);
 
-    const nv = await(await fetch(`gvnhanh/nhanvien/phone/${this.props.globalState.sdt}`)).json();
+    const nv = await(await fetch(`gvnhanh/nhanvien/phone/${localStorage.getItem("sdt")}`)).json();
     this.setState({
       nvs: nv
     })
@@ -69,6 +69,7 @@ class navbar extends Component{
   onLogout(){
     this.props.setGlobalState({ counter: 0 });
     this.props.history.push("/");
+    localStorage.clear();
   }
    
 	render(){

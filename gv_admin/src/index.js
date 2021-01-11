@@ -7,7 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import * as serviceWorker from './serviceWorker';
 
 const initialState = {
-  counter: 1,
+  counter: 0,
   sdt: '',
 }
 
