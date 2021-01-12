@@ -73,4 +73,9 @@ public class NguoiGVDAO {
     public int maxId(){
         return nguoiGVRepository.maxId();
     }
+
+    //Update diem
+    public void setDiem(float diem, int idnguoigv){
+        nguoiGVRepository.setDiem(diem, idnguoigv);
+    }
 }

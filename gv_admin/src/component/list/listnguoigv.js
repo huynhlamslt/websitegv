@@ -15,6 +15,7 @@ class listnguoigv extends Component{
           ngvs: [], 
           sortDate: 0,
           sortHopDong: 0,
+          sortDiem: 0,
           currentPage: 1,
           pageSize: 6,
           totalColumns: 0,
@@ -30,6 +31,8 @@ class listnguoigv extends Component{
         this.paging = this.paging.bind(this);
         this.searchChange = this.searchChange.bind(this);
         this.searchSubmit = this.searchSubmit.bind(this);
+        this.sortByDiemAsc = this.sortByDiemAsc.bind(this);
+        this.sortByDiemDesc = this.sortByDiemDesc.bind(this);
     }
 
     async componentDidMount() {
@@ -106,6 +109,24 @@ class listnguoigv extends Component{
         this.setState({
             ngvs: ngv,
             sortHopDong: 1,
+        })
+        console.log("sort", this.state);
+    }
+
+    sortByDiemAsc() {
+      let ngv = this.state.ngvs.sort((a,b) => (a.diem - b.diem));
+      this.setState({
+        ngvs: ngv,
+        sortDiem: 0,
+      })
+      console.log("sort", this.state);
+    }
+
+    sortByDiemDesc() {
+        let ngv = this.state.ngvs.sort((a,b) => (b.diem - a.diem));
+        this.setState({
+            ngvs: ngv,
+            sortDiem: 1,
         })
         console.log("sort", this.state);
     }
@@ -194,7 +215,7 @@ class listnguoigv extends Component{
 
 	render(){
 
-		const {ngvs, isLoading, sortDate, sortHopDong, pageSize, currentPage, totalColumns, search} = this.state;
+		const {ngvs, isLoading, sortDate, sortHopDong, pageSize, currentPage, totalColumns, search, sortDiem} = this.state;
 
 		if (isLoading) {
             return <p className="text-primary align-middle text-center">
@@ -210,23 +231,28 @@ class listnguoigv extends Component{
 	            <td className="text-center">{ngv.gioitinh}</td>
 	            <td className="text-center">{this.formatter.format(Date.parse(ngv.ngaysinh))}</td>
 	            <td className="text-center">{ngv.sdt}</td>
-	            <td className="text-center">{ngv.cmnd}</td>
 	            <td className="text-center">{ngv.quequan}</td>
+              <td className="text-center">{ngv.diem}</td>
 	            <td className="text-center">
 
-	            	<div className="btn-group" role="group" aria-label="Basic example">
-	                	<Link to={"/nguoigv/"+ngv.idnguoigv}>
-						  <button type="button" className="btn btn-outline-primary" title="Cập nhật">
-						  	<i className="fas fa-pencil-alt" />
-						  </button>
-						</Link>
+            	<div className="btn-group" role="group" aria-label="Basic example">
+                <Link to={"/nguoigv/"+ngv.idnguoigv}>
+      						  <button type="button" className="btn btn-outline-primary" title="Cập nhật">
+      						  	<i className="fas fa-pencil-alt" />
+  						  </button>
+  						</Link>
 
-						{ngv.hopdong!==1 ? <Link to={"/hdlaodong/" + `${ngv.idnguoigv}_new`}><button type="button" className="btn btn-outline-warning" tag={Link} to={"/hopdongdk/" + `${ngv.idnguoigv}_new`} 
-		                title="Hợp đồng"><i className="fas fa-print" /></button></Link>: null}
+					{/*	{ngv.hopdong!==1 ? <Link to={"/hdlaodong/" + `${ngv.idnguoigv}_new`}><button type="button" className="btn btn-outline-warning" tag={Link} to={"/hopdongdk/" + `${ngv.idnguoigv}_new`} 
+		                title="Hợp đồng"><i className="fas fa-print" /></button></Link>: null}*/}
 
 						<button type="button" className="btn btn-outline-danger" onClick={this.handleClick.bind(this,ngv.idnguoigv)} title="Xóa">
 							<i className="fas fa-trash" />
 						</button>
+            <Link to={"danhgia/"+ngv.idnguoigv}>
+              <button type="button" className="btn btn-outline-success" title="Đánh giá">
+                <i className="fas fa-check-double" />
+              </button>
+            </Link>
 					</div> 
 	            </td>
 	          </tr>
@@ -283,20 +309,20 @@ class listnguoigv extends Component{
                                     </th>
 									<th className=" text-center">Giới tính</th>
 									<th className="text-center">Ngày sinh {''}
-                                    {sortDate===1?
-                                      <i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByDateAsc}/>
-                                      :<i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByDateDesc}/>
-                                    }
-                                    </th>
+                        {sortDate===1?
+                          <i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByDateAsc}/>
+                          :<i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByDateDesc}/>
+                        }
+                        </th>
 									<th className="text-center">SĐT</th>
-									<th className=" text-center">CMND</th>
 									<th className="text-center">Quê quán</th>
-									<th className="text-center">
-                                     {sortHopDong===1?
-                                      <i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByHopDongAsc}/>
-                                      :<i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByHopDongDesc}/>
-                                    }
-                                    </th>
+                  <th className="text-center">Điểm {' '}
+                        {sortDiem===1?
+                          <i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByDiemAsc}/>
+                          :<i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByDiemDesc}/>
+                        }
+                  </th>
+									<th className="text-center"></th>
 								</tr>
 							</thead>
 							<tbody>

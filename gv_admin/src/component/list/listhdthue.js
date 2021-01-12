@@ -13,15 +13,18 @@ class listhdthue extends Component{
 		super(props);
 		this.state = {
 			hdthues:[],
-			DVs:[],
-			phieuthus:[],
-			ngvs:[],
-			yeucaus:[],
+			// DVs:[],
+			// phieuthus:[],
+			// ngvs:[],
+			// yeucaus:[],
 			serach:'',
 			currentPage: 1,
 			pageSize: 6,
 			totalColumns: 0,
 			search: '',
+			sortDV: 0,
+			sortNgaylam: 0,
+			sortNgayketthuc: 0,
 			isLoading: true,
 		};
 		this.remove = this.remove.bind(this);
@@ -29,22 +32,28 @@ class listhdthue extends Component{
 		this.paging = this.paging.bind(this);
 		this.searchChange = this.searchChange.bind(this);
         this.searchSubmit = this.searchSubmit.bind(this);
+        this.sortByDVAsc = this.sortByDVAsc.bind(this);
+        this.sortByDVDesc = this.sortByDVDesc.bind(this);
+        this.sortByNgaylamAsc = this.sortByNgaylamAsc.bind(this);
+        this.sortByNgaylamDesc = this.sortByNgaylamDesc.bind(this);
+        this.sortByNgayketthucAsc = this.sortByNgayketthucAsc.bind(this);
+        this.sortByNgayketthucDesc = this.sortByNgayketthucDesc.bind(this);
 	}
 
 	async componentDidMount(){
 		this.setState({isLoading: true});
 
-		const hdthue = await (await fetch(`/gvnhanh/hdthue/`)).json();
-		const DV = await (await fetch('/gvnhanh/bangphidv')).json();
-		const phieuthu = await (await fetch('/gvnhanh/phieuthudv')).json();
-		const ngv = await (await fetch('/gvnhanh/nguoigv')).json();
-		const yeucau = await (await fetch('/gvnhanh/yeucau')).json();
+		const hdthue = await (await fetch(`/gvnhanh/hdthue/all`)).json();
+		// const DV = await (await fetch('/gvnhanh/bangphidv')).json();
+		// const phieuthu = await (await fetch('/gvnhanh/phieuthudv')).json();
+		// const ngv = await (await fetch('/gvnhanh/nguoigv')).json();
+		// const yeucau = await (await fetch('/gvnhanh/yeucau')).json();
 		this.setState({
 				hdthues: hdthue,
-				DVs: DV,
-				phieuthus: phieuthu,
-				ngvs: ngv,
-				yeucaus: yeucau,
+				// DVs: DV,
+				// phieuthus: phieuthu,
+				// ngvs: ngv,
+				// yeucaus: yeucau,
 				search: '',
 				isLoading: false,
 		})
@@ -64,7 +73,7 @@ class listhdthue extends Component{
 
 		// (current - 1 ) = selected| * size lấy : size row
 		const { pageSize } = this.state;
-		const list = await (await fetch(`/gvnhanh/hdthue/`)).json();
+		const list = await (await fetch(`/gvnhanh/hdthue/all`)).json();
 
 		//myFish.splice(2, 1); // xóa 1 phần tử từ vị trí 2
 		const start = selected * pageSize;
@@ -152,9 +161,60 @@ class listhdthue extends Component{
 		
 	}
 
+	sortByDVAsc() {
+    	let hdthue = this.state.hdthues.sort((a,b) => (a.tendv.localeCompare(b.tendv)));
+    	this.setState({
+    		hdthues: hdthue,
+    		sortDV: 0,
+    	})
+    	console.log("sort", this.state);
+    }
+
+    sortByDVDesc() {
+        let hdthue = this.state.hdthues.sort((a, b) => (b.tendv.localeCompare(a.tendv)));
+    	this.setState({
+    		hdthues: hdthue,
+    		sortDV: 1,
+    	})
+    }
+
+    sortByNgaylamAsc() {
+    	let hdthue = this.state.hdthues.sort((a,b) => (a.ngaybatdau.localeCompare(b.ngaybatdau)));
+    	this.setState({
+    		hdthues: hdthue,
+    		sortNgaylam: 0,
+    	})
+    	console.log("sort", this.state);
+    }
+
+    sortByNgaylamDesc() {
+        let hdthue = this.state.hdthues.sort((a, b) => (b.ngaybatdau.localeCompare(a.ngaybatdau)));
+    	this.setState({
+    		hdthues: hdthue,
+    		sortNgaylam: 1,
+    	})
+    }
+
+    sortByNgayketthucAsc() {
+    	let hdthue = this.state.hdthues.sort((a,b) => (a.ngayketthuc.localeCompare(b.ngayketthuc)));
+    	this.setState({
+    		hdthues: hdthue,
+    		sortNgayketthuc: 0,
+    	})
+    	console.log("sort", this.state);
+    }
+
+    sortByNgayketthucDesc() {
+        let hdthue = this.state.hdthues.sort((a, b) => (b.ngayketthuc.localeCompare(a.ngayketthuc)));
+    	this.setState({
+    		hdthues: hdthue,
+    		sortNgayketthuc: 1,
+    	})
+    }
+
 	render(){
 
-		const {hdthues, phieuthus, DVs, ngvs, yeucaus, isLoading, pageSize, currentPage, totalColumns, search} = this.state;
+		const {hdthues, isLoading, pageSize, currentPage, totalColumns, search, sortDV, sortNgaylam, sortNgayketthuc} = this.state;
 		//console.log("dv", DVs)
 
 		if (isLoading) {
@@ -167,40 +227,11 @@ class listhdthue extends Component{
         const hdthueList = hdthues.map(hdthue =>{
         	return <tr key={hdthue.idhdthue}>
 						<td className="text-center">{hdthue.idhdthue}</td>
-						<td className="text-center">
-							{phieuthus.map(pt=>{
-	                        	if(pt.idhdthue===hdthue.idhdthue)
-	                        		return DVs.map(dv=>{
-	                        			if(dv.iddv===pt.iddv)
-	                        				return dv.tendv
-	                        		})
-	                        		
-	                        })}
-						</td>
-						<td className="text-center">
-							{yeucaus.map(yc=>{
-                        		if(yc.idyc===hdthue.idkh)
-                        			return yc.hoten
-                        	})}						
-						</td>
-                        <td className="text-center">
-                        	{ngvs.map(ngv=>{
-	                        	if(ngv.idnguoigv===hdthue.idnguoigv)
-	                        		return ngv.hoten
-	                        })}
-                        </td>
-                        <td className="text-center">
-	                        {phieuthus.map(pt=>{
-	                        	if(pt.idhdthue===hdthue.idhdthue)
-	                        		return this.formatter.format(Date.parse(pt.ngaybatdau))
-	                        })}
-                        </td>
-                        <td className="text-center">
-                        	{phieuthus.map(pt=>{
-	                        	if(pt.idhdthue===hdthue.idhdthue)
-	                        		return this.formatter.format(Date.parse(pt.ngayketthuc))
-	                        })}
-                        </td>
+						<td className="text-center">{hdthue.tendv}</td>
+						<td className="text-center">{hdthue.tenKH}</td>
+                        <td className="text-center">{hdthue.tenNGV}</td>
+                        <td className="text-center">{this.formatter.format(Date.parse(hdthue.ngaybatdau))}</td>
+                        <td className="text-center">{this.formatter.format(Date.parse(hdthue.ngayketthuc))}</td>
                         <td className="text-center">
                         	<div class="btn-group" role="group" aria-label="Basic example">
 	                        	<Link to={"/hdthue/"+hdthue.idhdthue}>
@@ -258,11 +289,26 @@ class listhdthue extends Component{
 							<thead className="thead-dark">
 								<tr className="">
 									<th className="text-center" scope="col">Mã HĐ</th>
-									<th className="text-center" scope="col">Dịch vụ</th>
+									<th className="text-center" scope="col">Dịch vụ{' '}
+										{sortDV===1?
+	                                    	<i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByDVAsc}/>
+	                                    	: <i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByDVDesc}/>
+	                                    }
+									</th>
 									<th className="col-2 text-center">Họ tên KH</th>
 									<th className="col-2 text-center">Họ tên NGV</th>
-									<th className="text-center">Ngày làm</th>
-									<th className="text-center">Ngày kết thúc</th>
+									<th className="text-center">Ngày làm{' '}
+										{sortNgaylam===1?
+	                                    	<i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByNgaylamAsc}/>
+	                                    	: <i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByNgaylamDesc}/>
+	                                    }
+									</th>
+									<th className="text-center">Ngày kết thúc{' '}
+										{sortNgayketthuc===1?
+	                                    	<i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByNgayketthucAsc}/>
+	                                    	: <i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByNgayketthucDesc}/>
+	                                    }
+									</th>
 									<th className="text-center"></th>
 								</tr>
 							</thead>

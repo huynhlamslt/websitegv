@@ -54,6 +54,7 @@ public class NguoiGVController {
         return ResponseEntity.ok().body(nguoiGV);
     }
 
+    //Tìm người giúp việc theo ngày
     @GetMapping("/nguoigv/timngv/{id}/{start}/{end}")
     public List<NguoiGV> getNguoiGvByHDThue(@PathVariable(value="id") Integer idloaidv, @PathVariable(value = "start") String start, @PathVariable(value = "end") String end){
         return nguoiGVDAO.findHdThue(idloaidv, start, end);
@@ -85,6 +86,7 @@ public class NguoiGVController {
         nguoiGV.setHopdong(ngvDetail.getHopdong());
         nguoiGV.setUngtuyen(ngvDetail.getUngtuyen());
         nguoiGV.setIdloaidv(ngvDetail.getIdloaidv());
+        nguoiGV.setDiem(ngvDetail.getDiem());
 
         NguoiGV updateNguoiGV = nguoiGVDAO.save(nguoiGV);
         return ResponseEntity.ok().body(updateNguoiGV);
@@ -142,6 +144,18 @@ public class NguoiGVController {
     @GetMapping("/nguoigv/next")
     public Integer findNextId(){
         return nguoiGVDAO.maxId()+1;
+    }
+
+    // Cập nhật điểm của người giúp việc qua Id
+    @PutMapping("/nguoigv/updiem/{id}/{diem}")
+    public ResponseEntity<NguoiGV> updateDiem(@PathVariable(value="id") Integer idngv, @PathVariable(value="diem") Float diem){
+        NguoiGV nguoiGV = nguoiGVDAO.findOne(idngv);
+
+        if(nguoiGV == null){
+            return ResponseEntity.notFound().build();
+        }
+        nguoiGVDAO.setDiem(diem, idngv);
+        return ResponseEntity.ok().build();
     }
 }
 

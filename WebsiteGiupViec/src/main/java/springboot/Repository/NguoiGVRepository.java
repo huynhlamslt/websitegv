@@ -51,4 +51,9 @@ public interface NguoiGVRepository extends JpaRepository<NguoiGV, Integer>{
 
 	@Query(value = "SELECT MAX(idnguoigv) FROM nguoigiupviec", nativeQuery = true)
 	int maxId();
+
+	@Transactional
+    @Modifying
+	@Query(value ="UPDATE nguoigiupviec SET diem =:diem WHERE idnguoigv =:idnguoigv", nativeQuery = true)
+    void setDiem(@Param("diem") float diem, @Param("idnguoigv") int idnguoigv);
 }

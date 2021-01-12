@@ -27,6 +27,7 @@ import Themnguoigv from "./component/new/themnguoigv";
 import Themlichhen from "./component/new/themlichhen";
 import Themhdthue from "./component/new/themhdthue";
 import Login from "./component/login";
+import Danhgia from "./component//list/danhgia";
 
 import Upload from "./component/Register.js";
 import Main from "./component/main";
@@ -56,7 +57,8 @@ class App extends Component {
               </Route>
           </Switch>
         
-        {localStorage.getItem("login")!==null? <body className="hold-transition sidebar-mini layout-fixed">
+        {(localStorage.getItem("login")==1||localStorage.getItem("login")==2)? 
+        <body className="hold-transition sidebar-mini layout-fixed">
         <div class="wrapper">
             
             {/*navbar*/}
@@ -110,15 +112,20 @@ class App extends Component {
                 <Route path="/tuyendung" component={Listtuyendung} exact />
            </Switch>
 
+           {/*Danh sách đánh giá người giúp việc*/}
            <Switch>
-                {/*Danh sách hợp đồng lao động*/}
-                <Route path="/hdlaodong" component={Listhdlaodong} exact />
+                <Route path="/danhgia/:id" component={Danhgia} exact/>
            </Switch>
 
-           <Switch>
-                {/*Thêm hợp đồng lao động*/}
+           {/*Danh sách hợp đồng lao động*/}
+           {/*<Switch>
+                <Route path="/hdlaodong" component={Listhdlaodong} exact />
+           </Switch>*/}
+
+           {/*Thêm hợp đồng lao động*/}
+           {/*<Switch> 
                 <Route path="/hdlaodong/:id" component={Themhdlaodong} exact />
-           </Switch>
+           </Switch>*/}
 
            <Switch>
                 {/*Danh sách khách hàng*/}
@@ -130,15 +137,15 @@ class App extends Component {
                 <Route path="/yeucau" component={Listyeucau} exact />
            </Switch>
 
-           <Switch>
-                {/*Danh sách lịch hẹn*/}
+            {/*Danh sách lịch hẹn*/}
+           {/*<Switch>      
                 <Route path="/lichhen" component={Listlichhen} exact />
-           </Switch>
+           </Switch>*/}
 
-            <Switch>
-                {/*Thêm lịch hẹn*/}
+            {/*Thêm lịch hẹn*/}
+            {/*<Switch>   
                 <Route path="/lichhen/:id" component={Themlichhen} exact />
-           </Switch>
+           </Switch>*/}
 
            <Switch>
                 {/*Danh sách hợp đồng thuê dịch vụ*/}

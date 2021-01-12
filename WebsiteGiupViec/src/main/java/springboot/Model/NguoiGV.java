@@ -30,13 +30,14 @@ public class NguoiGV {
     private int hopdong;
     private int ungtuyen;
     private int idloaidv;
+    private float diem;
 
     public NguoiGV(){
 
     }
 
     public NguoiGV(int idnguoigv, String hoten, String gioitinh, Date ngaysinh, String sdt, String cmnd, String quequan,
-            String hinhanh, int del, int hopdong, int ungtuyen, int idloaidv) {
+            String hinhanh, int del, int hopdong, int ungtuyen, int idloaidv, float diem) {
         this.idnguoigv = idnguoigv;
         this.hoten = hoten;
         this.gioitinh = gioitinh;
@@ -49,6 +50,7 @@ public class NguoiGV {
         this.hopdong = hopdong;
         this.ungtuyen = ungtuyen;
         this.idloaidv = idloaidv;
+        this.diem = diem;
     }
 
     public int getIdnguoigv() {
@@ -146,5 +148,13 @@ public class NguoiGV {
     public void setIdloaidv(int idloaidv) {
         this.idloaidv = idloaidv;
     }
-     
+
+    public float getDiem() {
+        return diem;
+    }
+
+    public void setDiem(float diem) {
+        this.diem = diem;
+    }
+    
 }

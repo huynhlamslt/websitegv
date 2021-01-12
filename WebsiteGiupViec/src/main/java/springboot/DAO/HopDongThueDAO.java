@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import springboot.Model.HopDongThue;
+import springboot.Model.ListHD;
 import springboot.Repository.HopDongThueRepository;
 
 @Service
@@ -22,6 +23,11 @@ public class HopDongThueDAO {
     //Get all
     public List<HopDongThue> findAll(){
         return hopDongThueRepository.findAll();
+    }
+
+    //Get all list
+    public List<ListHD> findAllList(){
+        return hopDongThueRepository.findListHDThue();
     }
 
     //Get by Id
@@ -45,7 +51,7 @@ public class HopDongThueDAO {
     }
 
     //Tim theo ten
-    public List<HopDongThue> findByName(String ten){
+    public List<ListHD> findByName(String ten){
         return hopDongThueRepository.findByName(ten);
     }
 }

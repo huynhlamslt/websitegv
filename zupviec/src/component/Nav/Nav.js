@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import{
+import {
   BrowserRouter as Router,
   Switch,
   Route,
@@ -8,33 +8,33 @@ import{
 } from "react-router-dom"
 class Nav extends Component {
 
-    state = {
-        isLoading: true,
-        loaiDVs: [],
-      };
+  state = {
+    isLoading: true,
+    loaiDVs: [],
+  };
 
-    async componentDidMount() {
-        const response = await fetch('/gvnhanh/loaidv');
-        const body = await response.json();
-        this.setState({ loaiDVs: body, isLoading: false });
-        console.log("loaidv", this.state.loaiDVs)
-    }
+  async componentDidMount() {
+    const response = await fetch('/gvnhanh/loaidv');
+    const body = await response.json();
+    this.setState({ loaiDVs: body, isLoading: false });
+    console.log("loaidv", this.state.loaiDVs)
+  }
 
   // clickContact = () =>{
   //   this.props.history.push('/contact')
   // }
 
   render() {
-    const {loaiDVs, isLoading} = this.state;
+    const { loaiDVs, isLoading } = this.state;
     return (
       <div>
-        <nav className="navbar fixed-top navbar-expand-lg navbar-light bg-light ">
+        <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-dark ">
           <div className="container">
-            <Link to="/" className="navbar-brand" style={{borderRadius: '20px', color: 'red'}}>
+            <Link to="/" className="navbar-brand" style={{ borderRadius: '20px', color: 'red' }}>
               <span>
-                <img src="../image/logo.png" alt="" style={{width: '50px', height: '50px'}} />
+                <img src="../image/logo.png" alt="" style={{ width: '50px', height: '50px' }} />
               </span>
-              <span style={{color: '#881A7C', width: '50px', fontWeight: 1000}}>
+              <span style={{ color: '#CCFFFF', width: '50px', fontWeight: 1000 }}>
                 GiupViecNhanh.com
               </span>
               <i className="fa fa-flag" />
@@ -42,23 +42,24 @@ class Nav extends Component {
             <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
               <span className="navbar-toggler-icon" />
             </button>
-            <div className="collapse navbar-collapse" id="navbarResponsive">
-              <ul className="navbar-nav ml-auto mt-3">
+            <div className="collapse navbar-collapse" id="navbarResponsive" style={{ color: 'Window' }}>
+              <ul className="navbar-nav ml-auto mt-3" >
                 <li className="nav-item">
                   <Link to="/intro" className="nav-link" style={{}}>
-                    <p className="font-weight-bold">Giới thiệu</p>
+                    <p className="font-weight-bold" >Giới thiệu</p>
                   </Link>
                 </li>
                 <li className="nav-item dropdown">
-                  <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <a className="font-weight-bold" className="nav-link dropdown-toggle" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Các loại DV
                   </a>
                   <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
-                  <div onClick={()=>window.location.reload(false)}>
+                    {/* <div onClick={() => window.location.reload(false)}> */}
+                    <div>
                       {loaiDVs.map((dv, idx) =>
-                       <Link key={idx} to={"/chitiet/" + dv.idloaidv} className="dropdown-item">{dv.tenloai}</Link>
-                     )}
-                  </div>
+                        <Link key={idx} to={"/chitiet/" + dv.idloaidv} className="dropdown-item">{dv.tenloai}</Link>
+                      )}
+                    </div>
                     {/*<Link to="/dichvu/1" className="dropdown-item">Giúp việc gia đình</Link>
                     <Link to="/dichvu/2" className="dropdown-item">Giúp việc trông trẻ</Link>
                     <Link to="/dichvu/3" className="dropdown-item" >Giúp việc trông ông bà</Link>
@@ -71,15 +72,16 @@ class Nav extends Component {
                 <li className="nav-item">
                   <Link to="/contact" className="nav-link" href="" >Liên hệ</Link>
                 </li>
-                <Link to="/dangkynguoigv">
-                  <a className="nav-link">Đăng ký đi làm</a>
-                </Link>
-                
+                <li className="nav-item">
+                  <Link to="/dangkynguoigv" className="nav-link" href="" >Đăng ký đi làm</Link>
+                </li>
+
+
               </ul>
               <ul className="navbar-nav mt-0 ml-2">
-              
-              <li className="nav-item ml-2">
-                 {/* <Link to="/dangky">
+
+                <li className="nav-item ml-2">
+                  {/* <Link to="/dangky">
                     <button type="button" className="btn btn-danger">Đăng ký</button>
                   </Link>
                 </li>

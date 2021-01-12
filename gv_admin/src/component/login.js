@@ -50,32 +50,38 @@ class login extends Component{
         let item = {...this.state.item};
         item[name] = value;
         //console.log("link", `/gvnhanh/taikhoan/${item["sdt"]}/${item["pass"]}`);
-        this.setState({item},async()=>{
-            dn = await (await fetch(`/gvnhanh/taikhoan/check/${item["sdt"]}/${item["pass"]}`)).json();
+        // if(item["sdt"]=='' || item["pass"]==''){
+        //     alert("Sai user hoặc password");
+        //         this.nameInput.focus();
+        // }
+        // else{
+          this.setState({item},async()=>{
+              dn = await (await fetch(`/gvnhanh/taikhoan/check/${item["sdt"]}/${item["pass"]}`)).json();
 
-            console.log("dn", dn);
-            if(dn===0){
-                alert("Sai user hoặc password");
-                this.nameInput.focus();
-                // this.setState({
-                //   item:{
-                //     pass:''
-                //   } 
-                // });
-            }
-            else{
-                this.props.setGlobalState({ 
-                  counter: dn,
-                  sdt: item["sdt"]
-                });
-                localStorage.setItem("login", dn);
-                localStorage.setItem("sdt", item["sdt"])
-                console.log("log", localStorage.getItem("login"))
-                console.log("props", this.props)
-                this.props.history.push("/dashboard");
-                window.location.reload();
-            }
-        });
+              console.log("dn", dn);
+              if((dn!==1)||(dn!==2)){
+                  alert("Sai user hoặc password");
+                  this.nameInput.focus();
+                  // this.setState({
+                  //   item:{
+                  //     pass:''
+                  //   } 
+                  // });
+              }
+              else{
+                  this.props.setGlobalState({ 
+                    counter: dn,
+                    sdt: item["sdt"]
+                  });
+                  localStorage.setItem("login", dn);
+                  localStorage.setItem("sdt", item["sdt"])
+                  console.log("log", localStorage.getItem("login"))
+                  console.log("props", this.props)
+                  //this.props.history.push("/dashboard");
+                  //window.location.reload();
+              }
+          });
+        // }
     }
     handleClick(){
         this.props.setGlobalState({ counter: 1 });
@@ -131,12 +137,12 @@ class login extends Component{
                             className="form-control form-control-user" id="exampleInputPassword" placeholder="Password" 
                             ref={(input) => { this.nameInput = input; }}/>
                           </div>
-                          <div className="form-group">
+                         {/* <div className="form-group">
                             <div className="custom-control custom-checkbox small">
                               <input type="checkbox" className="custom-control-input" id="customCheck" />
                               <label className="custom-control-label" htmlFor="customCheck">Remember Me</label>
                             </div>
-                          </div>
+                          </div>*/}
                           <button type="submit" className="btn btn-primary btn-user btn-block">
                             Login
                           </button>

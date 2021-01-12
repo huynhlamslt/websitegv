@@ -169,6 +169,10 @@ class themnguoigv extends Component{
 			this.state.hopdong.idnv=this.state.nhanViens[0].idnv;
 		}
 
+		if(them==='new' || update==='new'){
+			this.state.item.diem = 10
+		}
+
 		if(update!=='new'){
 			this.state.hopdong.idnguoigv = update;
 		

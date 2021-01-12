@@ -28,7 +28,9 @@ class Footer extends Component {
                     <p><i className="fa fa-envelope-o mr-3" />GIUPVIECNHANH@info.com</p>
                   </div>
                 </div>
+              
               </div>
+              <div className="fb-customerchat" page_id="<PAGE_ID>"></div>
             </div>
 
         );

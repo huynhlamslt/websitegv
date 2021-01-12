@@ -26,16 +26,16 @@ class RegisterServiceContain extends Component {
         sdt: '',
         diachi: '',
         ngaylam: '',
-        congviec:'',
+        congviec: '',
         trangthai: 'Chưa duyệt',
-        iddv:''
+        iddv: ''
     };
 
     emptyKh = {
         hoten: '',
         sdt: '',
-        diachi:'',
-        trangthai:''
+        diachi: '',
+        trangthai: ''
     };
 
     constructor(props) {
@@ -44,18 +44,18 @@ class RegisterServiceContain extends Component {
             item: this.emptyItem,
             dichVus: [],
             khachhang: this.emptyKh,
-            loaiDVs:[],
+            loaiDVs: [],
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    async componentDidMount(){
+    async componentDidMount() {
         const dv = await (await fetch(`/gvnhanh/bangphidv/${this.props.match.params.id}`)).json();
         const loaidv = await (await fetch(`/gvnhanh/loaidv/bpdv/${this.props.match.params.id}`)).json();
         this.setState({
-            dichVus:dv,
-            loaiDVs: loaidv,      
+            dichVus: dv,
+            loaiDVs: loaidv,
         })
 
         console.log("this", this.state);
@@ -65,28 +65,28 @@ class RegisterServiceContain extends Component {
     handleChange(event) {
         const target = event.target;
         const value = target.value;
-        const name= target.name;
-        let item = {...this.state.item};
+        const name = target.name;
+        let item = { ...this.state.item };
         item[name] = value;
-        this.setState({item});
+        this.setState({ item });
 
         var months = ["01", "02", "03", "04", "05", "06", "07",
-         "08", "09", "10", "11", "12"];
+            "08", "09", "10", "11", "12"];
         var d = new Date();
         var namedMonth = months[d.getMonth()];
         let ng;
-        if(d.getDate()<10){
+        if (d.getDate() < 10) {
             ng = `${d.getFullYear()}-${namedMonth}-0${d.getDate()}`;
         }
-        else{
+        else {
             ng = `${d.getFullYear()}-${namedMonth}-${d.getDate()}`;
         }
 
-        this.setState({item}, async () => {
-            if(this.state.item["ngaylam"] && this.state.item["ngaylam"]<ng){
+        this.setState({ item }, async () => {
+            if (this.state.item["ngaylam"] && this.state.item["ngaylam"] < ng) {
                 alert("Không được chọn ngày đã qua!");
                 this.setState({
-                    item:{
+                    item: {
                         hoten: this.state.item["hoten"],
                         sdt: this.state.item["sdt"],
                         diachi: this.state.item["diachi"],
@@ -102,23 +102,23 @@ class RegisterServiceContain extends Component {
 
     async handleSubmit(event) {
         event.preventDefault();
-        const {item} = this.state;
-        const {khachhang} = this.state;
-       
+        const { item } = this.state;
+        const { khachhang } = this.state;
+
         const sv = await (await fetch(`/gvnhanh/khachhang/sdt/${item["sdt"]}`)).json();
         console.log("sv", sv.length)
-        if(sv.length!==0){
-           confirmAlert({
-              title: 'Cảnh báo!',
-              message: 'Khách hàng không được đặt dịch vụ do đã vi phạm quy định. Liên hệ với công ty để biết thêm chi tiết!',
-              buttons: [
-                {
-                  label: 'OK',
-                  onClick: () => this.props.history.push("/contact")
-               
-                }
-              ],
-               childrenElement: () => null,
+        if (sv.length !== 0) {
+            confirmAlert({
+                title: 'Cảnh báo!',
+                message: 'Khách hàng không được đặt dịch vụ do đã vi phạm quy định. Liên hệ với công ty để biết thêm chi tiết!',
+                buttons: [
+                    {
+                        label: 'OK',
+                        onClick: () => this.props.history.push("/contact")
+
+                    }
+                ],
+                childrenElement: () => null,
                 closeOnClickOutside: true,
                 closeOnEscape: true,
                 willUnmount: () => null,
@@ -126,7 +126,7 @@ class RegisterServiceContain extends Component {
                 onKeypressEscape: () => null
             });
         }
-        else{
+        else {
 
             // this.setState({
             //     khachhang:{
@@ -154,25 +154,25 @@ class RegisterServiceContain extends Component {
             // });
 
             await fetch('/gvnhanh/yeucau', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(item),
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(item),
             });
-          
+
             confirmAlert({
-              title: 'Yêu cầu thành công!',
-              message: 'Nhân viên công ty sẽ liên lạc với bạn trong 24h.',
-              buttons: [
-                {
-                  label: 'OK',
-                  onClick: () => window.location.reload(false)
-               
-                }
-              ],
-               childrenElement: () => null,
+                title: 'Yêu cầu thành công!',
+                message: 'Nhân viên công ty sẽ liên lạc với bạn trong 24h.',
+                buttons: [
+                    {
+                        label: 'OK',
+                        onClick: () => window.location.reload(false)
+
+                    }
+                ],
+                childrenElement: () => null,
                 closeOnClickOutside: true,
                 closeOnEscape: true,
                 willUnmount: () => null,
@@ -183,25 +183,25 @@ class RegisterServiceContain extends Component {
 
     }
     render() {
-        
 
-        const {item} = this.state;
-        const {dichVus} = this.state;
+
+        const { item } = this.state;
+        const { dichVus } = this.state;
         this.state.item.iddv = this.state.dichVus.iddv;
-        const {loaiDVs} = this.state;
+        const { loaiDVs } = this.state;
         return (
             <div>
                 <div className="container">
-                    <h1 className="mt-4 mb-3">
-                    <span style={{color: '#fc9e26'}}>
-                    Đặt lịch 
+                    <h1 className="mt-4" style={{ padding: '20px', textAlign: 'center' }}>
+                        <span style={{ color: '#fc9e26' }}>
+                            Đặt lịch
                     </span>
-                    <small>
-                    {/*<span style={{color: '#fb8533'}}>
+                        <small>
+                            {/*<span style={{color: '#fb8533'}}>
                         {dichVus.tenloai}
                     </span>*/}
-                    </small>
-                </h1>
+                        </small>
+                    </h1>
                     <ol className="breadcrumb">
                         <li className="breadcrumb-item">
                             <Link to=""><a>Trang chủ</a></Link>
@@ -210,82 +210,82 @@ class RegisterServiceContain extends Component {
                     </ol>
                     <div className="row">
                         <div className="col-md-5">
-                            
-                            <img className="img-fluid rounded mb-3 mb-md-0" src={loaiDVs.anh} alt="ảnh" />
-                          
+
+                            <img style={{ height: '500px',marginTop:'10px' }} className="img-fluid rounded mx-auto d-block " src={loaiDVs.anh} alt="ảnh" />
+
                         </div>
                         <div className="col-md-7">
                             <form onSubmit={this.handleSubmit}>
                                 {/* form-khachhang */}
                                 <div className="title-form-service">
-                                    <span style={{fontWeight: 700}}>
-                            Tên khách hàng 
-                            <label htmlFor style={{color: 'red'}}>*</label>
-                        </span>
+                                    <span style={{ fontWeight: 700 }}>
+                                        Tên khách hàng
+                            <label htmlFor style={{ color: 'red' }}>*</label>
+                                    </span>
                                 </div>
                                 <div className="form-group input-group">
                                     <div className="input-group-prepend">
                                         <span className="input-group-text"> <i className="fa fa-user" /> </span>
                                     </div>
-                                    <input name="hoten" id="hoten" value={item.hoten ||''} className="form-control" 
-                                    placeholder="Nhập tên khách hàng" type="text"onChange={this.handleChange} required/>
+                                    <input name="hoten" id="hoten" value={item.hoten || ''} className="form-control"
+                                        placeholder="Nhập tên khách hàng" type="text" onChange={this.handleChange} required />
                                 </div>
                                 {/* ket thuc form-khách hàng */} {/* form-sodienthoai */}
                                 <div className="title-form-service">
-                                    <span style={{fontWeight: 700}}>
-                            Số điện thoại 
-                            <label htmlFor style={{color: 'red'}}>*</label>
-                        </span>
+                                    <span style={{ fontWeight: 700 }}>
+                                        Số điện thoại
+                            <label htmlFor style={{ color: 'red' }}>*</label>
+                                    </span>
                                 </div>
                                 <div className="form-group input-group">
                                     <div className="input-group-prepend">
                                         <span className="input-group-text"> <i className="fa fa-user" /> </span>
                                     </div>
-                                    <input name="sdt" id="sdt" value={item.sdt ||''} className="form-control" 
-                                    placeholder="Nhập số điện thoại " type="text" onChange={this.handleChange} 
-                                    title="Hãy nhập đúng 10 chữ số điện thoại" pattern="[0-9]{10}" required/>
+                                    <input name="sdt" id="sdt" value={item.sdt || ''} className="form-control"
+                                        placeholder="Nhập số điện thoại " type="text" onChange={this.handleChange}
+                                        title="Hãy nhập đúng 10 chữ số điện thoại" pattern="[0-9]{10}" required />
                                 </div>
                                 {/* ket thuc form-khách hàng */} {/* form-dia chi */}
                                 <div className="title-form-service">
-                                    <span style={{fontWeight: 700}}>
-                            Địa chỉ 
-                            <label htmlFor style={{color: 'red'}}>*</label>
-                        </span>
+                                    <span style={{ fontWeight: 700 }}>
+                                        Địa chỉ
+                            <label htmlFor style={{ color: 'red' }}>*</label>
+                                    </span>
                                 </div>
                                 <div className="form-group input-group">
                                     <div className="input-group-prepend">
                                         <span className="input-group-text"> <i className="fa fa-user" /> </span>
                                     </div>
-                                    <input name="diachi" id="diachi" value={item.diachi ||''} className="form-control" 
-                                    placeholder="Nhập địa chỉ" type="text" onChange={this.handleChange} required/>
+                                    <input name="diachi" id="diachi" value={item.diachi || ''} className="form-control"
+                                        placeholder="Nhập địa chỉ" type="text" onChange={this.handleChange} required />
                                 </div>
                                 {/* ket thuc form-diachi */} {/* form-thoigian */}
                                 <div className="title-form-service">
-                                    <span style={{fontWeight: 700}}>
-                            Chọn thời gian làm
-                            <label htmlFor style={{color: 'red'}}>*</label>
-                        </span>
+                                    <span style={{ fontWeight: 700 }}>
+                                        Chọn thời gian làm
+                            <label htmlFor style={{ color: 'red' }}>*</label>
+                                    </span>
                                 </div>
                                 <div className="form-group input-group">
                                     <div className="input-group-prepend">
                                         <span className="input-group-text"> <i className="fa fa-user" /> </span>
                                     </div>
-                                    <input name="ngaylam" id="ngaylam" value={item.ngaylam ||''} className="form-control" 
-                                    placeholder="Đặt dịch vụ" type="date" onChange={this.handleChange} required/>
+                                    <input name="ngaylam" id="ngaylam" value={item.ngaylam || ''} className="form-control"
+                                        placeholder="Đặt dịch vụ" type="date" onChange={this.handleChange} required />
                                 </div>
                                 {/* ket thuc form-tgian */} {/* form-mota */}
                                 <div className="title-form-service">
-                                    <span style={{fontWeight: 700}}>
-                            Chi tiết công việc
-                            <label htmlFor style={{color: 'red'}}>*</label>
-                        </span>
+                                    <span style={{ fontWeight: 700 }}>
+                                        Chi tiết công việc
+                            <label htmlFor style={{ color: 'red' }}>*</label>
+                                    </span>
                                 </div>
                                 <div className="form-group input-group">
                                     <div className="input-group-prepend">
                                         <span className="input-group-text"> <i className="fa fa-user" /> </span>
                                     </div>
-                                    <textarea className="form-control" rows={5} name="congviec" id="congviec" 
-                                    value={item.congviec ||''} onChange={this.handleChange} required/>
+                                    <textarea className="form-control" rows={5} name="congviec" id="congviec"
+                                        value={item.congviec || ''} onChange={this.handleChange} required />
                                 </div>
                                 {/* ket thuc form-mota */} {/* form-submit// */}
                                 <div className="form-group">
