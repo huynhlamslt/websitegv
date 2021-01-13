@@ -287,11 +287,11 @@ class listnguoigv extends Component{
                              </form>
                           </div>
 
-                          <div>
+                         {/* <div>
                             <Link to = "/nguoigv/new">
                                 <button className="btn btn-success float-right">Thêm mới</button>
                             </Link>
-                          </div>
+                          </div>*/}
                         </div>      
                     </div>
 
