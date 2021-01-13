@@ -19,12 +19,13 @@ class listhdthue extends Component{
 			// yeucaus:[],
 			serach:'',
 			currentPage: 1,
-			pageSize: 6,
+			pageSize: 8,
 			totalColumns: 0,
 			search: '',
 			sortDV: 0,
 			sortNgaylam: 0,
 			sortNgayketthuc: 0,
+			sortThanhtoan:0,
 			isLoading: true,
 		};
 		this.remove = this.remove.bind(this);
@@ -38,6 +39,8 @@ class listhdthue extends Component{
         this.sortByNgaylamDesc = this.sortByNgaylamDesc.bind(this);
         this.sortByNgayketthucAsc = this.sortByNgayketthucAsc.bind(this);
         this.sortByNgayketthucDesc = this.sortByNgayketthucDesc.bind(this);
+        this.sortByThanhtoanAsc = this.sortByThanhtoanAsc.bind(this);
+        this.sortByThanhtoanDesc = this.sortByThanhtoanDesc.bind(this);
 	}
 
 	async componentDidMount(){
@@ -212,9 +215,26 @@ class listhdthue extends Component{
     	})
     }
 
+    sortByThanhtoanAsc() {
+    	let hdthue = this.state.hdthues.sort((a,b) => (a.thanhtoan.localeCompare(b.thanhtoan)));
+    	this.setState({
+    		hdthues: hdthue,
+    		sortThanhtoan: 0,
+    	})
+    	console.log("sort", this.state);
+    }
+
+    sortByThanhtoanDesc() {
+        let hdthue = this.state.hdthues.sort((a, b) => (b.thanhtoan.localeCompare(a.thanhtoan)));
+    	this.setState({
+    		hdthues: hdthue,
+    		sortThanhtoan: 1,
+    	})
+    }
+
 	render(){
 
-		const {hdthues, isLoading, pageSize, currentPage, totalColumns, search, sortDV, sortNgaylam, sortNgayketthuc} = this.state;
+		const {hdthues, isLoading, pageSize, currentPage, totalColumns, search, sortDV, sortNgaylam, sortNgayketthuc, sortThanhtoan} = this.state;
 		//console.log("dv", DVs)
 
 		if (isLoading) {
@@ -232,6 +252,7 @@ class listhdthue extends Component{
                         <td className="text-center">{hdthue.tenNGV}</td>
                         <td className="text-center">{this.formatter.format(Date.parse(hdthue.ngaybatdau))}</td>
                         <td className="text-center">{this.formatter.format(Date.parse(hdthue.ngayketthuc))}</td>
+                        <td className="text-center">{hdthue.thanhtoan=='true'?<i className="fas fa-check-circle text-success"/>:null}</td>
                         <td className="text-center">
                         	<div class="btn-group" role="group" aria-label="Basic example">
 	                        	<Link to={"/hdthue/"+hdthue.idhdthue}>
@@ -289,14 +310,14 @@ class listhdthue extends Component{
 							<thead className="thead-dark">
 								<tr className="">
 									<th className="text-center" scope="col">Mã HĐ</th>
-									<th className="text-center" scope="col">Dịch vụ{' '}
+									<th className="text-center align-middle" scope="col">Dịch vụ{' '}
 										{sortDV===1?
 	                                    	<i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByDVAsc}/>
 	                                    	: <i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByDVDesc}/>
 	                                    }
 									</th>
-									<th className="col-2 text-center">Họ tên KH</th>
-									<th className="col-2 text-center">Họ tên NGV</th>
+									<th className="text-center align-middle">Họ tên KH</th>
+									<th className="text-center align-middle">Họ tên NGV</th>
 									<th className="text-center">Ngày làm{' '}
 										{sortNgaylam===1?
 	                                    	<i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByNgaylamAsc}/>
@@ -308,6 +329,12 @@ class listhdthue extends Component{
 	                                    	<i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByNgayketthucAsc}/>
 	                                    	: <i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByNgayketthucDesc}/>
 	                                    }
+									</th>
+									<th className="text-center">Thanh toán{' '}
+										{sortThanhtoan===1?
+											<i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByThanhtoanAsc}/>
+	                                    	: <i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByThanhtoanDesc}/>
+										}
 									</th>
 									<th className="text-center"></th>
 								</tr>

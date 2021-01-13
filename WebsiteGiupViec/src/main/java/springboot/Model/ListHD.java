@@ -8,4 +8,5 @@ public interface ListHD {
     String getTenNGV();
     String getNgaybatdau();
     String getNgayketthuc(); 
+    String getThanhtoan();
 }

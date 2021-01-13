@@ -17,7 +17,7 @@ class listnguoigv extends Component{
           sortHopDong: 0,
           sortDiem: 0,
           currentPage: 1,
-          pageSize: 6,
+          pageSize: 8,
           totalColumns: 0,
           search: '',
           isLoading: true,

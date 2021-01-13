@@ -16,7 +16,7 @@ class listbangphidv extends Component{
 			bpdvs:[],
 			loaiDVs:[],
 			currentPage: 1,
-			pageSize: 6,
+			pageSize: 8,
 			totalColumns: 0,
 			isLoading: true,
 		};

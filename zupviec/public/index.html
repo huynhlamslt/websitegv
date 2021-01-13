@@ -21,6 +21,7 @@
     <!-- Custom styles for this template -->
     <link href="%PUBLIC_URL%/css/modern-business.css" rel="stylesheet">
     <title>Giúp việc nhanh</title>
+    
   </head>
   <body>
     <noscript>
@@ -30,19 +31,34 @@
     <script src="%PUBLIC_URL%/vendor/jquery/jquery.min.js"></script>
     <script src="%PUBLIC_URL%/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <script>
-      (function(s, u, b, i, z){
-        u[i]=u[i]||function(){
-          u[i].t=+new Date();
-          (u[i].q=u[i].q||[]).push(arguments);
+
+    <!-- Load Facebook SDK for JavaScript -->
+      <div id="fb-root"></div>
+      <script>
+        window.fbAsyncInit = function() {
+          FB.init({
+            xfbml            : true,
+            version          : 'v9.0'
+          });
         };
-        z=s.createElement('script');
-        var zz=s.getElementsByTagName('script')[0];
-        z.async=1; z.src=b; z.id='subiz-script';
-        zz.parentNode.insertBefore(z,zz);
-      })(document, window, 'https://widgetv4.subiz.com/static/js/app.js', 'subiz');
-      subiz('setAccount', 'acqfupzjofodtwnydzuc');
-    </script>
+
+        (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js';
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
+
+      <!-- Your Chat Plugin code -->
+      <div class="fb-customerchat"
+        attribution=setup_tool
+        page_id="104177921635583"
+    theme_color="#fa3c4c"
+    logged_in_greeting="Xin chào ! Giupviecnhanh.vn có thể giúp gì cho anh/chị ?"
+    logged_out_greeting="Xin chào ! Giupviecnhanh.vn có thể giúp gì cho anh/chị ?">
+      </div>
+    
 
     <div id="fb-root"></div>
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/vi_VN/sdk.js#xfbml=1&version=v5.0&appId=462649174443590&autoLogAppEvents=1"></script>

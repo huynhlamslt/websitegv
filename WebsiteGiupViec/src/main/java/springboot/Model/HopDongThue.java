@@ -22,18 +22,20 @@ public class HopDongThue {
     private int idnv;
     private Date ngaythue;
     private String trangthai;
+    private boolean thanhtoan;
 
     public HopDongThue(){
 
     }
 
-    public HopDongThue(int idhdthue, int idkh, int idnguoigv, int idnv, Date ngaythue, String trangthai) {
+    public HopDongThue(int idhdthue, int idkh, int idnguoigv, int idnv, Date ngaythue, String trangthai, boolean thanhtoan) {
         this.idhdthue = idhdthue;
         this.idkh = idkh;
         this.idnguoigv = idnguoigv;
         this.idnv = idnv;
         this.ngaythue = ngaythue;
         this.trangthai = trangthai;
+        this.thanhtoan = thanhtoan;
     }
 
     public int getIdhdthue() {
@@ -83,5 +85,13 @@ public class HopDongThue {
     public void setTrangthai(String trangthai) {
         this.trangthai = trangthai;
     }
- 
+
+    public boolean isThanhtoan() {
+        return thanhtoan;
+    }
+
+    public void setThanhtoan(boolean thanhtoan) {
+        this.thanhtoan = thanhtoan;
+    }
+    
 }

@@ -68,6 +68,7 @@ public class HopDongThueController {
         hopDongThue.setIdnv(hdthueDetail.getIdnv());
         hopDongThue.setNgaythue(hdthueDetail.getNgaythue());
         hopDongThue.setTrangthai(hdthueDetail.getTrangthai());
+        hopDongThue.setThanhtoan(hdthueDetail.isThanhtoan());
 
         HopDongThue updateHDThue = hopDongThueDAO.save(hopDongThue);
         return ResponseEntity.ok().body(updateHDThue);

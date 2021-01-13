@@ -14,7 +14,7 @@ class listtuyendung extends Component{
         this.state = {
           ngvs: [], 
           currentPage: 1,
-          pageSize: 6,
+          pageSize: 8,
           totalColumns: 0,
           search: '',
           isLoading: true,

@@ -18,7 +18,7 @@ class listyeucau extends Component{
 			sortTrangthai: 0,
 			sortNgaylam: 0,
 			currentPage: 1,
-			pageSize: 6,
+			pageSize: 8,
 			totalColumns: 0,
 			search: '',
 		};

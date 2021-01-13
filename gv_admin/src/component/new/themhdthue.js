@@ -14,7 +14,8 @@ class themhdthue extends Component{
 		idnguoigv: '',
 		idnv: '',
 		ngaythue: '',
-		trangthai: ''
+		trangthai: '',
+		thanhtoan:''
 	};
 	emptyPhieuthu = {
 		idhdthue:'',
@@ -49,10 +50,11 @@ class themhdthue extends Component{
 		 	dongia:[],
 		 	tienthu: '',
 		 	gio: false,
+		 	check: ''
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
-		
+		this.onCheck = this.onCheck.bind(this);
 	}
 
 	async componentDidMount() {
@@ -89,12 +91,13 @@ class themhdthue extends Component{
 		if (idThemhd !== 'new') {
 			const hd = await (await fetch(`/gvnhanh/hdthue/${idLichhen}`)).json();
 			this.setState({
-				hdthue: hd
+				hdthue: hd,
+				check:hd["thanhtoan"]
 			})
 
 			const pt = await (await fetch(`/gvnhanh/phieuthudv/${idLichhen}`)).json();
 			this.setState({
-				phieuthu: pt
+				phieuthu: pt,
 			})
 
 			const dg = await (await fetch(`/gvnhanh/bangphidv/${pt.iddv}`)).json();
@@ -112,7 +115,7 @@ class themhdthue extends Component{
 					idhdthue: idLichhen,
 					iddv: kh.iddv,
 					diachilam: kh.diachi,
-					ngaybatdau:'',
+					ngaybatdau:kh.ngaylam,
 					ngayketthuc:'',
 					giolamviec:'',
 					gioketthuc:'',
@@ -373,9 +376,9 @@ class themhdthue extends Component{
 		const {phieuthu} = this.state;
 		const {khachhang} = this.state;
 		const {khs} = this.state;
+		const {check} = this.state;
 		const [idLichhen, idThemhd] = this.props.match.params.id.split('_');
 		
-
 		if(this.state.hdthue.idnv===''){
 			this.state.hdthue.idnv=this.state.nhanViens[0].idnv;
 		}
@@ -385,6 +388,14 @@ class themhdthue extends Component{
 		this.state.hdthue.idkh = khs.idyc;
 		this.state.hdthue.trangthai = "Đã đặt";
 		this.state.phieuthu.idhdthue = idLichhen;
+
+		if(idThemhd==='new'){
+			this.state.hdthue.thanhtoan=false;
+		}
+		else{
+			this.state.hdthue.thanhtoan=check;
+		}
+		
 
 		// console.log("it",hdthue)
 		// console.log("pt", phieuthu)
@@ -467,8 +478,24 @@ class themhdthue extends Component{
 		console.log("hd", hdthue);
 		console.log("pt", phieuthu);
 		console.log("kh", khachhang);
+		console.log("check", check)
 
 		this.props.history.push('/hdthue');
+	}
+
+	onCheck(event){
+		const target = event.target;
+		const value = target.value;
+		if(target.checked){
+			this.setState({
+				check: true
+			})
+		}
+		else{
+			this.setState({
+				check: false
+			})
+		}
 	}
 	
 	render(){
@@ -478,6 +505,7 @@ class themhdthue extends Component{
 		const {phieuthu} = this.state;
 		const {khs} = this.state;
 		const {dongia} = this.state;
+		const {check} = this.state;
 
 		//const {loaiDVs} = this.state;
 		//console.log("dv",loaiDVs);
@@ -531,6 +559,12 @@ class themhdthue extends Component{
 													))}
 												</select>
 							                </div>
+
+							                <div className="form-group">
+							                    <label for="exampleInputPassword1">Địa chỉ làm việc</label>
+							                    <input type="text" className="form-control" name="diachilam" id="diachilam" value={phieuthu.diachilam || ''}
+							                    onChange={this.handleChange}/>
+							                  </div>
 							                  
 							                <div class="form-row">
 							                  	<div className="col">
@@ -583,7 +617,7 @@ class themhdthue extends Component{
 							                    <select className="form-control col-lg-12" name="idnguoigv" id="idnguoigv" value={hdthue.idnguoigv || ''}
 												onChange={this.handleChange}>
 													{this.state.nguoiGVs.map((item, index) => (
-														<option value={item.idnguoigv}>{item.hoten}</option>
+														<option value={item.idnguoigv}>{item.hoten + " - " +item.diem}</option>
 													))}
 												</select>
 							                </div>				                      
@@ -601,53 +635,59 @@ class themhdthue extends Component{
 													))}
 												</select>
 							                 </div>
-				                			 
-							                  <div className="form-group">
-							                    <label for="exampleInputPassword1">Địa chỉ làm việc</label>
-							                    <input type="text" className="form-control" name="diachilam" id="diachilam" value={phieuthu.diachilam || ''}
-							                    onChange={this.handleChange}/>
-							                  </div>
 
 							                <div className="form-group">
 							                    <label for="exampleInputPassword1">Đơn giá</label>
-							                    <div class="input-group">
+							                    <div className="input-group">
 								                    {/*<input type="number" className="form-control" name="dongia" id="dongia" value={phieuthu.dongia || ''}
 														onChange={this.handleChange} disabled/>*/}
 													<CurrencyInput className="form-control" name = "dongia" id="dongia" value = {phieuthu.dongia || ''}
 													decimalSeparator="," groupSeparator="." disabled/>
-													<div class="input-group-append">
-													    <span class="input-group-text">VNĐ /</span>
-													    <span class="input-group-text">{dongia.donvitinh}</span>
+													<div className="input-group-append">
+													    <span className="input-group-text">VNĐ /</span>
+													    <span className="input-group-text">{dongia.donvitinh}</span>
 													</div>
 												</div>
 							                 </div>
 
 							                 <div className="form-group">
 							                    <label for="exampleInputPassword1">Tổng giá</label>
-							                    <div class="input-group">
+							                    <div className="input-group">
 								                    {/*<input type="number" className="form-control" name="tongtien" id="tongtien" value={phieuthu.tongtien || ''}
 														onChange={this.handleChange} disabled/>*/}
 													<CurrencyInput className="form-control" name = "tongtien" id="tongtien" value = {phieuthu.tongtien || ''}
 													 decimalSeparator="," groupSeparator="." disabled/>
-													<div class="input-group-append">
-													    <span class="input-group-text">VNĐ</span>
+													<div className="input-group-append">
+													    <span className="input-group-text">VNĐ</span>
 													</div>
 												</div>
 							                 </div>
 
 							                 <div className="form-group">
 							                    <label for="exampleInputPassword1">Tiền nộp lại</label>
-							                    <div class="input-group">
+							                    <div className="input-group">
 								                    {/*<input type="number" className="form-control" name="tienthu" id="tienthu" value={phieuthu.tienthu || ''}
 														onChange={this.handleChange} disabled/>*/}
 													<CurrencyInput className="form-control" name = "tienthu" id="tienthu" value = {phieuthu.tienthu || ''}
 													 decimalSeparator="," groupSeparator="." disabled/>
-													<div class="input-group-append">
-													    <span class="input-group-text">VNĐ</span>
+													<div className="input-group-append">
+													    <span className="input-group-text">VNĐ</span>
 													</div>
 												</div>
-							                 </div>		
-
+							                 </div>	
+							                 <div className="form-group">  
+												  <label for="exampleInputPassword1">Thanh toán</label>
+												  <div className="input-group-prepend">
+												    <div className="input-group-text">
+												    {check===true?<input type="checkbox" className="" name="check" id="check" aria-label="Checkbox for following text input"
+												      onChange={this.onCheck} checked/>
+												      :<input type="checkbox" className="" name="check" id="check" aria-label="Checkbox for following text input"
+												      onChange={this.onCheck}/>
+												    }
+												      
+												    </div>
+												  </div>
+											 </div>
 							                </div>
 				                		</div>
 				                	</div>

@@ -14,7 +14,7 @@ class listloaidv extends Component{
 		this.state = {
 			loaidvs:[],
 			currentPage: 1,
-			pageSize: 6,
+			pageSize: 8,
 			totalColumns: 0,
 			isLoading: true,
 		};
@@ -141,11 +141,11 @@ class listloaidv extends Component{
         }
 
         const loaidvList = loaidvs.map(loaidv =>{
-        	return <tr className="h-100" key={loaidv.idloaidv}>
-						<td className="col-1 text-center align-middle">{loaidv.idloaidv}</td>
-						<td className="col-3 align-middle">{loaidv.tenloai}</td>
-						<td className="col-7 text-justify">{loaidv.gioithieu}</td>
-                        <td className="col-1 text-center align-middle">
+        	return <tr className="" key={loaidv.idloaidv}>
+						<td className="text-center align-middle">{loaidv.idloaidv}</td>
+						<td className="align-middle">{loaidv.tenloai}</td>
+						<td className="text-justify">{loaidv.gioithieu}</td>
+                        <td className="text-center align-middle">
                         	<div class="btn-group" role="group" aria-label="Basic example">
 	                        	<Link to={"/loaidv/"+loaidv.idloaidv}>
 								  <button type="button" class="btn btn-outline-primary" title="Cập nhật">
@@ -207,10 +207,10 @@ class listloaidv extends Component{
 						<table className="table table-bordered table-hover table-inverse table-striped">
 							<thead className="thead-dark">
 								<tr className="">
-									<th className="col-1 text-center">Mã loại</th>
-									<th className="col-3 text-center">Tên loại</th>
-									<th className="col-7 text-center">Giới thiệu</th>
-									<th className="col-1 text-center"></th>
+									<th className="text-center ">Mã loại</th>
+									<th className="text-center w-25">Tên loại</th>
+									<th className="text-center">Giới thiệu</th>
+									<th className="text-center"></th>
 								</tr>
 							</thead>
 							<tbody>

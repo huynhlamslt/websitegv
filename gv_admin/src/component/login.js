@@ -50,16 +50,16 @@ class login extends Component{
         let item = {...this.state.item};
         item[name] = value;
         //console.log("link", `/gvnhanh/taikhoan/${item["sdt"]}/${item["pass"]}`);
-        // if(item["sdt"]=='' || item["pass"]==''){
-        //     alert("Sai user hoặc password");
-        //         this.nameInput.focus();
-        // }
-        // else{
+        if(item["sdt"]=='' || item["pass"]==''){
+            alert("Sai user hoặc password");
+                this.nameInput.focus();
+        }
+        else{
           this.setState({item},async()=>{
               dn = await (await fetch(`/gvnhanh/taikhoan/check/${item["sdt"]}/${item["pass"]}`)).json();
 
               console.log("dn", dn);
-              if((dn!==1)||(dn!==2)){
+              if(dn===0){
                   alert("Sai user hoặc password");
                   this.nameInput.focus();
                   // this.setState({
@@ -81,7 +81,7 @@ class login extends Component{
                   //window.location.reload();
               }
           });
-        // }
+        }
     }
     handleClick(){
         this.props.setGlobalState({ counter: 1 });

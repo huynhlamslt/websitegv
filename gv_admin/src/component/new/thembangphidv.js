@@ -148,8 +148,8 @@ class thembangphidv extends Component{
 										onChange={this.handleChange}>
 								      <option>Giờ</option>
 								      <option>Ngày</option>
-								      <option>Tháng</option>
-								      <option>Năm</option>
+								    {/*  <option>Tháng</option>
+								      <option>Năm</option>*/}
 								    </select>
 								  </div>
 				                  

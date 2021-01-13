@@ -28,7 +28,7 @@ class Nav extends Component {
     const { loaiDVs, isLoading } = this.state;
     return (
       <div>
-        <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-dark ">
+        <nav className="navbar fixed-top navbar-expand-lg bg-dark bg-nav ">
           <div className="container">
             <Link to="/" className="navbar-brand" style={{ borderRadius: '20px', color: 'red' }}>
               <span>

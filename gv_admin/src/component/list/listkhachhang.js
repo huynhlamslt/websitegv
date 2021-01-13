@@ -16,7 +16,7 @@ class listkhachhang extends Component{
 			item:[],
 			sortTrangthai: 0,
 			currentPage: 1,
-			pageSize: 6,
+			pageSize: 8,
 			totalColumns: 0,
 			isLoading: true,
 		};
@@ -256,8 +256,8 @@ class listkhachhang extends Component{
 						<table className="table table-bordered table-hover table-inverse table-striped">
 							<thead className="thead-dark">
 								<tr className="">
-									<th className="col-1 text-center" scope="col">Mã KH</th>
-									<th className="col-2 text-center">Họ tên</th>
+									<th className="text-center" scope="col">Mã KH</th>
+									<th className="text-center">Họ tên</th>
 									<th className=" text-center">SĐT</th>
 									<th className="text-center">Địa chỉ</th>
 									<th className="text-center">Trạng thái {' '}

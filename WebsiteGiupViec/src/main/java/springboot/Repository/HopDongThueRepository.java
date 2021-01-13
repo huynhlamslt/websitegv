@@ -25,7 +25,7 @@ public interface HopDongThueRepository extends JpaRepository<HopDongThue, Intege
             +"AND (yeucau.hoten LIKE %:ten% OR nguoigiupviec.hoten LIKE %:ten%)", nativeQuery = true)
     List<ListHD> findByName(@Param("ten") String ten);
 
-    @Query(value = "SELECT hopdongthuedv.idhdthue, bangphidv.tendv, yeucau.hoten as tenKH, nguoigiupviec.hoten as tenNGV, phieuthudv.ngaybatdau, phieuthudv.ngayketthuc\r\n"
+    @Query(value = "SELECT hopdongthuedv.idhdthue, bangphidv.tendv, yeucau.hoten as tenKH, nguoigiupviec.hoten as tenNGV, phieuthudv.ngaybatdau, phieuthudv.ngayketthuc, hopdongthuedv.thanhtoan\r\n"
     +"FROM phieuthudv, hopdongthuedv, bangphidv, nguoigiupviec, yeucau\r\n" 
     +"WHERE phieuthudv.idhdthue = hopdongthuedv.idhdthue\r\n"
             +"AND phieuthudv.iddv = bangphidv.iddv\r\n"

@@ -214,10 +214,10 @@ class navbar extends Component{
                       Thông tin tài khoản
                     </a>
                     </Link>
-                    <a className="dropdown-item" href="#">
+                    {/*<a className="dropdown-item" href="#">
                       <i className="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400" />
                       Cài đặt
-                    </a>
+                    </a>*/}
                     <div className="dropdown-divider" />
                     <button className="dropdown-item" onClick={this.onLogout}>
                       <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" />
