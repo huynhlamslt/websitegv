@@ -27,7 +27,6 @@ class themhdthue extends Component{
 		gioketthuc:'',
 		diachilam:'',
 		tongtien: '',
-		phantramluong: '',
 		tienthu: ''
 	};
 	emptyKhachhang = {
@@ -50,11 +49,18 @@ class themhdthue extends Component{
 		 	dongia:[],
 		 	tienthu: '',
 		 	gio: false,
-		 	check: ''
+		 	check: '',
+		 	click: ''
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 		this.onCheck = this.onCheck.bind(this);
+		this.tinhKhoangCach = this.tinhKhoangCach.bind(this);
+		this.calcDist = this.calcDist.bind(this);
+		this.currencyFormat = this.currencyFormat.bind(this);
+		this.sortByLuongAsc = this.sortByLuongAsc.bind(this);
+		this.sortByKhoangCachAsc = this.sortByKhoangCachAsc.bind(this);
+		this.sortByKinhNghiemAsc = this.sortByKinhNghiemAsc.bind(this);
 	}
 
 	async componentDidMount() {
@@ -75,7 +81,7 @@ class themhdthue extends Component{
 				nguoiGVs: ngv
 			})
 
-		const ls = await (await fetch(`/gvnhanh/hopdongdk/ptluong/${ngv[0]['idnguoigv']}`)).json();
+		//const ls = await (await fetch(`/gvnhanh/hopdongdk/ptluong/${ngv[0]['idnguoigv']}`)).json();
 
 		const kh = await (await fetch(`/gvnhanh/yeucau/${idLichhen}`)).json();
 		this.setState({
@@ -105,10 +111,17 @@ class themhdthue extends Component{
 				dongia: dg
 			})
 
-			console.log("hd", this.state)
+			//console.log("hd", this.state)
 		}
 		else{
-			const dg = await (await fetch(`/gvnhanh/bangphidv/${dv[0].iddv}`)).json();
+			const dg = await (await fetch(`/gvnhanh/bangphidv/${kh.iddv}`)).json();
+			
+
+			const ngv = await (await fetch(`/gvnhanh/nguoigv/timngv/${dg.idloaidv}/${kh["ngaylam"]}/${kh["ngayketthuc"]}`)).json();
+			this.setState({
+				nguoiGVs: ngv
+			})
+
 			this.setState({
 				dongia: dg,
 				phieuthu:{
@@ -116,24 +129,26 @@ class themhdthue extends Component{
 					iddv: kh.iddv,
 					diachilam: kh.diachi,
 					ngaybatdau:kh.ngaylam,
-					ngayketthuc:'',
+					ngayketthuc:kh.ngayketthuc,
 					giolamviec:'',
 					gioketthuc:'',
 					diachi: kh.diachi,
-					dongia: dg.gia,
-					tongtien: '',
-					phantramluong: ls,
-					tienthi: '',
+					dongia: ngv[0].luong,
+					tongtien: ngv[0].luong*kh.thoigian,
+					thoigian: kh.thoigian,
+					tienthu: dg.phidv,
 				},
 				hdthue:{
 					idhdthue:idLichhen,
 					idkh: '',
-					idnguoigv: '',
+					idnguoigv: ngv[0].idnguoigv,
 					idnv: '',
 					ngaythue: '',
 					trangthai: ''
 				}
 			})
+
+			this.tinhKhoangCach();
 		}
 
 		// if (idThemhd === 'new'){
@@ -142,10 +157,37 @@ class themhdthue extends Component{
 		// 		dongia: dg
 		// 	})
 		// }
+	}
 
-		
+	tinhKhoangCach(){
+		let {khs, nguoiGVs} = this.state;
+		// nguoiGVs.map((index, ngv)=>{
+		// 	ngv.khoangcach = this.calcDist(khs.lat, khs.lng, ngv.lat, ngv.lng)
+		// })
+		let kc = 0;
+		for(let i=0; i<nguoiGVs.length; i++){
+			kc = this.calcDist(khs.lat, khs.lng, nguoiGVs[i].lat, nguoiGVs[i].lng);
+			nguoiGVs = [...this.state.nguoiGVs];
+			let ngv = {...nguoiGVs[i]};
+			ngv.khoangcach =  parseFloat(kc).toFixed(1);
+			nguoiGVs[i] = ngv;
+			this.setState({nguoiGVs})
+			//this.state.nguoiGVs[i].khoangcach = parseFloat(kc).toFixed(1);
+			//console.log("kc", nguoiGVs[i].kc, kc)
+		}
+		//console.log("load", nguoiGVs);
+	}
 
-		//console.log("state", this.state)
+	calcDist(lat1,lng1,lat2,lng2){
+	    var R = 6371; 
+	    var dLat = (lat2 - lat1) * Math.PI / 180;  
+	    var dLon = (lng2 - lng1) * Math.PI / 180;
+	    var a = 
+	        0.5 - Math.cos(dLat)/2 + 
+	        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+	        (1 - Math.cos(dLon))/2;
+	    //alert(R * 2 * Math.asin(Math.sqrt(a)));
+	    return R * 2 * Math.asin(Math.sqrt(a));
 	}
 
 	async handleChange(event) {
@@ -167,7 +209,10 @@ class themhdthue extends Component{
 		const dg = await (await fetch(`/gvnhanh/bangphidv/${phieuthu["iddv"]}`)).json();
 		this.setState({
 				dongia: dg,
-			})		
+			})	
+
+		ls = await (await fetch(`/gvnhanh/nguoigv/${hdthue['idnguoigv']}`)).json();
+		//console.log("hdthue", this.state.hdthue.idnguoigv, ls)
 
 		//Tạo ngày
 		var months = ["01", "02", "03", "04", "05", "06", "07",
@@ -202,7 +247,8 @@ class themhdthue extends Component{
 							ngaybatdau: ng,
 							iddv: this.state.phieuthu["iddv"],
 							diachilam: this.state.phieuthu["diachilam"],
-							dongia: this.state.phieuthu["dongia"]
+							dongia: this.state.phieuthu["dongia"],
+							thoigian: this.state.phieuthu["thoigian"]
 						}
 					})
 				}
@@ -245,13 +291,13 @@ class themhdthue extends Component{
 						nguoiGVs:ngv
 					})
 
-					ls = await (await fetch(`/gvnhanh/hopdongdk/ptluong/${ngv[0]['idnguoigv']}`)).json();
-					this.setState({
-						tienthu: ls,
+					// ls = await (await fetch(`/gvnhanh/hopdongdk/ptluong/${ngv[0]['idnguoigv']}`)).json();
+					// this.setState({
+					// 	tienthu: ls,
 						
-					})
-					this.state.phieuthu.phantramluong = ls;
-					console.log("luong", this.state.phieuthu.phantramluong)
+					// })
+					// this.state.phieuthu.phantramluong = ls;
+					// console.log("luong", this.state.phieuthu.phantramluong)
 				}
 			}
 
@@ -291,7 +337,7 @@ class themhdthue extends Component{
 					const d2  = new Date('2020-12-12 ' + this.state.phieuthu["gioketthuc"]);
 					const time2 = d2.getTime();
 					const minus = (d2-d1)/3600000;
-					console.log("gio", minus)
+					//console.log("gio", minus)
 
 					this.setState({
 						phieuthu:{
@@ -308,7 +354,7 @@ class themhdthue extends Component{
 						}		
 					})
 
-					console.log("tien gio", this.state.phieuthu['phantramluong'])
+					//console.log("tien gio", this.state.phieuthu['phantramluong'])
 					
 				}
 				
@@ -328,7 +374,8 @@ class themhdthue extends Component{
 								diachilam: this.state.phieuthu["diachilam"],
 								dongia: this.state.phieuthu["dongia"],
 								giolamviec: this.state.phieuthu["giolamviec"],
-								gioketthuc: this.state.phieuthu["gioketthuc"]
+								gioketthuc: this.state.phieuthu["gioketthuc"],
+								thoigian: this.state.phieuthu["thoigian"]
 							}
 							
 						})
@@ -352,15 +399,16 @@ class themhdthue extends Component{
 								ngaybatdau: this.state.phieuthu["ngaybatdau"],
 								iddv: this.state.phieuthu["iddv"],
 								diachilam: this.state.phieuthu["diachilam"],
-								dongia: this.state.phieuthu["dongia"],
+								dongia: ls.luong,
 								giolamviec: this.state.phieuthu["giolamviec"],
 								gioketthuc: this.state.phieuthu["gioketthuc"],
-								tongtien: diffDays * dg.gia,
-								phantramluong: this.state.phieuthu["phantramluong"],
-								tienthu: (100-this.state.phieuthu["phantramluong"])*diffDays * dg.gia/100
+								thoigian: this.state.phieuthu["thoigian"],
+								tongtien: ls.luong*this.state.phieuthu["thoigian"],
+								tienthu: dg.phidv
 							}
 							
 						})
+					this.tinhKhoangCach();
 					//this.state.phieuthu['tongtien'] = diffDays * dg.gia;
 					//console.log("tien", this.state.phieuthu)
 				}
@@ -437,16 +485,6 @@ class themhdthue extends Component{
 				body: JSON.stringify(khachhang),
 			});
 
-			
-
-			// await fetch(`/gvnhanh/lichhen/capnhat/${idLichhen}`, {
-			// 	method:'PUT',
-			// 	headers: {
-			// 		'Accept': 'application/json',
-			// 		'Content-Type': 'application/json'
-			// 	}
-			// });
-
 			await fetch(`/gvnhanh/yeucau/trangthai/${idLichhen}`, {
 				method:'PUT',
 				headers: {
@@ -478,7 +516,7 @@ class themhdthue extends Component{
 		console.log("hd", hdthue);
 		console.log("pt", phieuthu);
 		console.log("kh", khachhang);
-		console.log("check", check)
+		// console.log("check", check)
 
 		this.props.history.push('/hdthue');
 	}
@@ -497,7 +535,41 @@ class themhdthue extends Component{
 			})
 		}
 	}
-	
+
+	clickTb(id){
+		let idclick = id;
+		this.setState({
+			click: id
+		})
+		//console.log("click", this.state.click)
+	}
+
+	currencyFormat(num){
+		   return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.') +' VNĐ'
+		}
+
+	sortByLuongAsc() {
+    	let ngv = this.state.nguoiGVs.sort((a,b) => (a.luong - b.luong));
+    	this.setState({
+    		nguoiGVs: ngv,
+    	})
+    }
+
+    sortByKhoangCachAsc() {
+    	let ngv = this.state.nguoiGVs.sort((a,b) => (a.khoangcach - b.khoangcach));
+    	this.setState({
+    		nguoiGVs: ngv,
+    	})
+    }
+
+     sortByKinhNghiemAsc() {
+    	let ngv = this.state.nguoiGVs.sort((a,b) => (a.kinhnghiem.localeCompare(b.kinhnghiem)));
+    	this.setState({
+    		nguoiGVs: ngv,
+    	})
+    }
+
+   	
 	render(){
 
 		const [idLichhen, idThemhd] = this.props.match.params.id.split('_');
@@ -505,18 +577,44 @@ class themhdthue extends Component{
 		const {phieuthu} = this.state;
 		const {khs} = this.state;
 		const {dongia} = this.state;
-		const {check} = this.state;
+		const {check, click} = this.state;
+		const {nguoiGVs} = this.state;
+		//console.log("ngv", nguoiGVs)
 
 		//const {loaiDVs} = this.state;
 		//console.log("dv",loaiDVs);
 		const title = <h1 className="h3 mb-2 text-gray-800 pb-3">{idThemhd ? 'Thêm hợp đồng' : 'Thông tin hợp đồng'}</h1>;
 
-		//this.state.item.idyc = idLichhen;
-		// this.state.hdthue.idhdthue = idLichhen;
-		// this.state.phieuthu.idhdthue = idLichhen;
-		// this.state.phieuthu.dongia = this.state.dongia.gia;
-		// phieuthu.diachi = khs.diachi;
-
+		const table = <table className="table table-bordered table-hover table-inverse table-striped">
+							<thead className="">
+								<tr className="h-100">
+									<th className="text-center">STT</th>
+									<th className="text-center">Người giúp việc</th>
+									<th className="text-center">Mức lương {' '}
+										<i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByLuongAsc}/>
+									</th>
+									<th className="text-center">Khoảng cách {' '}
+										<i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByKhoangCachAsc}/>
+									</th>
+                                    <th className="text-center">Kinh nghiệm {' '}
+                                    	<i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByKinhNghiemAsc}/>
+                                    </th>
+								</tr>
+							</thead>
+							<tbody>
+								{nguoiGVs.map((ngv, index)=>{
+									return <tr key={ngv.idnguoigv}>
+										<td className="text-center">{index+1}</td>
+										<td className="text-center">{ngv.hoten}</td>
+										<td className="text-center">{this.currencyFormat(ngv.luong)} 
+											
+										</td>
+										<td className="text-center">{ngv.khoangcach} km</td>
+										<td className="text-center">{ngv.kinhnghiem}</td>									
+									</tr>
+								})}
+							</tbody>
+						</table>
 		return(
 			<div className="content-wrapper">
 
@@ -553,7 +651,7 @@ class themhdthue extends Component{
 							                <div className="form-group">
 							                    <label for="exampleInputEmail1">Tên dịch vụ</label>
 							                    <select type="text" className="form-control col-md-12" name="iddv" id="iddv" value={phieuthu.iddv || ''}
-												onChange={this.handleChange}>
+												onChange={this.handleChange} disabled>
 													{this.state.DVs.map((item, index) => (
 														<option value={item.iddv}>{item.tendv}</option>
 													))}
@@ -583,10 +681,21 @@ class themhdthue extends Component{
 										                </div>
 										            </div>:
 										            <div className="col">
-										                <div className="form-group ">
+										                {/*<div className="form-group ">
 										                    <label for="exampleInputPassword1">Ngày kết thúc</label>
 										                    <input type="date" className="form-control col-md-10 " name="ngayketthuc" id="ngayketthu" value={phieuthu.ngayketthuc || ''}
 										                    onChange={this.handleChange} />
+										                </div>*/}
+										                <div className="form-group ">
+										                    <label for="exampleInputPassword1">Thời gian làm</label>
+										                    <div className="input-group">
+											        			 <input type="number" className="form-control col-md-10 text-center" name="thoigian" id="thoigian" value={phieuthu.thoigian || ''}
+										                    	onChange={this.handleChange} />
+																<div className="input-group-append">
+																    <span className="input-group-text">{dongia.donvitinh}</span>
+																</div>
+															</div>
+										                   
 										                </div>
 										            </div>
 									            }
@@ -617,7 +726,7 @@ class themhdthue extends Component{
 							                    <select className="form-control col-lg-12" name="idnguoigv" id="idnguoigv" value={hdthue.idnguoigv || ''}
 												onChange={this.handleChange}>
 													{this.state.nguoiGVs.map((item, index) => (
-														<option value={item.idnguoigv}>{item.hoten + " - " +item.diem}</option>
+														<option value={item.idnguoigv}>{item.hoten}</option>
 													))}
 												</select>
 							                </div>				                      
@@ -664,7 +773,7 @@ class themhdthue extends Component{
 							                 </div>
 
 							                 <div className="form-group">
-							                    <label for="exampleInputPassword1">Tiền nộp lại</label>
+							                    <label for="exampleInputPassword1">Phí giới thiệu</label>
 							                    <div className="input-group">
 								                    {/*<input type="number" className="form-control" name="tienthu" id="tienthu" value={phieuthu.tienthu || ''}
 														onChange={this.handleChange} disabled/>*/}
@@ -690,6 +799,7 @@ class themhdthue extends Component{
 											 </div>
 							                </div>
 				                		</div>
+				                		{idThemhd?table:null}
 				                	</div>
 
 				                <div className="card-footer d-flex justify-content-center">

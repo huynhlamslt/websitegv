@@ -232,7 +232,7 @@ class listnguoigv extends Component{
 	            <td className="text-center">{this.formatter.format(Date.parse(ngv.ngaysinh))}</td>
 	            <td className="text-center">{ngv.sdt}</td>
 	            <td className="text-center">{ngv.quequan}</td>
-              <td className="text-center">{ngv.diem}</td>
+              {/*<td className="text-center">{ngv.diem}</td>*/}
 	            <td className="text-center">
 
             	<div className="btn-group" role="group" aria-label="Basic example">
@@ -248,11 +248,11 @@ class listnguoigv extends Component{
 						<button type="button" className="btn btn-outline-danger" onClick={this.handleClick.bind(this,ngv.idnguoigv)} title="Xóa">
 							<i className="fas fa-trash" />
 						</button>
-            <Link to={"danhgia/"+ngv.idnguoigv}>
+            {/*<Link to={"danhgia/"+ngv.idnguoigv}>
               <button type="button" className="btn btn-outline-success" title="Đánh giá">
                 <i className="fas fa-check-double" />
               </button>
-            </Link>
+            </Link>*/}
 					</div> 
 	            </td>
 	          </tr>
@@ -316,12 +316,12 @@ class listnguoigv extends Component{
                         </th>
 									<th className="text-center">SĐT</th>
 									<th className="text-center">Quê quán</th>
-                  <th className="text-center">Điểm {' '}
+                  {/*<th className="text-center">Điểm {' '}
                         {sortDiem===1?
                           <i className="fas fa-arrow-alt-circle-up text-info pointer" onClick={this.sortByDiemAsc}/>
                           :<i className="fas fa-arrow-alt-circle-down text-info pointer" onClick={this.sortByDiemDesc}/>
                         }
-                  </th>
+                  </th>*/}
 									<th className="text-center"></th>
 								</tr>
 							</thead>

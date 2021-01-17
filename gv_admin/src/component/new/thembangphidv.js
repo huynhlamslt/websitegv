@@ -12,6 +12,8 @@ class thembangphidv extends Component{
 		mota:'',
 		gia: '',
 		donvitinh: '',
+		phidv:'',
+		chantren: '',
 		// tenloai: ''
 	};
 
@@ -130,26 +132,59 @@ class thembangphidv extends Component{
 									onChange={this.handleChange} required row="2">
 									</textarea>
 				                  </div>
-				                  <div className="form-group">
-				                    <label for="exampleInputPassword1">Giá</label>
-				                    <div className="input-group">
-				                      <div className="custom-file col-md-2">
-				                        <input type="number" min="0" name="gia" id="gia" value={item.gia || ''}
-											onChange={this.handleChange} className="form-control text-center"/>
-				                      </div>
-				                      <div className="input-group-append">
-				                        <span className="input-group-text">VNĐ</span>
-				                      </div>
-				                    </div>
+				                  <div class="row">
+				                  	 	<div class="col">
+				                  	   		<div className="form-group">
+							                    <label for="exampleInputPassword1">Giá</label>
+							                    <div className="input-group">
+							                      <div className="custom-file col-md-8">
+							                        <input type="number" min="0" name="gia" id="gia" value={item.gia || ''}
+														onChange={this.handleChange} className="form-control text-center"/>
+							                      </div>
+							                      <div className="input-group-append">
+							                        <span className="input-group-text">VNĐ</span>
+							                      </div>
+							                    </div>
+							                </div>
+				                  	 	</div>
+				                  	 	<div className="col">
+						                  	<div className="form-group">
+							                    <label for="exampleInputPassword1">Giá tối đa</label>
+							                    <div className="input-group">
+							                      <div className="custom-file col-md-8">
+							                        <input type="number" min="0" name="chantren" id="chantren" value={item.chantren || ''}
+														onChange={this.handleChange} className="form-control text-center"/>
+							                      </div>
+							                      <div className="input-group-append">
+							                        <span className="input-group-text">VNĐ</span>
+							                      </div>
+							                    </div>
+							                </div>
+				                  	 	</div>
+				                  	 	<div className="col">
+				                  	 		<div className="form-group">
+							                    <label for="exampleInputPassword1">Phí giới thiệu</label>
+							                    <div className="input-group">
+							                      <div className="custom-file col-md-8">
+							                        <input type="number" min="0" name="phidv" id="phidv" value={item.phidv || ''}
+														onChange={this.handleChange} className="form-control text-center"/>
+							                      </div>
+							                      <div className="input-group-append">
+							                        <span className="input-group-text">VNĐ</span>
+							                      </div>
+							                    </div>
+							                </div>
+				                  	 	</div>
 				                  </div>
+				                  
 				                  <div className="form-group">
 								    <label for="exampleFormControlSelect1">Đơn vị tính</label>
 								    <select className="form-control col-md-2" name="donvitinh" id="donvitinh" value={item.donvitinh || ''}
 										onChange={this.handleChange}>
-								      <option>Giờ</option>
+								      {/*<option>Giờ</option>*/}
 								      <option>Ngày</option>
-								    {/*  <option>Tháng</option>
-								      <option>Năm</option>*/}
+								      <option>Tháng</option>
+								      {/*<option>Năm</option>*/}
 								    </select>
 								  </div>
 				                  

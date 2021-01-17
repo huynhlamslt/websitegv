@@ -90,7 +90,7 @@ class infService extends Component {
         <div className="card mb-5 mb-lg-0">
           <div className="card-body mt-2">
             <h1 className="card-title text-center namepk1">{ct.tendv}</h1>
-            <h6 className="card-price text-center ">{this.currencyFormat(ct.gia)}<span className="period">VNĐ/{ct.donvitinh}</span></h6>
+            <h6 className="card-price text-center ">{ct.donvitinh==="Tháng"?<span className="period">Từ </span>:null}{this.currencyFormat(ct.gia)}<span className="period">VNĐ/{ct.donvitinh}</span></h6>
             <hr />
             <ul className="fa-ul">
               <li>

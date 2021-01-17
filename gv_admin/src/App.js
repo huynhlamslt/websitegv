@@ -28,6 +28,7 @@ import Themlichhen from "./component/new/themlichhen";
 import Themhdthue from "./component/new/themhdthue";
 import Login from "./component/login";
 import Danhgia from "./component//list/danhgia";
+import Nguoigiupviec from "./component/new/nguoigiupviec";
 
 import Upload from "./component/Register.js";
 import Main from "./component/main";
@@ -104,7 +105,7 @@ class App extends Component {
 
            <Switch>
                 {/*Thêm người giúp việc*/}
-                <Route path="/nguoigv/:id" component={Themnguoigv} exact />
+                <Route path="/nguoigv/:id" component={Nguoigiupviec} exact />
            </Switch>
 
            <Switch>

@@ -22,18 +22,22 @@ public class BangPhiDV {
     private String mota;
     private float gia;
     private String donvitinh;
+    private float phidv;
+    private float chantren;
 
     public BangPhiDV(){
 
     }
 
-    public BangPhiDV(int iddv, int idloaidv, String tendv, String mota, float gia, String donvitinh) {
+    public BangPhiDV(int iddv, int idloaidv, String tendv, String mota, float gia, String donvitinh, float phidv, float chantren) {
         this.iddv = iddv;
         this.idloaidv = idloaidv;
         this.tendv = tendv;
         this.mota = mota;
         this.gia = gia;
         this.donvitinh = donvitinh;
+        this.phidv = phidv;
+        this.chantren = chantren;
     }
 
     public int getIddv() {
@@ -84,4 +88,19 @@ public class BangPhiDV {
         this.donvitinh = donvitinh;
     }
 
+    public float getPhidv() {
+        return phidv;
+    }
+
+    public void setPhidv(float phidv) {
+        this.phidv = phidv;
+    }
+
+    public float getChantren() {
+        return chantren;
+    }
+
+    public void setChantren(float chantren) {
+        this.chantren = chantren;
+    }
 }

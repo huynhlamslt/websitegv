@@ -28,13 +28,13 @@ class Nav extends Component {
     const { loaiDVs, isLoading } = this.state;
     return (
       <div>
-        <nav className="navbar fixed-top navbar-expand-lg bg-dark bg-nav ">
+        <nav className="navbar fixed-top navbar-expand-lg bg-nav">
           <div className="container">
             <Link to="/" className="navbar-brand" style={{ borderRadius: '20px', color: 'red' }}>
               <span>
                 <img src="../image/logo.png" alt="" style={{ width: '50px', height: '50px' }} />
               </span>
-              <span style={{ color: '#CCFFFF', width: '50px', fontWeight: 1000 }}>
+              <span style={{ color: '#04B404', width: '50px', fontWeight: 1000 }}>
                 GiupViecNhanh.com
               </span>
               <i className="fa fa-flag" />
@@ -45,13 +45,14 @@ class Nav extends Component {
             <div className="collapse navbar-collapse" id="navbarResponsive" style={{ color: 'Window' }}>
               <ul className="navbar-nav ml-auto mt-3" >
                 <li className="nav-item">
-                  <Link to="/intro" className="nav-link" style={{}}>
-                    <p className="font-weight-bold" >Giới thiệu</p>
+                  <Link to="/intro" className="nav-link txt_color" href="">
+                    <p className="font-weight-bold " >Giới thiệu</p>
                   </Link>
                 </li>
-                <li className="nav-item dropdown">
+
+                <li className="nav-item dropdown" >
                   <a className="font-weight-bold" className="nav-link dropdown-toggle" href="#" id="navbarDropdownPortfolio" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Các loại DV
+                    <span className="font-weight-bold txt_color">Các loại DV</span>
                   </a>
                   <div className="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownPortfolio">
                     {/* <div onClick={() => window.location.reload(false)}> */}
@@ -70,10 +71,10 @@ class Nav extends Component {
                   </div>
                 </li>
                 <li className="nav-item">
-                  <Link to="/contact" className="nav-link" href="" >Liên hệ</Link>
+                  <Link to="/contact" className="nav-link txt_color" href="" ><p className="font-weight-bold" >Liên hệ</p></Link>
                 </li>
                 <li className="nav-item">
-                  <Link to="/dangkynguoigv" className="nav-link" href="" >Đăng ký đi làm</Link>
+                  <Link to="/dangkynguoigv" className="nav-link txt_color" href="" ><p className="font-weight-bold" >Đăng ký đi làm</p></Link>
                 </li>
 
 

@@ -74,6 +74,8 @@ public class BangPhiDVController {
         bangPhiDV.setMota(bpdvDatail.getMota());
         bangPhiDV.setGia(bpdvDatail.getGia());
         bangPhiDV.setDonvitinh(bpdvDatail.getDonvitinh());
+        bangPhiDV.setPhidv(bpdvDatail.getPhidv());
+        bangPhiDV.setChantren(bpdvDatail.getChantren());
 
         BangPhiDV updateBangPhiDV = bangPhiDVDAO.save(bangPhiDV);
         return ResponseEntity.ok().body(updateBangPhiDV);

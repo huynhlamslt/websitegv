@@ -24,8 +24,37 @@ class Home extends Component {
     const { iddv } = this.state;
 
     return (
+      <div>
+
+      <div className="content-wrapper">
+        <div id="carouselExampleControls" className="carousel slide crs-mr mt-4 " data-ride="carousel">
+          <div className="carousel-inner ">
+            <div className="carousel-item active">
+              <img className="d-block w-100 img-fluid" src="/image/panel2.jpg" alt="First slide"/>
+            </div>
+            <div className="carousel-item">
+              <img className="d-block w-100 img-fluid" src="/image/panel1.jpg" alt="Second slide"/>
+            </div>
+            <div className="carousel-item">
+              <img className="crs_img" src="/image/panel3.jpg" alt="Third slide"/>
+            </div>
+          </div>
+          <a className="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span className="sr-only">Previous</span>
+          </a>
+          <a className="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+            <span className="carousel-control-next-icon" aria-hidden="true"></span>
+            <span className="sr-only">Next</span>
+          </a>
+        </div>
+      </div>
+
       <div className="container">
-        <h1 className="my-4" style={{ padding: '20px', textAlign: 'center' }}>
+
+            
+
+        <h1 className="my-1" style={{ padding: '0px', textAlign: 'center' }}>
           <span style={{ color: '#858484' }} className="mr-2 ">
             Hãy để
                 </span>
@@ -40,6 +69,9 @@ class Home extends Component {
         <div className="row mb-3">
           <div className="col-sm-4 pricing">
             <div className="card mb-5 mb-lg-0">
+
+                
+
               <div className="card-body">
                 <h1 className="card-title text-center namepk1">Chuyên nghiệp <br /> Tận tâm</h1>
                 <img src="image/info1.png" className="rounded mx-auto d-block" alt="Chuyên nghiệp - Tận tâm" />
@@ -217,7 +249,7 @@ class Home extends Component {
         {/* Call to Action Section */}
         <hr />
       </div>
-
+      </div>
     );
   }
 }

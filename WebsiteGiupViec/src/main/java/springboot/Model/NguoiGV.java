@@ -31,13 +31,20 @@ public class NguoiGV {
     private int ungtuyen;
     private int idloaidv;
     private float diem;
+    private float luong;
+    private String kinhnghiem;
+    private String kynang;
+    private String suckhoe;
+    private float lat;
+    private float lng;
 
     public NguoiGV(){
 
     }
 
     public NguoiGV(int idnguoigv, String hoten, String gioitinh, Date ngaysinh, String sdt, String cmnd, String quequan,
-            String hinhanh, int del, int hopdong, int ungtuyen, int idloaidv, float diem) {
+            String hinhanh, int del, int hopdong, int ungtuyen, int idloaidv, float diem, float luong,
+            String kinhnghiem, String kynang, String suckhoe, float lat, float lng) {
         this.idnguoigv = idnguoigv;
         this.hoten = hoten;
         this.gioitinh = gioitinh;
@@ -51,6 +58,12 @@ public class NguoiGV {
         this.ungtuyen = ungtuyen;
         this.idloaidv = idloaidv;
         this.diem = diem;
+        this.luong = luong;
+        this.kinhnghiem = kinhnghiem;
+        this.kynang = kynang;
+        this.suckhoe = suckhoe;
+        this.lat = lat;
+        this.lng = lng;
     }
 
     public int getIdnguoigv() {
@@ -156,5 +169,52 @@ public class NguoiGV {
     public void setDiem(float diem) {
         this.diem = diem;
     }
-    
+
+    public float getLuong() {
+        return luong;
+    }
+
+    public void setLuong(float luong) {
+        this.luong = luong;
+    }
+
+    public String getKinhnghiem() {
+        return kinhnghiem;
+    }
+
+    public void setKinhnghiem(String kinhnghiem) {
+        this.kinhnghiem = kinhnghiem;
+    }
+
+    public String getKynang() {
+        return kynang;
+    }
+
+    public void setKynang(String kynang) {
+        this.kynang = kynang;
+    }
+
+    public String getSuckhoe() {
+        return suckhoe;
+    }
+
+    public void setSuckhoe(String suckhoe) {
+        this.suckhoe = suckhoe;
+    }
+
+    public float getLat() {
+        return lat;
+    }
+
+    public void setLat(float lat) {
+        this.lat = lat;
+    }
+
+    public float getLng() {
+        return lng;
+    }
+
+    public void setLng(float lng) {
+        this.lng = lng;
+    }
 }

@@ -79,9 +79,15 @@ public class YeuCauController {
         yc.setSdt(ycDetail.getSdt());
         yc.setDiachi(ycDetail.getDiachi());
         yc.setNgaylam(ycDetail.getNgaylam());
+        yc.setNgayketthuc(ycDetail.getNgayketthuc());
         yc.setCongviec(ycDetail.getCongviec());
         yc.setIddv(ycDetail.getIddv());
         yc.setTrangthai(ycDetail.getTrangthai());
+        yc.setGiolamviec(ycDetail.getGiolamviec());
+        yc.setGioketthuc(ycDetail.getGioketthuc());
+        yc.setLat(ycDetail.getLat());
+        yc.setLng(ycDetail.getLng());
+        yc.setThoigian(ycDetail.getThoigian());
 
         YeuCau updateYeuCau = yeuCauDAO.save(yc);
         return ResponseEntity.ok().body(updateYeuCau);

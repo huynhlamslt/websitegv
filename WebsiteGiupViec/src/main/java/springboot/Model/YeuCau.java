@@ -23,24 +23,36 @@ public class YeuCau {
     private String sdt;
     private String diachi;
     private Date ngaylam;
+    private Date ngayketthuc;
     private String congviec;
     private String trangthai;
     private int iddv;
+    private String giolamviec;
+    private String gioketthuc;
+    private float lat;
+    private float lng;
+    private int thoigian;
 
     public YeuCau(){
 
     }
 
-    public YeuCau(int idyc, String hoten, String sdt, String diachi, Date ngaylam, String congviec, String trangthai,
-            int iddv) {
+    public YeuCau(int idyc, String hoten, String sdt, String diachi, Date ngaylam, Date ngayketthuc, String congviec, String trangthai,
+            int iddv, String giolamviec, String gioketthuc, float lat, float lng, int thoigian) {
         this.idyc = idyc;
         this.hoten = hoten;
         this.sdt = sdt;
         this.diachi = diachi;
         this.ngaylam = ngaylam;
+        this.ngayketthuc = ngayketthuc;
         this.congviec = congviec;
         this.trangthai = trangthai;
         this.iddv = iddv;
+        this.giolamviec = giolamviec;
+        this.gioketthuc = gioketthuc;
+        this.lat = lat;
+        this.lng = lng;
+        this.thoigian = thoigian;
     }
 
     public int getIdyc() {
@@ -106,4 +118,53 @@ public class YeuCau {
     public void setIddv(int iddv) {
         this.iddv = iddv;
     }
+
+    public Date getNgayketthuc() {
+        return ngayketthuc;
+    }
+
+    public void setNgayketthuc(Date ngayketthuc) {
+        this.ngayketthuc = ngayketthuc;
+    }
+
+    public String getGiolamviec() {
+        return giolamviec;
+    }
+
+    public void setGiolamviec(String giolamviec) {
+        this.giolamviec = giolamviec;
+    }
+
+    public String getGioketthuc() {
+        return gioketthuc;
+    }
+
+    public void setGioketthuc(String gioketthuc) {
+        this.gioketthuc = gioketthuc;
+    }
+
+    public float getLat() {
+        return lat;
+    }
+
+    public void setLat(float lat) {
+        this.lat = lat;
+    }
+
+    public float getLng() {
+        return lng;
+    }
+
+    public void setLng(float lng) {
+        this.lng = lng;
+    }
+
+    public int getThoigian() {
+        return thoigian;
+    }
+
+    public void setThoigian(int thoigian) {
+        this.thoigian = thoigian;
+    }
+    
 }

@@ -41,7 +41,8 @@ class themnguoigv extends Component{
 			picture: '',
 			nhanViens:[],
 			hopdong: this.emptyHdong,
-			nextId: ''
+			nextId: '',
+			image: ''
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -176,14 +177,25 @@ class themnguoigv extends Component{
 		if(update!=='new'){
 			this.state.hopdong.idnguoigv = update;
 		
-			await fetch(`/gvnhanh/nguoigv/${update}`, {
+			const formData = new FormData();
+			formData.append('hinhanh', item['hinhanh']);
+			formData.append('hoten', item['hoten']);
+			formData.append('ngaysinh', item['ngaysinh']);
+			formData.append('sdt', item['sdt']);
+			formData.append('cmnd', item['cmnd']);
+			formData.append('luong', item['luong'])
+			formData.append('gioitinh', item['gioitinh'])
+			fetch(`/gvnhanh/nguoigv/${update}`, {
 				method: 'PUT',
-				headers: {
-					'Accept': 'application/json',
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(item),
-			});
+				body: formData
+			})
+				.then(response => response.json())
+				.then(result => {
+					console.log('Success:', result);
+				})
+				.catch(error => {
+					console.error('Error:', error);
+				});
 
 			if(them==="new"){
 				this.state.hopdong.idhddk = update;
@@ -239,7 +251,8 @@ class themnguoigv extends Component{
 	    if (event.target.files && event.target.files[0]) {
 	      let img = event.target.files[0];
 	      this.setState({
-	      	picture: URL.createObjectURL(img)
+	      	picture: URL.createObjectURL(img),
+	      	image: img
 	      })
 	    }
     }
@@ -299,7 +312,7 @@ class themnguoigv extends Component{
 						                    	<div className="form-group">
 								                    <label for="exampleInputPassword1">Ngày sinh</label>
 				   				                    <input type="date" className="form-control col-md-10" name="ngaysinh" id="ngaysinh" value={item.ngaysinh || ''}
-													onChange={this.handleChange} placeholder=""/>
+													onChange={this.handleChange} placeholder="" required/>
 								                  </div>
 						                    </div>
 						                  </div>
@@ -309,20 +322,20 @@ class themnguoigv extends Component{
 						                    	<div className="form-group">
 								                    <label for="exampleInputPassword1">Số điện thoại</label>
 								               		<input type="text" className="form-control col-md-10" name="sdt" id="sdt" value={item.sdt || ''}
-													onChange={this.handleChange} pattern="[0-9]{10}" placeholder="" title="Hãy nhập đúng 10 chữ số điện thoại"/>
+													onChange={this.handleChange} pattern="[0-9]{10}" placeholder="" title="Hãy nhập đúng 10 chữ số điện thoại" required/>
 								                </div>
 						                    </div>
 						                    <div class="col">
 						                    	<div className="form-group">
 								                    <label for="exampleInputPassword1">CMND</label>
 								               		<input type="text" className="form-control col-md-10" name="cmnd" id="cmnd" value={item.cmnd || ''}
-													onChange={this.handleChange} pattern="[0-9]{9}" placeholder="" title="Hãy nhập đúng 9 chữ số cmnd"/>
+													onChange={this.handleChange} pattern="[0-9]{9}" placeholder="" title="Hãy nhập đúng 9 chữ số cmnd" required/>
 								                </div>
 						                    </div>
 						                  </div>
 
 						                   <div className="form-group">
-						                    <label for="exampleInputEmail1">Quê quán</label>
+						                    <label for="exampleInputEmail1">Địa chỉ</label>
 						                    <input type="text" className="form-control col-md-12" name="quequan" id="quaquan" value={item.quequan || ''} 
 						                    onChange={this.handleChange} placeholder="" required/>
 						                  </div>
@@ -370,11 +383,18 @@ class themnguoigv extends Component{
 
 							                  <div className="form-group">
 							                    <label for="exampleInputPassword1">Kinh nghiệm</label>
-							                    <input type="text" className="form-control" name="kinhnghiem" id="kinhnghiem" value={hopdong.kinhnghiem || ''}
-													onChange={this.handleChange}/>
+							                    <select type="text" className="form-control" name="kinhnghiem" id="kinhnghiem" value={hopdong.kinhnghiem || ''}
+													onChange={this.handleChange}>
+														<option value="1 năm">1 năm</option>
+														<option value="2 năm">2 năm</option>
+														<option value="3 năm">3 năm</option>
+														<option value="4 năm">4 năm</option>
+														<option value="5 năm">5 năm</option>
+														<option value="trên 5 năm">trên 5 năm</option>
+												</select>
 							                  </div>
 							                   
-							                  <div class="form-row">
+							                 {/* <div class="form-row">
 							                      <div class="col">
 							                        <div className="form-group">
 									                    <label for="exampleInputPassword1">Ngày ký hợp đồng</label>
@@ -389,8 +409,8 @@ class themnguoigv extends Component{
 							                    onChange={this.handleChange}/>
 									                </div>
 							                      </div>
-							                    </div>							         
-							                  <div className="form-group">
+							                    </div>	*/}						         
+							                  {/*<div className="form-group">
 							                    <label for="exampleInputPassword1">Phần trăm lương</label>
 							                    <div class="input-group mb-3 col-md-6">
 												  <input type="number" min="0" max="100" className="form-control" name="phantramluong" id="phantramluong" value={hopdong.phantramluong || ''}
@@ -399,7 +419,7 @@ class themnguoigv extends Component{
 												    <span class="input-group-text" id="basic-addon2">%</span>
 												  </div>
 												</div>
-							                </div>
+							                </div>*/}
 						                </div>
 							        </div>	                 
 				                </div>

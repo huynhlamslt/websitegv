@@ -61,6 +61,8 @@ class App extends Component {
             <Route exact path="/dangkynguoigv">
               <RegisterStaff/>   
             </Route>
+
+
           </Switch>
 
           <Footer/>

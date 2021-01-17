@@ -35,9 +35,10 @@ class RegisterStaff extends Component {
         del: '',
         hopdong: '',
         ungtuyen: '',
-        idloaidv: ''
+        idloaidv: '',
+        lat: '',
+        lng: ''
     };
-
 
     constructor(props) {
         super(props);
@@ -45,20 +46,91 @@ class RegisterStaff extends Component {
             item: this.emptyItem,
             dichVus: []
         };
+        this.map = React.createRef();
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.showmap = this.showmap.bind(this);
+        this.log = this.log.bind(this);
+        //this.initMap = this.initMap.bind(this);
     }
 
     async componentDidMount(){
-        window.scrollTo(0, 0); 
+        window.scrollTo(0, 0);
         const dv = await (await fetch('/gvnhanh/loaidv')).json();
         this.setState({
-            dichVus:dv      
+           dichVus:dv      
         });
-        // const {dichVus} = this.state;
-        // console.log("dv", this.state.dichVus[0].tenloai);
+        // this.showmap();
 
+        // console.log("dv", this.state.dichVus[0].tenloai);
     }
+
+    showmap(){
+        const map = new window.google.maps.Map(document.getElementById("map"), {
+            zoom: 12,
+            center: { lat: -34.397, lng: 150.644 }, //tọa độ ban đầu
+          });
+    }
+
+    laytoado = () => {
+        const {item} = this.state;
+        const geocoder = new window.google.maps.Geocoder();
+        const address = item['quequan'];
+        geocoder.geocode({ address: address }, (results, status) => {
+          if (status === "OK") {
+              console.log(results[0].geometry.location.toJSON());
+             
+            this.state.item.lat = results[0].geometry.location.toJSON().lat;
+            this.state.item.lng = results[0].geometry.location.toJSON().lng;
+ 
+            } else {
+            alert(
+              "Geocode was not successful for the following reason: " + status
+            );
+          }
+        });
+    }
+
+    log(){
+        console.log("ok")
+    }
+   
+    // initMap(){
+    //     const map = new window.google.maps.Map(this.refs.map?.getDOMNode(), {
+    //       zoom: 12,
+    //       center: { lat: -34.397, lng: 150.644 },
+    //     });
+    //     const geocoder = new window. google.maps.Geocoder();
+    //     console.log("map", map)
+    //     // document.getElementById("submit").addEventListener("click", () => {
+    //     //   geocodeAddress(geocoder, map);
+    //     // });
+    //   }
+
+    // geocodeAddress(geocoder, resultsMap) {
+    //     // const address = document.getElementById("sonha").value + "," + document.getElementById("duong").value + "," + document.getElementById("phuong").value + "," + document.getElementById("quan").value + "," + document.getElementById("quan").value ;
+    //     // geocoder.geocode({ address: address }, (results, status) => {
+    //     //   if (status === "OK") {
+        
+    //     //     resultsMap.setCenter(results[0].geometry.location);
+    //     //     new google.maps.Marker({
+    //     //       map: resultsMap,
+    //     //       position: results[0].geometry.location,
+    //     //     });
+
+    //     // const LatLng = results[0].geometry.location.toJSON();
+    //     // console.log(LatLng);
+    //     // $("#txtLat").val(LatLng.lat);
+    //     //         $("#txtLng").val(LatLng.lng);
+    //     // $("#InputToaDo").val(LatLng.lat + "," + LatLng.lng);
+    //     //         $("#InputBanDo").val(`https://maps.google.com/maps?q=${LatLng.lat.toFixed(6)},${LatLng.lng.toFixed(6)}&z=15&output=embed&hl=vi`);
+    //     //   } else {
+    //     //     alert(
+    //     //       "Geocode was not successful for the following reason: " + status
+    //     //     );
+    //     //   }
+    //     // });
+    //   }
 
     handleChange(event) {
         const target = event.target;
@@ -67,12 +139,6 @@ class RegisterStaff extends Component {
         let item = {...this.state.item};
         item[name] = value;
         this.setState({item});
-
-        // this.setState({[event.target.id]: event.target.value});
-        
-         // this.setState({
-      //     input: event.target.value
-      //   });
     }
 
     async handleSubmit(event) {
@@ -87,7 +153,9 @@ class RegisterStaff extends Component {
             //alert("loi")
             this.state.item.idloaidv= this.state.dichVus[0].idloaidv;
         }
-        console.log("item", item);
+        //console.log("item", item);
+
+        
 
         await fetch('/gvnhanh/nguoigv', {
             method: 'POST',
@@ -115,6 +183,8 @@ class RegisterStaff extends Component {
             onKeypressEscape: () => null
         });
 
+        console.log("item", item)
+
         //this.props.history.push('/home');
         //window.location.reload(false);
     }
@@ -129,7 +199,7 @@ class RegisterStaff extends Component {
             <div className="container">
 
                 <div className="card bg-light">
-                    <article className="card-body mx-auto" style={{maxWidth: '400px'}}>
+                    <article className="card-body mx-auto" style={{maxWidth: '500px'}}>
                     <h4 className="card-title mt-3 text-center">Đăng ký trở thành NHÂN VIÊN 
                     <br />
                         <span style={{color: '#881A7C', width: '50px', fontWeight: 1000}}>
@@ -152,8 +222,9 @@ class RegisterStaff extends Component {
                         <div className="input-group-prepend">
                             <span className="input-group-text"> <i className="fa fa-envelope" /> </span>
                         </div>
-                            <input name="quequan" id="quequan" value={item.quequan ||''} onChange={this.handleChange}
-                            className="form-control" placeholder="Địa chỉ" type="text" required/>
+                           <input name="quequan" id="quequan" value={item.quequan ||''} onChange={this.handleChange}
+                            onBlur = {this.laytoado}className="form-control" placeholder="Địa chỉ" type="text" required/>
+                            
                             </div>
                         {/* form-group// */}
                         {/* form-group// */} 
@@ -194,6 +265,7 @@ class RegisterStaff extends Component {
                             </Input>
                         </div>
                        
+                       
 
                         {/* form-group end.// */}
                        
@@ -202,13 +274,20 @@ class RegisterStaff extends Component {
                         <button type="submit" className="btn btn-primary btn-block">GỬI ĐĂNG KÝ</button>
                         </div>
                         {/* form-group// */}
+
                         
+                       {/*<div id="map" style={{height: 500}}></div>*/}
                     </form>
                     </article>
+
+                    {/*<input ref="diachi" type="text"/>
+                <button onClick={() => this.laytoado()}>lay toa do</button>*/}
+
                 </div>
             </div>
 
         );
+   
     }
 }
 

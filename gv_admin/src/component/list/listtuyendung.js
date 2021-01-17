@@ -158,8 +158,8 @@ class listtuyendung extends Component{
 
 	            	<div className="btn-group" role="group" aria-label="Basic example">
 	                	<Link to={"/nguoigv/"+ngv.idnguoigv+`_new`}>
-						  <button type="button" className="btn btn-outline-primary" title="Cập nhật">
-						  	<i className="fas fa-pencil-alt" />
+						  <button type="button" className="btn btn-outline-primary" title="Chấp nhận">
+						  	<i className="fas fa-check" />
 						  </button>
 						</Link>
 

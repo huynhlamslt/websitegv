@@ -25,15 +25,15 @@ public class PhieuThuDV {
     private String gioketthuc;
     private String diachilam;
     private float tongtien;
-    private int phantramluong;
     private float tienthu;
+    private int thoigian;
 
     public PhieuThuDV(){
 
     }
 
     public PhieuThuDV(int idhdthue, int iddv, float dongia, Date ngaybatdau, Date ngayketthuc, String giolamviec, String gioketthuc, 
-            String diachilam, float tongtien, int phantramluong, float tienthu) {
+            String diachilam, float tongtien, float tienthu, int thoigian) {
         this.idhdthue = idhdthue;
         this.iddv = iddv;
         this.dongia = dongia;
@@ -43,8 +43,8 @@ public class PhieuThuDV {
         this.gioketthuc = gioketthuc;
         this.diachilam = diachilam;
         this.tongtien = tongtien;
-        this.phantramluong = phantramluong;
         this.tienthu = tienthu;
+        this.thoigian = thoigian;
     }
 
     public int getIdhdthue() {
@@ -119,19 +119,19 @@ public class PhieuThuDV {
         this.tongtien = tongtien;
     }
 
-    public int getPhantramluong() {
-        return phantramluong;
-    }
-
-    public void setPhantramluong(int phantramluong) {
-        this.phantramluong = phantramluong;
-    }
-
     public float getTienthu() {
         return tienthu;
     }
 
     public void setTienthu(float tienthu) {
         this.tienthu = tienthu;
+    }
+
+    public int getThoigian() {
+        return thoigian;
+    }
+
+    public void setThoigian(int thoigian) {
+        this.thoigian = thoigian;
     }
 }

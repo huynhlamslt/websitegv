@@ -1,9 +1,17 @@
 package springboot.Controller;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +20,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import springboot.DAO.NguoiGVDAO;
 import springboot.Model.NguoiGV;
@@ -68,7 +79,7 @@ public class NguoiGVController {
 
     //Update người giúp việc
     @PutMapping("/nguoigv/{id}")
-    public ResponseEntity<NguoiGV> updateNguoiGV(@PathVariable(value="id") Integer idngv, @Validated @RequestBody NguoiGV ngvDetail){
+    public ResponseEntity<NguoiGV> updateNguoiGV(@PathVariable(value="id") Integer idngv, @Validated @RequestBody NguoiGV ngvDetail)throws Exception{
         NguoiGV nguoiGV = nguoiGVDAO.findOne(idngv);
 
         if(nguoiGV == null){
@@ -87,6 +98,56 @@ public class NguoiGVController {
         nguoiGV.setUngtuyen(ngvDetail.getUngtuyen());
         nguoiGV.setIdloaidv(ngvDetail.getIdloaidv());
         nguoiGV.setDiem(ngvDetail.getDiem());
+        nguoiGV.setLuong(ngvDetail.getLuong());
+        nguoiGV.setKinhnghiem(ngvDetail.getKinhnghiem());
+        nguoiGV.setKynang(ngvDetail.getKynang());
+        nguoiGV.setSuckhoe(ngvDetail.getSuckhoe());
+        nguoiGV.setLat(ngvDetail.getLat());
+        nguoiGV.setLng(ngvDetail.getLng());
+
+        NguoiGV updateNguoiGV = nguoiGVDAO.save(nguoiGV);
+        return ResponseEntity.ok().body(updateNguoiGV);
+    }
+
+    //Update người giúp việc
+    @PutMapping("/nguoigv/image/{id}")
+    public ResponseEntity<NguoiGV> updateNguoiGVImage(@PathVariable(value="id") Integer idngv, @Validated NguoiGV ngvDetail, BindingResult result, RedirectAttributes redirect, @RequestParam("hinhanh") MultipartFile multipartFile)throws Exception{
+        NguoiGV nguoiGV = nguoiGVDAO.findOne(idngv);
+
+        if(nguoiGV == null){
+            return ResponseEntity.notFound().build();
+        }
+
+        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+		Path uploadPath = Paths.get("D:\\BT\\Reactjs\\gv_admin\\public\\image"); //thu muc up cung cap thu muc src
+		if (!Files.exists(uploadPath)) {
+			Files.createDirectories(uploadPath);
+		}
+		try (InputStream inputStream = multipartFile.getInputStream()) {
+			Path filePath = uploadPath.resolve(fileName);
+			Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException ioe) {        
+			throw new IOException("Could not save image file: " + fileName, ioe);
+		}  
+
+        nguoiGV.setHoten(ngvDetail.getHoten());
+        nguoiGV.setNgaysinh(ngvDetail.getNgaysinh());
+        nguoiGV.setGioitinh(ngvDetail.getGioitinh());
+        nguoiGV.setSdt(ngvDetail.getSdt());
+        nguoiGV.setCmnd(ngvDetail.getCmnd());
+        nguoiGV.setQuequan(ngvDetail.getQuequan());
+        nguoiGV.setHinhanh("/image/"+fileName);
+        nguoiGV.setDel(ngvDetail.getDel());
+        nguoiGV.setHopdong(ngvDetail.getHopdong());
+        nguoiGV.setUngtuyen(ngvDetail.getUngtuyen());
+        nguoiGV.setIdloaidv(ngvDetail.getIdloaidv());
+        nguoiGV.setDiem(ngvDetail.getDiem());
+        nguoiGV.setLuong(ngvDetail.getLuong());
+        nguoiGV.setKinhnghiem(ngvDetail.getKinhnghiem());
+        nguoiGV.setKynang(ngvDetail.getKynang());
+        nguoiGV.setSuckhoe(ngvDetail.getSuckhoe());
+        nguoiGV.setLat(ngvDetail.getLat());
+        nguoiGV.setLng(ngvDetail.getLng());
 
         NguoiGV updateNguoiGV = nguoiGVDAO.save(nguoiGV);
         return ResponseEntity.ok().body(updateNguoiGV);

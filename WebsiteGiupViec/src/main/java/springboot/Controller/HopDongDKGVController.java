@@ -49,16 +49,16 @@ public class HopDongDKGVController {
     }
 
     //Lấy phan tram luong theo Id
-    @GetMapping("hopdongdk/ptluong/{id}")
-    public int getPhanTramLuongById(@PathVariable(value="id") Integer idnguoigv){
-        int phantramluong = hopDongDKGVDAO.findPhamTramLuong(idnguoigv);
+    // @GetMapping("hopdongdk/ptluong/{id}")
+    // public int getPhanTramLuongById(@PathVariable(value="id") Integer idnguoigv){
+    //     int phantramluong = hopDongDKGVDAO.findPhamTramLuong(idnguoigv);
 
-        // if(phantramluong==0){
-        //     return ResponseEntity.notFound().build();
-        // }
+    //     // if(phantramluong==0){
+    //     //     return ResponseEntity.notFound().build();
+    //     // }
 
-        return phantramluong;
-    }
+    //     return phantramluong;
+    // }
 
     //Cập nhật hợp đồng đăng ký
     @PutMapping("/hopdongdk/{id}")

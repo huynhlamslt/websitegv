@@ -72,8 +72,8 @@ public class PhieuThuDVController {
         phieuThuDV.setGioketthuc(ptDetail.getGioketthuc());
         phieuThuDV.setDiachilam(ptDetail.getDiachilam());
         phieuThuDV.setTongtien(ptDetail.getTongtien());
-        phieuThuDV.setPhantramluong(ptDetail.getPhantramluong());
         phieuThuDV.setTienthu(ptDetail.getTienthu());
+        phieuThuDV.setThoigian(ptDetail.getThoigian());
 
         PhieuThuDV updatePhieuThuDV = phieuThuDVDAO.save(phieuThuDV);
         return ResponseEntity.ok().body(updatePhieuThuDV);
