@@ -122,6 +122,25 @@ class themhdthue extends Component{
 				nguoiGVs: ngv
 			})
 
+			if(ngv.length===0){
+				confirmAlert({
+		          title: 'Thông báo',
+		          message: 'Hiện không có người giúp việc nào phù hợp. Vui lòng quay lại sau!',
+		          buttons: [
+		            {
+		              label: 'OK',
+		              onClick: ()=> this.props.history.push('/hdlaodong')
+		            }
+		          ],
+		           childrenElement: () => null,
+		            closeOnClickOutside: true,
+		            closeOnEscape: true,
+		            willUnmount: () => null,
+		            onClickOutside: () => null,
+		            onKeypressEscape: () => null
+		        });
+			}
+
 			this.setState({
 				dongia: dg,
 				phieuthu:{

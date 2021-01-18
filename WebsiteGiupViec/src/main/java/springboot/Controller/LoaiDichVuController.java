@@ -74,6 +74,7 @@ public class LoaiDichVuController {
         loaiDichVu.setCamket(loaidvDetail.getCamket());
         loaiDichVu.setKynang(loaidvDetail.getKynang());
         loaiDichVu.setAnh(loaidvDetail.getAnh());
+        loaiDichVu.setChantren(loaidvDetail.getChantren());
 
         LoaiDichVu updateloaidv = loaiDichVuDAO.save(loaiDichVu);
         return ResponseEntity.ok().body(updateloaidv);

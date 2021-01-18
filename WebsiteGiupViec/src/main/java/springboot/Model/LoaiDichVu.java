@@ -22,18 +22,20 @@ public class LoaiDichVu {
 	private String camket;
 	private String kynang;
 	private String anh;
+	private float chantren;
 
 	public LoaiDichVu(){
 		
 	}
 
-	public LoaiDichVu(int idloaidv, String tenloai, String gioithieu, String camket, String kynang, String anh) {
+	public LoaiDichVu(int idloaidv, String tenloai, String gioithieu, String camket, String kynang, String anh, float chantren) {
 		this.idloaidv = idloaidv;
 		this.tenloai = tenloai;
 		this.gioithieu = gioithieu;
 		this.camket = camket;
 		this.kynang = kynang;
 		this.anh = anh;
+		this.chantren = chantren;
 	}
 
 	public int getIdloaidv() {
@@ -82,5 +84,13 @@ public class LoaiDichVu {
 
 	public void setAnh(String anh) {
 		this.anh = anh;
+	}
+
+	public float getChantren() {
+		return chantren;
+	}
+
+	public void setChantren(float chantren) {
+		this.chantren = chantren;
 	}
 }

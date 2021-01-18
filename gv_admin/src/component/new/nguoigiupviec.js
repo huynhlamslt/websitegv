@@ -33,9 +33,11 @@ class nguoigiupviec extends Component{
 			picture: '',
 			image: '',
 			luong: '',
+			maxluong: '',
 		};
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
+		this.max = this.max.bind(this);
 		//this.handleChangePhone = this.handleChangePhone.bind(this);
 	}
 
@@ -59,6 +61,24 @@ class nguoigiupviec extends Component{
 		let item = {...this.state.item};
 		item[name] = value;
 		this.setState({item});
+
+	}
+
+	async max(){
+		let {item} = this.state;
+		const max = await(await fetch(`/gvnhanh/loaidv/${item.idloaidv}`)).json();
+		console.log("max", max.chantren)
+		if(item['luong']>max.chantren){
+			alert("Mức lương quá cao so với công việc! Tối đa "+max.chantren+" VNĐ");
+			item = {...this.state.item}
+			item['luong'] = max.chantren;
+			this.setState({item})
+			this.setState({
+				luong: max.chantren
+			})
+		}
+
+		console.log("item", this.state.item)
 	}
 
 	async handleSubmit(event) {
@@ -142,7 +162,7 @@ class nguoigiupviec extends Component{
 		})
 		this.state.item.luong = val;
 	}
-
+	
 	render(){
 
 		const {item, dichVus, picture, luong} = this.state;
@@ -285,7 +305,7 @@ class nguoigiupviec extends Component{
 															onChange={(value, name) => this.numberChange(value)}
 															decimalSeparator=","
 															groupSeparator="."
-														/>
+														onBlur={this.max} />
 														<div class="input-group-append">
 															<span class="input-group-text" id="basic-addon2">VNĐ/Tháng</span>
 														</div>
